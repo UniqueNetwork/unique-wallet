@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="theme-color" content="#000000">
+    <link rel="manifest" href="manifest.json">
+    <title><%= htmlWebpackPlugin.options.PAGE_TITLE %></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="/env-config.js"></script>
+    <link rel="stylesheet" href="theme.css">
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- favicon injection -->
+    <script>
+      var link = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+      if (window.processEnv.faviconPath) {
+        link.href = window.processEnv.faviconPath + '/favicon.ico';
+      } else {
+        link.href = 'favicon.ico';
+      }
+    </script>
+    <div id="root"></div>
+    <div id="tooltips"></div>
+    <script>
+      if (window.self !== window.top) {
+        window.top.location.href = window.location.href;
+      }
+    </script>
+  </body>
+</html>
