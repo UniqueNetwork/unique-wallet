@@ -3,7 +3,7 @@
 
 import './apps.scss';
 
-import type { BareProps as Props, ThemeDef } from '@polkadot/react-components/types';
+import type { BareProps as Props, ThemeDef } from 'ui-core/types';
 
 import React, { Suspense, useContext, useMemo, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -19,7 +19,7 @@ import { getSystemChainColor } from '@polkadot/apps-config';
 import envConfig from '@polkadot/apps-config/envConfig';
 import createRoutes from '@polkadot/apps-routing';
 import { Route } from '@polkadot/apps-routing/types';
-import { AccountSelector, ErrorBoundary, StatusContext } from '@polkadot/react-components';
+import { AccountSelector, ErrorBoundary, StatusContext } from 'ui-core';
 import GlobalStyle from '@polkadot/react-components/styles';
 import { useApi } from '@polkadot/react-hooks';
 import Signer from '@polkadot/react-signer';

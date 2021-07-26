@@ -12,7 +12,7 @@ import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import Item from 'semantic-ui-react/dist/commonjs/views/Item';
 
 import envConfig from '@polkadot/apps-config/envConfig';
-import { Expander } from '@polkadot/react-components';
+import { Expander } from 'ui-core';
 import pencil from '@polkadot/react-components/ManageCollection/pencil.svg';
 import trash from '@polkadot/react-components/ManageCollection/trash.svg';
 import Tooltip from '@polkadot/react-components/Tooltip';
@@ -30,15 +30,16 @@ interface Props {
   removeCollection: (collection: string) => void;
   openTransferModal: (collection: NftCollectionInterface, tokenId: string, balance: number) => void;
   shouldUpdateTokens: string | undefined;
+  tokensSelling: string[];
 }
 
-function NftCollectionCard ({ account, canTransferTokens, collection, openTransferModal, removeCollection, shouldUpdateTokens }: Props): React.ReactElement<Props> {
+function NftCollectionCard ({ account, canTransferTokens, collection, openTransferModal, removeCollection, shouldUpdateTokens, tokensSelling }: Props): React.ReactElement<Props> {
   const [opened, setOpened] = useState(true);
   const [collectionImageUrl, setCollectionImageUrl] = useState<string>();
   const [ownTokensCount, setOwnTokensCount] = useState<number>();
   const [allTokensCount, setAllTokensCount] = useState<number>();
   const [confirmDeleteCollection, setConfirmDeleteCollection] = useState<boolean>(false);
-  const [tokensOfCollection, setTokensOfCollection] = useState<Array<string>>([]);
+  const [tokensOfCollection, setTokensOfCollection] = useState<string[]>([]);
   const { getTokensOfCollection } = useCollections();
   const { getCollectionTokensCount } = useCollection();
   const { collectionName16Decoder } = useDecoder();
@@ -170,7 +171,7 @@ function NftCollectionCard ({ account, canTransferTokens, collection, openTransf
             )}
           </div>
           <div className='tokens-count'>
-            <span>Total: {allTokensCount} {!allTokensCount || allTokensCount > 1 ? 'items' : 'item'} (own: {ownTokensCount})</span>
+            <span>Total: {allTokensCount} {!allTokensCount || allTokensCount > 1 ? 'items' : 'item'} {tokensSelling.length ? `(own: ${ownTokensCount || 0}, selling: ${tokensSelling.length})` : `(own: ${ownTokensCount || 0})`}</span>
           </div>
           <div className='link-button'>
             { canEditCollection && (
@@ -223,7 +224,7 @@ function NftCollectionCard ({ account, canTransferTokens, collection, openTransf
       }
     >
       <div className='token-table'>
-        { account && tokensOfCollection.map((token) => (
+        { account && [...tokensSelling, ...tokensOfCollection].map((token) => (
           <NftTokenCard
             account={account}
             canTransferTokens={canTransferTokens}
