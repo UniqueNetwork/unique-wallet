@@ -6,13 +6,13 @@ import './styles.scss';
 import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 
 import BN from 'bn.js';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import Form from 'semantic-ui-react/dist/commonjs/collections/Form/Form';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button';
 import Modal from 'semantic-ui-react/dist/commonjs/modules/Modal/Modal';
 
 import { Input, Label, StatusContext } from '@polkadot/react-components';
-import { useApi, useBalance } from '@polkadot/react-hooks';
+import { useApi } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 
 import closeIcon from './closeIconBlack.svg';
@@ -29,10 +29,10 @@ interface Props {
 function TransferModal ({ account, closeModal, collection, reFungibleBalance, tokenId, updateTokens }: Props): React.ReactElement<Props> {
   const { api } = useApi();
   const [recipient, setRecipient] = useState<string>();
-  const { balance } = useBalance(account);
+  // const { balance } = useBalance(account);
   const { queueExtrinsic } = useContext(StatusContext);
   const [tokenPart, setTokenPart] = useState<number>(0);
-  const [balanceTooLow, setBalanceTooLow] = useState<boolean>(false);
+  // const [balanceTooLow, setBalanceTooLow] = useState<boolean>(false);
   const [isAddressError, setIsAddressError] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
   const decimalPoints = collection?.DecimalPoints instanceof BN ? collection?.DecimalPoints.toNumber() : 1;
@@ -54,6 +54,7 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
       setRecipient(value);
     } catch (e) {
       setIsAddressError(true);
+      setRecipient(undefined);
     }
   }, [setIsAddressError, setRecipient]);
 
@@ -73,11 +74,9 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
     setTokenPart(parseFloat(value));
   }, [reFungibleBalance, decimalPoints]);
 
-  const checkBalanceEnough = useCallback(async () => {
+  /* const checkBalanceEnough = useCallback(async () => {
     if (account && recipient) {
       const transferFee = await api.tx.nft.transfer(recipient, collection.id, tokenId, (tokenPart * Math.pow(10, decimalPoints))).paymentInfo(account) as { partialFee: BN };
-
-      console.log('transferFee', transferFee, 'balance', balance?.free, 'existentialDeposit', api.consts.balances.existentialDeposit);
 
       if (transferFee && (!balance?.free || balance?.free.sub(transferFee.partialFee).lt(api.consts.balances.existentialDeposit))) {
         setBalanceTooLow(true);
@@ -85,13 +84,11 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
         setBalanceTooLow(false);
       }
     }
-  }, [account, api, balance, collection, decimalPoints, recipient, tokenId, tokenPart]);
+  }, [account, api, balance, collection, decimalPoints, recipient, tokenId, tokenPart]); */
 
-  useEffect(() => {
+  /* useEffect(() => {
     void checkBalanceEnough();
-  }, [checkBalanceEnough]);
-
-  console.log('balanceTooLow', balanceTooLow);
+  }, [checkBalanceEnough]); */
 
   return (
     <Modal
@@ -135,16 +132,24 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
             </Form.Field>
           )}
         </Form>
-        { balanceTooLow && (
+        {/* { balanceTooLow && (
           <div className='warning-block'>Your balance is too low to pay fees. <a href='https://t.me/unique2faucetbot'
             rel='noreferrer nooperer'
             target='_blank'>Get testUNQ here.</a></div>
-        )}
+        )} */}
       </Modal.Content>
+      <Modal.Description className='modalDescription'>
+        <div>
+          <p> Be careful, the transaction cannot be reverted.</p>
+          <p> Make sure to use the Substrate address created with polkadot.js or this marketplace.</p>
+          <p> Do not use address of third party wallets, exchanges or hardware signers, like ledger nano.</p>
+        </div>
+      </Modal.Description>
+
       <Modal.Actions>
         <Button
           content='Transfer token'
-          disabled={balanceTooLow || !recipient}
+          disabled={!recipient}
           onClick={transferToken}
         />
       </Modal.Actions>

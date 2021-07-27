@@ -1,4 +1,4 @@
-@import '../styles/global.scss';
+@import "../styles/global.scss";
 
 .app-wrapper {
   background: var(--bg-page);
@@ -85,7 +85,6 @@
   display: flex;
 
   &--item {
-
   }
 
   .app-balance--item {
@@ -115,4 +114,100 @@
     margin-left: 8px;
     cursor: pointer;
   }
+}
+
+.deposit-flex {
+  display: flex;
+  .deposit-input {
+    width: 85%;
+    display: flex;
+    position: relative;
+
+    button {
+      position: absolute;
+      background-color: transparent !important;
+      color: var(--link-color) !important;
+      width: 40px;
+      height: 28px;
+      padding: 3px;
+      right: 10px;
+      top: 7px;
+      letter-spacing: 0px;
+    }
+  }
+  .balance-number {
+    width: 100%;
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+  .ksm-text {
+    margin-left: 10px;
+    width: 15%;
+  }
+}
+.modal-position {
+  top: 30%;
+}
+.help-text {
+  padding: 4px;
+  border-radius: 5px;
+  color: var(--link-color);
+  font-size: 13px;
+  background-color: #eff9ff;
+
+  i {
+    vertical-align: bottom;
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    color: var(--link-color);
+    display: inline-block;
+    background: url("../../react-components/src/ManageCollection/warning-alert.svg")
+      no-repeat;
+    background-size: contain;
+  }
+}
+.no-account {
+  display: flex;
+  background: #fef6da;
+  color: #dea513;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 22px span {
+    color: #1db0ff;
+  }
+  .error-message-info {
+    margin-left: 10px;
+  }
+  .error-info-svg {
+    display: flex;
+    margin-left: 10px;
+  }
+  p {
+    margin: 3px !important;
+  }
+}
+
+.crateAccountBtn {
+  background: #ffffff;
+  text-transform: lowercase;
+  align-items: center;
+  padding: 8px 24px;
+  border: 1px solid #1db0ff;
+  box-sizing: border-box;
+  border-radius: 4px;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 24px;
+  color: #1db0ff;
+}
+.crateAccountBtn:first-letter {
+  text-transform: uppercase;
 }

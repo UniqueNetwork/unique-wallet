@@ -5,30 +5,31 @@ import './styles.scss';
 
 import type { OfferType } from '@polkadot/react-hooks/useCollections';
 
-import React, { useEffect } from 'react';
+import BN from 'bn.js';
+import React, { useCallback } from 'react';
 import Image from 'semantic-ui-react/dist/commonjs/elements/Image';
 import Card from 'semantic-ui-react/dist/commonjs/views/Card';
 
-import { useSchema } from '@polkadot/react-hooks';
+import envConfig from '@polkadot/apps-config/envConfig';
+import { useDecoder, useSchema } from '@polkadot/react-hooks';
 import { formatKsmBalance } from '@polkadot/react-hooks/useKusamaApi';
-import { AttributesDecoded } from '@polkadot/react-hooks/useSchema';
+
+const { commission } = envConfig;
 
 interface Props {
-  account: string;
+  account: string | undefined;
   collectionId: string;
-  onSetTokenAttributes?: (collectionId: string, tokenId: string, attributes: AttributesDecoded) => void;
   openDetailedInformationModal: (collectionId: string, tokenId: string) => void;
   token: OfferType;
 }
 
-const NftTokenCard = ({ account, collectionId, onSetTokenAttributes, openDetailedInformationModal, token }: Props): React.ReactElement<Props> => {
-  const { attributes, tokenName, tokenUrl } = useSchema(account, collectionId, token.tokenId);
+const NftTokenCard = ({ account, collectionId, openDetailedInformationModal, token }: Props): React.ReactElement<Props> => {
+  const { collectionInfo, tokenName, tokenUrl } = useSchema(account, collectionId, token.tokenId);
+  const { collectionName16Decoder, hex2a } = useDecoder();
 
-  useEffect(() => {
-    if (attributes && onSetTokenAttributes) {
-      onSetTokenAttributes(collectionId, token.tokenId, attributes);
-    }
-  }, [attributes, collectionId, onSetTokenAttributes, token]);
+  const getFee = useCallback((price: BN): BN => {
+    return new BN(price).mul(new BN(commission)).div(new BN(100));
+  }, []);
 
   return (
     <Card
@@ -43,19 +44,18 @@ const NftTokenCard = ({ account, collectionId, onSetTokenAttributes, openDetaile
           wrapped
         />
       )}
-      { token && (
+      { !!(token && collectionInfo) && (
         <Card.Content>
           <Card.Description>
-            {tokenName && (
-              <div className='card-name'>
-                <div className='card-name__title'>{tokenName.name}</div>
-                <div className='card-name__field'>{tokenName.value}</div>
+            <div className='card-name'>
+              <div className='card-name__title'>{hex2a(collectionInfo.TokenPrefix)} {`#${token.tokenId}`} {tokenName?.value}</div>
+              <div className='card-name__field'>{ collectionName16Decoder(collectionInfo.Name)}</div>
+            </div>
+            { token.price && (
+              <div className='card-price'>
+                <div className='card-price__title'> {formatKsmBalance(new BN(token.price).add(getFee(token.price)))} KSM</div>
               </div>
             )}
-            <div className='card-price'>
-              <div className='card-price__title'>Price</div>
-              <div className='card-price__field'>{formatKsmBalance(token.price)} KSM</div>
-            </div>
           </Card.Description>
           <Card.Meta>
             <span className='link'>View

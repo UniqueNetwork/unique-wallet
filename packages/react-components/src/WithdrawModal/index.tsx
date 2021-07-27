@@ -27,7 +27,7 @@ interface Props {
 
 function WithdrawModal ({ account, closeModal, contractInstance, deposited, updateDeposit }: Props): React.ReactElement<Props> {
   const { queueExtrinsic } = useContext(StatusContext);
-  const [withdrawAmount, setWithdrawAmount] = useState<string>('0');
+  const [withdrawAmount, setWithdrawAmount] = useState<string>('');
 
   const revertMoney = useCallback(() => {
     const message = findCallMethodByName(contractInstance, 'withdraw');
@@ -50,40 +50,64 @@ function WithdrawModal ({ account, closeModal, contractInstance, deposited, upda
     }
   }, [account, closeModal, contractInstance, queueExtrinsic, updateDeposit, withdrawAmount]);
 
+  const setValue = (val: string) => {
+    val = val.slice(0, 8);
+
+    if (+val > 100000 || +val < 0) return;
+    if (val.length === 2 && val[0] === '0' && val[1] !== '.') val = '0';
+
+    setWithdrawAmount(val);
+  };
+
   return (
     <Modal
-      className='unique-modal withdraw'
+      className='unique-modal withdraw modal-position'
       onClose={closeModal}
       open
       size='tiny'
     >
       <Modal.Header>
-        <h2>Withdraw KSM from the deposit to your account</h2>
+        <h2>Withdrawal from the market deposit to the your main Kusama account</h2>
       </Modal.Header>
       <Modal.Content image>
         <Form className='transfer-form'>
           <Form.Field>
-            <Input
-              autoFocus
-              className='isSmall'
-              defaultValue={(withdrawAmount || 0).toString()}
-              isError={!!(!deposited || (withdrawAmount && parseFloat(withdrawAmount) > parseFloat(formatKsmBalance(deposited))))}
-              label={'amount'}
-              max={parseFloat(formatKsmBalance(deposited))}
-              onChange={setWithdrawAmount}
-              type='number'
-              value={withdrawAmount}
-            />
+            <div className='deposit-flex'>
+              <div className='deposit-input'>
+                <Input
+                  autoFocus
+                  className='isSmall balance-number'
+                  defaultValue={(withdrawAmount || 0).toString()}
+                  isError={!!(!deposited || (withdrawAmount && parseFloat(withdrawAmount) > parseFloat(formatKsmBalance(deposited))))}
+                  label={'amount'}
+                  max={parseFloat(formatKsmBalance(deposited))}
+                  onChange={setValue}
+                  onKeyDown={(evt) => ['e', 'E', '+', '-'].includes(evt.key) && evt.preventDefault()}
+                  placeholder='0'
+                  type='number'
+                  value={withdrawAmount}
+                />
+                <Button
+                  content='Max'
+                  onClick={deposited ? setWithdrawAmount.bind(null, formatKsmBalance(deposited)) : () => null}
+                />
+              </div>
+
+              <Input
+                className='isSmall ksm-text'
+                isReadOnly
+                label={'ksm'}
+                type='text'
+                value='KSM'
+              />
+            </div>
           </Form.Field>
         </Form>
       </Modal.Content>
       <Modal.Actions>
+
         <Button
-          content={`Withdraw max ${formatKsmBalance(deposited)}`}
-          onClick={deposited ? setWithdrawAmount.bind(null, formatKsmBalance(deposited)) : () => null}
-        />
-        <Button
-          content='confirm withdraw'
+          content='Confirm'
           disabled={!deposited || !parseFloat(withdrawAmount) || (parseFloat(withdrawAmount) > parseFloat(formatKsmBalance(deposited)))}
           onClick={revertMoney}
         />

@@ -27,18 +27,16 @@ interface UseSchemaInterface {
   tokenUrl: string;
 }
 
-export function useSchema (account: string, collectionId: string, tokenId: string | number): UseSchemaInterface {
+export function useSchema (account: string | undefined, collectionId: string, tokenId: string | number): UseSchemaInterface {
   const [collectionInfo, setCollectionInfo] = useState<NftCollectionInterface>();
   const [reFungibleBalance, setReFungibleBalance] = useState<number>(0);
   const [tokenUrl, setTokenUrl] = useState<string>('');
-  const [attributesConst, setAttributesConst] = useState<string>();
-  const [attributesVar, setAttributesVar] = useState<string>();
   const [attributes, setAttributes] = useState<AttributesDecoded>();
   const [tokenDetails, setTokenDetails] = useState<TokenDetailsInterface>();
   const { getTokenInfo } = useToken();
   const { getDetailedCollectionInfo } = useCollection();
   const cleanup = useRef<boolean>(false);
-  const { decodeStruct, getOnChainSchema, getTokenImageUrl } = useMetadata();
+  const { getTokenAttributes, getTokenImageUrl } = useMetadata();
 
   const tokenName = useMemo(() => {
     if (attributes) {
@@ -54,12 +52,16 @@ export function useSchema (account: string, collectionId: string, tokenId: strin
 
   const getReFungibleDetails = useCallback(() => {
     try {
-      if (tokenDetails?.Owner) {
+      if (account && tokenDetails?.Owner) {
         if (Object.prototype.hasOwnProperty.call(collectionInfo?.Mode, 'reFungible')) {
           const owner = tokenDetails.Owner.find((item: { fraction: BN, owner: string }) => item.owner.toString() === account) as { fraction: BN, owner: string } | undefined;
 
           if (typeof collectionInfo?.DecimalPoints === 'number') {
             const balance = owner && owner.fraction.toNumber() / Math.pow(10, collectionInfo.DecimalPoints);
+
+            if (cleanup.current) {
+              return;
+            }
 
             setReFungibleBalance(balance || 0);
           }
@@ -69,15 +71,6 @@ export function useSchema (account: string, collectionId: string, tokenId: strin
       console.error('token balance calculation error', e);
     }
   }, [account, collectionInfo, tokenDetails?.Owner]);
-
-  const setOnChainSchema = useCallback(() => {
-    if (collectionInfo) {
-      const onChainSchema = getOnChainSchema(collectionInfo);
-
-      setAttributesConst(onChainSchema.attributesConst);
-      setAttributesVar(onChainSchema.attributesVar);
-    }
-  }, [collectionInfo, getOnChainSchema]);
 
   const getCollectionInfo = useCallback(async () => {
     if (collectionId) {
@@ -100,42 +93,52 @@ export function useSchema (account: string, collectionId: string, tokenId: strin
     if (tokenId && collectionInfo) {
       const tokenDetailsData = await getTokenInfo(collectionInfo, tokenId.toString());
 
+      if (cleanup.current) {
+        return;
+      }
+
       setTokenDetails(tokenDetailsData);
     }
   }, [collectionInfo, getTokenInfo, tokenId]);
 
-  const mergeTokenAttributes = useCallback(() => {
-    const tokenAttributes: any = {
-      ...decodeStruct({ attr: attributesConst, data: tokenDetails?.ConstData }),
-      ...decodeStruct({ attr: attributesVar, data: tokenDetails?.VariableData })
-    };
+  const mergeTokenAttributes = useCallback(async () => {
+    if (collectionInfo && tokenId) {
+      const attrs = await getTokenAttributes(collectionInfo, tokenId.toString());
 
-    setAttributes(tokenAttributes);
-  }, [attributesConst, attributesVar, decodeStruct, tokenDetails]);
+      if (cleanup.current) {
+        return;
+      }
+
+      setAttributes(attrs);
+    }
+  }, [collectionInfo, getTokenAttributes, tokenId]);
 
   const saveTokenImageUrl = useCallback(async (collectionInf: NftCollectionInterface, tokenId: string) => {
     const tokenImageUrl = await getTokenImageUrl(collectionInf, tokenId);
+
+    if (cleanup.current) {
+      return;
+    }
 
     setTokenUrl(tokenImageUrl);
   }, [getTokenImageUrl]);
 
   useEffect(() => {
     if (collectionInfo) {
-      void setOnChainSchema();
       void saveTokenImageUrl(collectionInfo, tokenId.toString());
       void getTokenDetails();
     }
-  }, [collectionInfo, getTokenDetails, setOnChainSchema, saveTokenImageUrl, tokenId]);
+  }, [collectionInfo, getTokenDetails, saveTokenImageUrl, tokenId]);
 
   useEffect(() => {
     void getCollectionInfo();
   }, [getCollectionInfo]);
 
   useEffect(() => {
-    if (collectionInfo && tokenDetails && !attributes) {
-      mergeTokenAttributes();
+    if (collectionInfo && tokenDetails) {
+      void mergeTokenAttributes();
     }
-  }, [attributes, collectionInfo, mergeTokenAttributes, tokenDetails]);
+  }, [collectionInfo, mergeTokenAttributes, tokenDetails]);
 
   useEffect(() => {
     void getReFungibleDetails();
@@ -149,8 +152,6 @@ export function useSchema (account: string, collectionId: string, tokenId: strin
 
   return {
     attributes,
-    attributesConst,
-    attributesVar,
     collectionInfo,
     getCollectionInfo,
     getTokenDetails,

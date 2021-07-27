@@ -6,7 +6,7 @@ import './styles.scss';
 import BN from 'bn.js';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Form from 'semantic-ui-react/dist/commonjs/collections/Form';
+// import Form from 'semantic-ui-react/dist/commonjs/collections/Form';
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header';
@@ -14,7 +14,7 @@ import Image from 'semantic-ui-react/dist/commonjs/elements/Image';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import envConfig from '@polkadot/apps-config/envConfig';
-import { Input, TransferModal } from '@polkadot/react-components';
+import { TransferModal } from '@polkadot/react-components';
 import { useBalance, useDecoder, useMarketplaceStages, useSchema } from '@polkadot/react-hooks';
 
 import BuySteps from './BuySteps';
@@ -32,19 +32,19 @@ function NftDetails ({ account, setShouldUpdateTokens }: NftDetailsProps): React
   const query = new URLSearchParams(useLocation().search);
   const tokenId = query.get('tokenId') || '';
   const collectionId = query.get('collectionId') || '';
-  const [readyToWithdraw, setReadyToWithdraw] = useState<boolean>(false);
   const [showTransferForm, setShowTransferForm] = useState<boolean>(false);
+  const [lowKsmBalanceToBuy, setLowKsmBalanceToBuy] = useState<boolean>(false);
+  const [kusamaFees, setKusamaFees] = useState<BN | null>(null);
   const { balance } = useBalance(account);
   const { hex2a } = useDecoder();
-  const [isOwnerEscrow, setIsOwnerEscrow] = useState<boolean>(false);
   const { attributes, collectionInfo, reFungibleBalance, tokenUrl } = useSchema(account, collectionId, tokenId);
   const [tokenPriceForSale, setTokenPriceForSale] = useState<string>('');
-  const { buyFee, cancelStep, deposited, escrowAddress, formatKsmBalance, getFee, kusamaBalance, readyToAskPrice, sendCurrentUserAction, setPrice, setReadyToAskPrice, setWithdrawAmount, tokenAsk, tokenInfo, transferStep, withdrawAmount } = useMarketplaceStages(account, collectionInfo, tokenId);
+  const { cancelStep, deposited, escrowAddress, formatKsmBalance, getFee, getKusamaTransferFee, kusamaBalance, readyToAskPrice, sendCurrentUserAction, setPrice, setReadyToAskPrice, tokenAsk, tokenDepositor, tokenInfo, transferStep } = useMarketplaceStages(account, collectionInfo, tokenId);
 
   const uOwnIt = tokenInfo?.Owner?.toString() === account || (tokenAsk && tokenAsk.owner === account);
   const uSellIt = tokenAsk && tokenAsk.owner === account;
-  const lowBalanceToBuy = !!(buyFee && !balance?.free.gte(buyFee));
-  const lowKsmBalanceToBuy = tokenAsk?.price && kusamaBalance?.free.add(deposited || new BN(0)).lte(tokenAsk.price);
+  const isOwnerEscrow = !!(!uOwnIt && tokenInfo && tokenInfo.Owner && tokenInfo.Owner.toString() === escrowAddress && tokenDepositor && (tokenAsk && tokenAsk.owner !== account));
+  // const lowBalanceToBuy = !!(buyFee && !balance?.free.gte(buyFee));
   // sponsoring is enabled
   // const lowBalanceToSell = !!(saleFee && !balance?.free.gte(saleFee));
 
@@ -55,13 +55,12 @@ function NftDetails ({ account, setShouldUpdateTokens }: NftDetailsProps): React
   }, [setShouldUpdateTokens]);
 
   const onSavePrice = useCallback(() => {
-    if (tokenPriceForSale && ((parseFloat(tokenPriceForSale) < 0.01) || (parseFloat(tokenPriceForSale) > 100000))) {
-      alert(`Sorry, price should be in the range between 0.01 and 100000 KSM. You have input: ${tokenPriceForSale}`);
+    const parts = tokenPriceForSale.split('.');
+    const priceLeft = new BN(parts[0]).mul(new BN(10).pow(new BN(12)));
+    const priceRight = new BN(parseFloat(`0.${parts[1]}`) * Math.pow(10, kusamaDecimals));
+    const price = priceLeft.add(priceRight);
 
-      return;
-    }
-
-    setPrice((parseFloat(tokenPriceForSale) * Math.pow(10, kusamaDecimals)).toString());
+    setPrice(price.toString());
   }, [setPrice, tokenPriceForSale]);
 
   const onTransferSuccess = useCallback(() => {
@@ -69,11 +68,6 @@ function NftDetails ({ account, setShouldUpdateTokens }: NftDetailsProps): React
     sendCurrentUserAction('UPDATE_TOKEN_STATE');
     setShouldUpdateTokens && setShouldUpdateTokens(collectionId);
   }, [collectionId, sendCurrentUserAction, setShouldUpdateTokens]);
-
-  const onConfirmWithdraw = useCallback(() => {
-    sendCurrentUserAction('REVERT_UNUSED_MONEY');
-    setReadyToWithdraw(false);
-  }, [sendCurrentUserAction]);
 
   const closeAskModal = useCallback(() => {
     setReadyToAskPrice(false);
@@ -83,11 +77,24 @@ function NftDetails ({ account, setShouldUpdateTokens }: NftDetailsProps): React
     }, 1000);
   }, [setReadyToAskPrice, sendCurrentUserAction]);
 
+  const ksmFeesCheck = useCallback(async () => {
+    // tokenPrice + marketFees + kusamaFees * 2
+    if (tokenAsk?.price) {
+      const kusamaFees: BN | null = await getKusamaTransferFee(escrowAddress, tokenAsk.price);
+
+      if (kusamaFees) {
+        setKusamaFees(kusamaFees);
+        const balanceNeeded = tokenAsk.price.add(getFee(tokenAsk.price)).add(kusamaFees.muln(2));
+        const low = !!kusamaBalance?.free.add(deposited || new BN(0)).lte(balanceNeeded);
+
+        setLowKsmBalanceToBuy(low);
+      }
+    }
+  }, [deposited, escrowAddress, getFee, getKusamaTransferFee, kusamaBalance, tokenAsk]);
+
   useEffect(() => {
-    setTimeout(() => {
-      setIsOwnerEscrow(!!(!uOwnIt && tokenInfo && tokenInfo.Owner && tokenInfo.Owner.toString() === escrowAddress && !tokenAsk?.owner));
-    }, 3000);
-  }, [escrowAddress, tokenAsk, tokenInfo, uOwnIt]);
+    void ksmFeesCheck();
+  }, [ksmFeesCheck]);
 
   return (
     <div className='toke-details'>
@@ -153,11 +160,11 @@ function NftDetails ({ account, setShouldUpdateTokens }: NftDetailsProps): React
                   {formatKsmBalance(tokenAsk.price.add(getFee(tokenAsk.price)))} KSM
                 </Header>
                 <p>Fee: {formatKsmBalance(getFee(tokenAsk.price))} KSM, Price: {formatKsmBalance(tokenAsk.price)} KSM</p>
-                { (!uOwnIt && !transferStep && tokenAsk) && lowBalanceToBuy && (
+                {/* { (!uOwnIt && !transferStep && tokenAsk) && lowBalanceToBuy && (
                   <div className='warning-block'>Your balance is too low to pay fees. <a href='https://t.me/unique2faucetbot'
                     rel='noreferrer nooperer'
                     target='_blank'>Get testUNQ here</a></div>
-                )}
+                )} */}
                 { (!uOwnIt && !transferStep && tokenAsk) && lowKsmBalanceToBuy && (
                   <div className='warning-block'>Your balance is too low to buy</div>
                 )}
@@ -188,21 +195,35 @@ function NftDetails ({ account, setShouldUpdateTokens }: NftDetailsProps): React
                   onClick={setShowTransferForm.bind(null, !showTransferForm)}
                 />
               )}
-              { showMarketActions && (
+              {(!account && tokenAsk) && (
+
+                <div>
+                  <Button
+                    content='Buy it'
+                    disabled
+                    title='ass'
+                  />
+                  <p className='text-with-button'>Сonnect your wallet to make transactions</p>
+
+                </div>
+              )}
+              {console.log(showMarketActions, 'hhhhhhhhhhhhhh')}
+
+              {showMarketActions && (
                 <>
-                  { (!uOwnIt && !transferStep && tokenAsk) && (
-                    <Button
-                      content={`Buy it - ${formatKsmBalance(tokenAsk.price.add(getFee(tokenAsk.price)))} KSM`}
-                      disabled={lowBalanceToBuy || lowKsmBalanceToBuy}
-                      onClick={sendCurrentUserAction.bind(null, 'BUY')}
-                    />
+                  { (!uOwnIt && !transferStep && tokenAsk && kusamaFees) && (
+                    <>
+                      <div className='warning-block'>A small Kusama Network transaction fee up to {formatKsmBalance(kusamaFees.muln(2))} KSM will be
+                        applied to the transaction</div>
+                      <Button
+                        content={`Buy it - ${formatKsmBalance(tokenAsk.price.add(getFee(tokenAsk.price)).add(kusamaFees.muln(2)))} KSM`}
+                        disabled={ lowKsmBalanceToBuy}
+
+                        onClick={sendCurrentUserAction.bind(null, 'BUY')}
+                      />
+                    </>
                   )}
-                  { (parseFloat(formatKsmBalance(deposited)) > 0) && (
-                    <Button
-                      content='Withdraw ksm deposit'
-                      onClick={setReadyToWithdraw.bind(null, !readyToWithdraw)}
-                    />
-                  )}
+
                   { (uOwnIt && !uSellIt) && (
                     <Button
                       content='Sell'
@@ -245,36 +266,7 @@ function NftDetails ({ account, setShouldUpdateTokens }: NftDetailsProps): React
             { !!(transferStep && transferStep >= 4) && (
               <BuySteps step={transferStep - 3} />
             )}
-            { readyToWithdraw && (
-              <Form className='transfer-form'>
-                <Form.Field>
-                  <Input
-                    autoFocus
-                    className='isSmall'
-                    defaultValue={(withdrawAmount || 0).toString()}
-                    isError={!!(!deposited || (withdrawAmount && parseFloat(withdrawAmount) > parseFloat(formatKsmBalance(deposited))))}
-                    label={'KSM'}
-                    max={parseFloat(formatKsmBalance(deposited))}
-                    onChange={setWithdrawAmount}
-                    type='number'
-                    value={withdrawAmount}
-                  />
-                </Form.Field>
-                <Form.Field>
-                  <div className='buttons'>
-                    <Button
-                      content={`Withdraw max ${formatKsmBalance(deposited)}`}
-                      onClick={deposited ? setWithdrawAmount.bind(null, formatKsmBalance(deposited)) : () => null}
-                    />
-                    <Button
-                      content='confirm withdraw'
-                      disabled={!deposited || !parseFloat(withdrawAmount) || (parseFloat(withdrawAmount) > parseFloat(formatKsmBalance(deposited)))}
-                      onClick={onConfirmWithdraw}
-                    />
-                  </div>
-                </Form.Field>
-              </Form>
-            )}
+
           </Grid.Column>
         </Grid.Row>
       </Grid>

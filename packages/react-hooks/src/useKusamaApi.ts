@@ -14,11 +14,12 @@ import { WsProvider } from '@polkadot/rpc-provider';
 import { TypeRegistry } from '@polkadot/types/create';
 import { encodeAddress } from '@polkadot/util-crypto';
 
-const { kusamaDecimals } = envConfig;
+const { kusamaDecimals, minPrice } = envConfig;
 
 interface UseKusamaApiInterface {
   formatKsmBalance: (balance: BN | undefined) => string;
   getKusamaBalance: () => void;
+  getKusamaTransferFee: (recipient: string, value: BN) => Promise<BN | null>;
   kusamaApi: ApiPromise | undefined;
   kusamaBalance: BalanceInterface | undefined;
   kusamaTransfer: (recipient: string, value: BN, onSuccess: (status: string) => void, onFail: (status: string) => void) => void;
@@ -30,8 +31,17 @@ export function formatKsmBalance (value: BN | undefined = new BN(0)): string {
 
 export function formatStrBalance (decimals: number, value: BN | undefined = new BN(0)): string {
   const floatValue = parseFloat(value.toString()) / Math.pow(10, decimals);
+  const arr = floatValue.toString().split('.');
 
-  return (Math.trunc(floatValue * 10000) / 10000).toFixed(4);
+  if (floatValue === 0) {
+    return '0';
+  }
+
+  if (floatValue < minPrice && floatValue > 0) {
+    return `< ${minPrice}`;
+  }
+
+  return `${arr[0]}${arr[1] ? `.${arr[1].substr(0, 6)}` : ''}`;
 }
 
 export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
@@ -64,7 +74,7 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
     const api = new ApiPromise({ provider, registry, signer, types, typesBundle, typesChain });
 
     api.on('ready', (): void => {
-      console.log('kusama api ready');
+      // console.log('kusama api ready');
       setKusamaApi(api);
     });
 
@@ -92,6 +102,14 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
     }
   }, [encodedKusamaAccount, kusamaApi, queueExtrinsic]);
 
+  const getKusamaTransferFee = useCallback(async (recipient: string, value: BN): Promise<BN | null> => {
+    if (encodedKusamaAccount && kusamaApi) {
+      const transferFee = await kusamaApi.tx.balances.transfer(recipient, value).paymentInfo(encodedKusamaAccount) as { partialFee: BN };
+
+      return transferFee.partialFee;
+    } else return null;
+  }, [encodedKusamaAccount, kusamaApi]);
+
   useEffect(() => {
     if (account) {
       setEncodedKusamaAccount(encodeAddress(account, 2));
@@ -110,6 +128,7 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
   return {
     formatKsmBalance,
     getKusamaBalance,
+    getKusamaTransferFee,
     kusamaApi,
     kusamaBalance,
     kusamaTransfer
