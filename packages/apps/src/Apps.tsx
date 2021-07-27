@@ -6,7 +6,7 @@ import './apps.scss';
 import type { BareProps as Props, ThemeDef } from '@polkadot/react-components/types';
 
 import React, { Suspense, useContext, useMemo, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import Menu from 'semantic-ui-react/dist/commonjs/collections/Menu';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 import { ThemeContext } from 'styled-components';
@@ -24,6 +24,7 @@ import GlobalStyle from '@polkadot/react-components/styles';
 import { useApi } from '@polkadot/react-hooks';
 import Signer from '@polkadot/react-signer';
 
+import infoSvg from '../src/images/info.svg';
 import ConnectingOverlay from './overlays/Connecting';
 import BalancesHeader from './BalancesHeader';
 import ScrollToTop from './ScrollToTop';
@@ -68,6 +69,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
   );
 
   const missingApis = findMissingApis(api, needsApi);
+  const currentLocation = location.pathname.slice(1) === 'accounts';
 
   return (
     <>
@@ -88,6 +90,22 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
             )
             : (
               <>
+                {(!account && !currentLocation) && (
+                  <div className='no-account'>
+                    <div className='error-info-svg'>
+                      <img src = {String(infoSvg)}/>
+                    </div>
+                    <div className='error-message-info'>
+                      <div>
+                        <p> Some features are currently hidden and will only become available once you connect your wallet.  </p>
+                        <p> You can create new or add your existing substrate account on the
+                          <Link to='accounts' > <span> account page</span> </Link >
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                )}
                 <Suspense fallback='...'>
                   <ErrorBoundary trigger={name}>
                     {missingApis.length
@@ -143,6 +161,12 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                                       as={NavLink}
                                       name='accounts'
                                       to='/accounts'
+                                    />
+                                    <Menu.Item
+                                      active={location.pathname === '/faq'}
+                                      as={NavLink}
+                                      name='FAQ'
+                                      to='/faq'
                                     />
                                   </>
                                 )}

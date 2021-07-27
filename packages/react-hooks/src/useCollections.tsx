@@ -8,6 +8,7 @@ import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
 import BN from 'bn.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { Filters } from '@polkadot/app-nft-market/containers/NftMarket';
 import envConfig from '@polkadot/apps-config/envConfig';
 import { useApi, useCollection, useFetch } from '@polkadot/react-hooks';
 import { base64Decode, encodeAddress } from '@polkadot/util-crypto';
@@ -38,6 +39,19 @@ export type OffersResponseType = {
   pageSize: number;
 }
 
+export type HoldType = {
+  collectionId: number;
+  tokenId: string;
+  owner: string;
+}
+
+export type HoldResponseType = {
+  items: HoldType[];
+  itemsCount: number;
+  page: number;
+  pageSize: number;
+}
+
 export type TradeType = {
   buyer?: string;
   collectionId: number;
@@ -62,8 +76,10 @@ export function useCollections () {
   const { api } = useApi();
   const { fetchData } = useFetch();
   const [error, setError] = useState<ErrorType>();
-  const [offers, setOffers] = useState<{[key: string]: OfferType}>({});
+  const [offers, setOffers] = useState<{ [key: string]: OfferType }>({});
+  const [myHold, setMyHold] = useState<{ [key: string]: HoldType[] }>({});
   const [offersLoading, setOffersLoading] = useState<boolean>(false);
+  const [holdLoading, setHoldLoading] = useState<boolean>(false);
   const [offersCount, setOffersCount] = useState<number>();
   const [trades, setTrades] = useState<TradeType[]>();
   const [tradesLoading, setTradesLoading] = useState<boolean>(false);
@@ -88,15 +104,32 @@ export function useCollections () {
   /**
    * Return the list of token sale offers
    */
-  const getOffers = useCallback((page: number, pageSize: number, collectionIds?: string[]) => {
+  const getOffers = useCallback((page: number, pageSize: number, filters?: Filters) => {
     try {
       let url = `/offers?page=${page}&pageSize=${pageSize}`;
 
-      if (!canAddCollections && collectionIds && collectionIds.length) {
-        url = `${url}${collectionIds.map((item: string) => `&collectionId=${item}`).join('')}`;
+      // reset offers before loading first page
+      if (page === 1) {
+        setOffers({});
       }
 
-      setOffersLoading(true);
+      if (filters) {
+        Object.keys(filters).forEach((filterKey: string) => {
+          const currentFilter: string | string[] = filters[filterKey];
+
+          if (Array.isArray(currentFilter)) {
+            // url += filters[key].map((item: string) => `&collectionId=${item}`).join('');
+            url = `${url}${currentFilter.map((item: string) => `&collectionId=${item}`).join('')}`;
+          } else {
+            url += '&' + filterKey + '=' + currentFilter;
+          }
+        });
+      }
+
+      // if (!canAddCollections && collectionIds && collectionIds.length) {
+      //   url = `${url}${collectionIds.map((item: string) => `&collectionId=${item}`).join('')}`;
+      // }
+
       fetchData<OffersResponseType>(url).subscribe((result: OffersResponseType | ErrorType) => {
         if (cleanup.current) {
           setOffersLoading(false);
@@ -108,7 +141,11 @@ export function useCollections () {
           setError(result);
         } else {
           if (result) {
-            if (result.items.length) {
+            setOffersCount(result.itemsCount);
+
+            if (result.itemsCount === 0) {
+              setOffers({});
+            } else if (result.items.length) {
               setOffers((prevState: {[key: string]: OfferType}) => {
                 const newState = { ...prevState };
 
@@ -120,10 +157,6 @@ export function useCollections () {
 
                 return newState;
               });
-            }
-
-            if (result.itemsCount) {
-              setOffersCount(result.itemsCount);
             }
           }
         }
@@ -137,9 +170,62 @@ export function useCollections () {
   }, [fetchData]);
 
   /**
+   * Return the list of token were hold on the escrow
+   */
+  const getHoldByMe = useCallback((account: string, page: number, pageSize: number, collectionIds?: string[]) => {
+    try {
+      let url = `/OnHold/${account}?page=${page}&pageSize=${pageSize}`;
+
+      if (!canAddCollections && collectionIds && collectionIds.length) {
+        url = `${url}${collectionIds.map((item: string) => `&collectionId=${item}`).join('')}`;
+      }
+
+      setHoldLoading(true);
+      fetchData<HoldResponseType>(url).subscribe((result: HoldResponseType | ErrorType) => {
+        if (cleanup.current) {
+          setHoldLoading(false);
+
+          return;
+        }
+
+        if ('error' in result) {
+          setError(result);
+          setMyHold({});
+        } else {
+          if (result?.items.length) {
+            const newState: { [key: string]: HoldType[] } = {};
+
+            result.items.forEach((hold: HoldType) => {
+              if (!newState[hold.collectionId]) {
+                newState[hold.collectionId] = [];
+              }
+
+              if (!newState[hold.collectionId].find((holdItem) => holdItem.tokenId === hold.tokenId)) {
+                newState[hold.collectionId].push(hold);
+              }
+            });
+
+            setMyHold(newState);
+          } else {
+            setMyHold({});
+          }
+        }
+
+        setHoldLoading(false);
+      });
+    } catch (e) {
+      console.log('getOffers error', e);
+      setHoldLoading(false);
+    }
+  }, [fetchData]);
+
+  /**
    * Return the list of token trades
    */
-  const getTrades = useCallback(({ account, collectionIds, page, pageSize }: { account?: string, collectionIds?: string[], page: number, pageSize: number }) => {
+  const getTrades = useCallback(({ account,
+    collectionIds,
+    page,
+    pageSize }: { account?: string, collectionIds?: string[], page: number, pageSize: number }) => {
     try {
       let url = '/trades';
 
@@ -271,9 +357,12 @@ export function useCollections () {
     error,
     getCollectionWithTokenCount,
     getDetailedCollectionInfo,
+    getHoldByMe,
     getOffers,
     getTokensOfCollection,
     getTrades,
+    holdLoading,
+    myHold,
     myTrades,
     offers,
     offersCount,

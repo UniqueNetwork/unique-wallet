@@ -34,8 +34,6 @@ export function useToken (): UseTokenInterface {
     { account: string, collectionId: string, constData: string, variableData: string, successCallback?: () => void, errorCallback?: () => void, owner: string }) => {
     const transaction = api.tx.nft.createItem(collectionId, owner, { nft: { const_data: constData, variable_data: variableData } });
 
-    console.log('info createNft constData', constData, 'variableData', variableData);
-
     queueExtrinsic({
       accountId: account && account.toString(),
       extrinsic: transaction,
@@ -69,7 +67,9 @@ export function useToken (): UseTokenInterface {
     }
 
     try {
-      return (await api.query.nft.nftItemList(collectionId, tokenId)).toJSON() as unknown as TokenDetailsInterface;
+      const tokenInfo = await api.query.nft.nftItemList(collectionId, tokenId);
+
+      return tokenInfo.toJSON() as unknown as TokenDetailsInterface;
     } catch (e) {
       console.log('getDetailedTokenInfo error', e);
 

@@ -4,11 +4,14 @@
 import './styles.scss';
 
 import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+import type { HoldType } from '@polkadot/react-hooks/useCollections';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import { useHistory } from 'react-router';
 import Confirm from 'semantic-ui-react/dist/commonjs/addons/Confirm';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
+import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 import Item from 'semantic-ui-react/dist/commonjs/views/Item';
 
 import envConfig from '@polkadot/apps-config/envConfig';
@@ -28,23 +31,29 @@ interface Props {
   canTransferTokens: boolean;
   collection: NftCollectionInterface;
   removeCollection: (collection: string) => void;
+  onHold: HoldType[];
   openTransferModal: (collection: NftCollectionInterface, tokenId: string, balance: number) => void;
   shouldUpdateTokens: string | undefined;
+  tokensSelling: string[];
 }
 
-function NftCollectionCard ({ account, canTransferTokens, collection, openTransferModal, removeCollection, shouldUpdateTokens }: Props): React.ReactElement<Props> {
+const perPage = 5;
+
+function NftCollectionCard ({ account, canTransferTokens, collection, onHold, openTransferModal, removeCollection, shouldUpdateTokens, tokensSelling }: Props): React.ReactElement<Props> {
   const [opened, setOpened] = useState(true);
   const [collectionImageUrl, setCollectionImageUrl] = useState<string>();
   const [ownTokensCount, setOwnTokensCount] = useState<number>();
   const [allTokensCount, setAllTokensCount] = useState<number>();
   const [confirmDeleteCollection, setConfirmDeleteCollection] = useState<boolean>(false);
-  const [tokensOfCollection, setTokensOfCollection] = useState<Array<string>>([]);
+  const [tokensOnPage, setTokensOnPage] = useState<string[]>([]);
+  const [allMyTokens, setAllMyTokens] = useState<string[]>([]);
   const { getTokensOfCollection } = useCollections();
   const { getCollectionTokensCount } = useCollection();
   const { collectionName16Decoder } = useDecoder();
   const cleanup = useRef<boolean>(false);
   const history = useHistory();
   const { getTokenImageUrl } = useMetadata();
+  const hasMore = tokensOnPage.length < allMyTokens.length;
 
   const openCollection = useCallback((isOpen) => {
     setOpened(isOpen);
@@ -87,21 +96,28 @@ function NftCollectionCard ({ account, canTransferTokens, collection, openTransf
       return;
     }
 
-    const tokensOfCollection = (await getTokensOfCollection(collection.id, account)) as string[];
+    const tokens = (await getTokensOfCollection(collection.id, account)) as string[];
 
     if (cleanup.current) {
       return;
     }
 
-    setOwnTokensCount(tokensOfCollection.length);
-    setTokensOfCollection(tokensOfCollection);
-  }, [account, collection, getTokensOfCollection]);
+    setOwnTokensCount(tokens.length);
+    const holdingTokens = onHold.map((item) => item.tokenId);
+
+    setAllMyTokens([...tokensSelling, ...tokens, ...holdingTokens]);
+    setTokensOnPage([...tokensSelling, ...tokens, ...holdingTokens].slice(0, perPage));
+  }, [account, collection, getTokensOfCollection, onHold, tokensSelling]);
 
   const toggleConfirmation = useCallback((status, e: React.MouseEvent<any>) => {
     e.stopPropagation();
 
     setConfirmDeleteCollection(status);
   }, []);
+
+  const loadMore = useCallback((page: number) => {
+    setTokensOnPage(allMyTokens.slice(0, perPage * page));
+  }, [allMyTokens]);
 
   useEffect(() => {
     if (shouldUpdateTokens && shouldUpdateTokens === collection.id) {
@@ -110,10 +126,8 @@ function NftCollectionCard ({ account, canTransferTokens, collection, openTransf
   }, [collection.id, shouldUpdateTokens, updateTokens]);
 
   useEffect(() => {
-    if (opened) {
-      void updateTokens();
-    }
-  }, [account, opened, updateTokens]);
+    void updateTokens();
+  }, [account, updateTokens]);
 
   useEffect(() => {
     if (!collectionImageUrl && collection) {
@@ -170,7 +184,7 @@ function NftCollectionCard ({ account, canTransferTokens, collection, openTransf
             )}
           </div>
           <div className='tokens-count'>
-            <span>Total: {allTokensCount} {!allTokensCount || allTokensCount > 1 ? 'items' : 'item'} (own: {ownTokensCount})</span>
+            <span>Total: {allTokensCount} {!allTokensCount || allTokensCount > 1 ? 'items' : 'item'} (own: {ownTokensCount || 0}, selling: {tokensSelling.length}, on hold: {onHold.length})</span>
           </div>
           <div className='link-button'>
             { canEditCollection && (
@@ -222,18 +236,37 @@ function NftCollectionCard ({ account, canTransferTokens, collection, openTransf
         </div>
       }
     >
-      <div className='token-table'>
-        { account && tokensOfCollection.map((token) => (
-          <NftTokenCard
-            account={account}
-            canTransferTokens={canTransferTokens}
-            collection={collection}
-            key={token}
-            openTransferModal={openTransferModal}
-            shouldUpdateTokens={shouldUpdateTokens}
-            token={token}
-          />
-        ))}
+      <div className='expander-inner'>
+        <InfiniteScroll
+          hasMore={hasMore}
+          initialLoad={false}
+          loadMore={loadMore}
+          loader={<Loader
+            active
+            className='load-more'
+            inline='centered'
+            key={'collection-card'}
+          />}
+          pageStart={1}
+          threshold={100}
+          useWindow={false}
+        >
+          <div className='token-table'>
+            { account && tokensOnPage.map((token) => (
+              <NftTokenCard
+                account={account}
+                canTransferTokens={canTransferTokens}
+                collection={collection}
+                key={token}
+                onHold={onHold}
+                openTransferModal={openTransferModal}
+                shouldUpdateTokens={shouldUpdateTokens}
+                token={token}
+                tokensSelling={tokensSelling}
+              />
+            ))}
+          </div>
+        </InfiniteScroll>
       </div>
     </Expander>
   );

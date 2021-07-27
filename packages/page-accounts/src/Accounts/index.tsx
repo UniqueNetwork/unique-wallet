@@ -24,7 +24,6 @@ import Proxy from '../modals/ProxiedAdd';
 import Qr from '../modals/Qr';
 import { sortAccounts } from '../util';
 import Account from './Account';
-import BannerClaims from './BannerClaims';
 import BannerExtension from './BannerExtension';
 
 interface Balances {
@@ -49,6 +48,7 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
   const { allAccounts } = useAccounts();
   const { isIpfs } = useIpfs();
   const [isCreateOpen, toggleCreate] = useToggle();
+  const [isRestoreOpen, toggleRestore] = useToggle();
   const [isImportOpen, toggleImport] = useToggle();
   const [isLedgerOpen, toggleLedger] = useToggle();
   const [isMultisigOpen, toggleMultisig] = useToggle();
@@ -150,6 +150,13 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
           onStatusChange={onStatusChange}
         />
       )}
+      {isRestoreOpen && (
+        <CreateModal
+          onClose={toggleRestore}
+          onStatusChange={onStatusChange}
+          restoreFromSeed={true}
+        />
+      )}
       {isImportOpen && (
         <ImportModal
           onClose={toggleImport}
@@ -189,12 +196,16 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
           onClick={toggleImport}
         />
         <Button
+          content={'Restore from seed'}
+          disabled={isIpfs}
+          onClick={toggleRestore}
+        />
+        <Button
           content={'Add via Qr'}
           onClick={toggleQr}
         />
       </Button.Group>
       <BannerExtension />
-      <BannerClaims />
       <Table
         empty={!isLoading && sortedAccountsWithDelegation && 'You don\'t have any accounts. Some features are currently hidden and will only become available once you have accounts.'}
         filter={filter}

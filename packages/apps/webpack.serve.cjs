@@ -17,19 +17,23 @@ module.exports = merge(
       proxy: {
         '/health': {
           changeOrigin: true,
-          target: 'https://whitelabel.market/'
+          target: 'https://unqnft.io/'
         },
         '/mint': {
           changeOrigin: true,
-          target: 'https://whitelabel.market/'
+          target: 'https://unqnft.io/'
         },
         '/offers': {
           changeOrigin: true,
-          target: 'https://whitelabel.market/'
+          target: 'https://unqnft.io/'
         },
         '/trades': {
           changeOrigin: true,
-          target: 'https://whitelabel.market/'
+          target: 'https://unqnft.io/'
+        },
+        'https://unqnft.io': {
+          changeOrigin: true,
+          target: 'https://unqnft.io/'
         },
         'https://whitelabel.market': {
           changeOrigin: true,

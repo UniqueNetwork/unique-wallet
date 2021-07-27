@@ -7,12 +7,10 @@ import type { Routes } from './types';
 import envConfig from '@polkadot/apps-config/envConfig';
 
 import accounts from './accounts';
-import contracts from './contracts';
 import nftMarket from './nft-market';
-import nftMint from './nft-mint';
 import nftTrades from './nft-trades';
 import nftWallet from './nft-wallet';
-import settings from './settings';
+import faq from './faq';
 
 const { walletMode } = envConfig;
 
@@ -20,19 +18,15 @@ export default function create (t: TFunction): Routes {
   if (walletMode) {
     return [
       nftWallet(t),
-      accounts(t),
-      contracts(t),
-      settings(t)
+      accounts(t)
     ];
   }
 
   return [
     nftTrades(t),
     nftWallet(t),
-    nftMint(t),
     nftMarket(t),
     accounts(t),
-    contracts(t),
-    settings(t)
+    faq(t)
   ];
 }

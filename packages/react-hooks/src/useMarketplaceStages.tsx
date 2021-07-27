@@ -16,9 +16,9 @@ import { BalanceInterface } from '@polkadot/react-hooks/useBalance';
 
 import marketplaceStateMachine from './stateMachine';
 
-const { escrowAddress, kusamaDecimals, maxGas, quoteId } = envConfig;
+const { commission, escrowAddress, kusamaDecimals, maxGas, quoteId } = envConfig;
 
-type UserActionType = 'BUY' | 'CANCEL' | 'SELL' | 'REVERT_UNUSED_MONEY' | 'UPDATE_TOKEN_STATE' | 'OFFER_TRANSACTION_FAIL' | 'SUBMIT_OFFER' | 'OFFER_TRANSACTION_SUCCESS';
+type UserActionType = 'ASK_PRICE_FAIL' | 'BUY' | 'CANCEL' | 'SELL' | 'REVERT_UNUSED_MONEY' | 'UPDATE_TOKEN_STATE' | 'OFFER_TRANSACTION_FAIL' | 'SUBMIT_OFFER' | 'OFFER_TRANSACTION_SUCCESS';
 
 export interface MarketplaceStagesInterface {
   buyFee: BN | undefined;
@@ -28,6 +28,8 @@ export interface MarketplaceStagesInterface {
   escrowAddress: string;
   error: string | null;
   formatKsmBalance: (value: BN | undefined) => string;
+  getFee: (price: BN) => BN;
+  getKusamaTransferFee: (recipient: string, value: BN) => Promise<BN | null>;
   kusamaBalance: BalanceInterface | undefined;
   saleFee: BN | undefined;
   sendCurrentUserAction: (action: UserActionType) => void;
@@ -36,6 +38,7 @@ export interface MarketplaceStagesInterface {
   setTokenPriceForSale: (price: number) => void;
   setWithdrawAmount: (withdrawAmount: string) => void;
   tokenAsk: { owner: string, price: BN } | undefined;
+  tokenDepositor: string | undefined;
   tokenInfo: TokenDetailsInterface | undefined;
   tokenPriceForSale: number | undefined;
   transferStep: number;
@@ -47,6 +50,7 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
   const { api } = useApi();
   const [state, send] = useMachine(marketplaceStateMachine);
   const [withdrawAmount, setWithdrawAmount] = useState<string>('0');
+  const [tokenDepositor, setTokenDepositor] = useState<string>();
   const [tokenInfo, setTokenInfo] = useState<TokenDetailsInterface>();
   const [saleFee, setSaleFee] = useState<BN>();
   const [buyFee, setBuyFee] = useState<BN>();
@@ -56,7 +60,7 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
   const { queueExtrinsic } = useContext(StatusContext);
   const [readyToAskPrice, setReadyToAskPrice] = useState<boolean>(false);
   const [tokenPriceForSale, setTokenPriceForSale] = useState<number>();
-  const { formatKsmBalance, kusamaBalance, kusamaTransfer } = useKusamaApi(account);
+  const { formatKsmBalance, getKusamaTransferFee, kusamaBalance, kusamaTransfer } = useKusamaApi(account);
 
   const sendCurrentUserAction = useCallback((userAction: UserActionType) => {
     send(userAction);
@@ -70,6 +74,13 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
     const info: TokenDetailsInterface = await getTokenInfo(collectionInfo, tokenId);
 
     setTokenInfo(info);
+
+    const tokenDepositor = await getDepositor(collectionInfo.id, tokenId);
+
+    if (tokenDepositor) {
+      setTokenDepositor(tokenDepositor);
+    }
+
     const ask = await getTokenAsk(collectionInfo.id, tokenId);
 
     await getUserDeposit();
@@ -77,10 +88,6 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
     // the token is mine
     if (info?.Owner?.toString() === escrowAddress) {
       if (!ask || !ask.price) {
-        const tokenDepositor = await getDepositor(collectionInfo.id, tokenId);
-
-        console.log('tokenDepositor', tokenDepositor);
-
         if (tokenDepositor === account) {
           // the token is in escrow - waiting for deposit
           send('WAIT_FOR_DEPOSIT');
@@ -89,10 +96,10 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
     }
 
     send('WAIT_FOR_USER_ACTION');
-  }, [collectionInfo, getTokenInfo, account, getUserDeposit, send, getTokenAsk, tokenId, getDepositor]);
+  }, [collectionInfo, getTokenInfo, getUserDeposit, account, send, getTokenAsk, tokenId, getDepositor]);
 
   const getFee = useCallback((price: BN): BN => {
-    return price.muln(2).divRound(new BN(100));
+    return price.mul(new BN(commission)).div(new BN(100));
   }, []);
 
   const queueTransaction = useCallback((transaction: SubmittableExtrinsic, fail: string, start: string, success: string, update: string) => {
@@ -113,7 +120,7 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
     if (fee) {
       setSaleFee(fee.partialFee);
 
-      return fee.partialFee.muln(2);
+      return fee.partialFee;
     }
 
     return null;
@@ -173,6 +180,8 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
   const waitForTokenRevert = useCallback(async () => {
     if (collectionInfo) {
       const info = await getTokenInfo(collectionInfo, tokenId);
+
+      setTokenInfo(info);
 
       if (info?.Owner?.toString() === account) {
         send('TOKEN_REVERT_SUCCESS');
@@ -342,6 +351,22 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
     return state.matches('cancelSell') || state.matches('waitForTokenRevert');
   }, [state]);
 
+  const updateTokenInfo = useCallback(async () => {
+    if (!collectionInfo) {
+      return;
+    }
+
+    const info: TokenDetailsInterface = await getTokenInfo(collectionInfo, tokenId);
+
+    setTokenInfo(info);
+  }, [collectionInfo, getTokenInfo, tokenId]);
+
+  const updateTokenAsk = useCallback(() => {
+    if (collectionInfo) {
+      void getTokenAsk(collectionInfo.id, tokenId);
+    }
+  }, [collectionInfo, getTokenAsk, tokenId]);
+
   useEffect(() => {
     switch (true) {
       // on load - update token state
@@ -399,7 +424,13 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
     }
   }, [account, getBuyFee, getSaleFee]);
 
-  console.log('buy / sale stage', state.value);
+  useEffect(() => {
+    updateTokenAsk();
+  }, [updateTokenAsk]);
+
+  useEffect(() => {
+    void updateTokenInfo();
+  }, [updateTokenInfo]);
 
   return {
     buyFee,
@@ -409,6 +440,8 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
     error,
     escrowAddress,
     formatKsmBalance,
+    getFee,
+    getKusamaTransferFee,
     kusamaBalance,
     readyToAskPrice,
     saleFee,
@@ -418,6 +451,7 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
     setTokenPriceForSale,
     setWithdrawAmount,
     tokenAsk,
+    tokenDepositor,
     tokenInfo,
     tokenPriceForSale,
     transferStep,
