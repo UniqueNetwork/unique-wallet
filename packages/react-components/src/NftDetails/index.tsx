@@ -207,8 +207,6 @@ function NftDetails ({ account, setShouldUpdateTokens }: NftDetailsProps): React
 
                 </div>
               )}
-              {console.log(showMarketActions, 'hhhhhhhhhhhhhh')}
-
               {showMarketActions && (
                 <>
                   { (!uOwnIt && !transferStep && tokenAsk && kusamaFees) && (
@@ -218,7 +216,6 @@ function NftDetails ({ account, setShouldUpdateTokens }: NftDetailsProps): React
                       <Button
                         content={`Buy it - ${formatKsmBalance(tokenAsk.price.add(getFee(tokenAsk.price)).add(kusamaFees.muln(2)))} KSM`}
                         disabled={ lowKsmBalanceToBuy}
-
                         onClick={sendCurrentUserAction.bind(null, 'BUY')}
                       />
                     </>
