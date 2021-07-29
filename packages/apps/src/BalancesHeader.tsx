@@ -5,7 +5,7 @@ import BN from 'bn.js';
 import React, { memo, useCallback, useState } from 'react';
 import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 
-import { WithdrawModal } from '@polkadot/react-components';
+import { WithdrawModal } from 'ui-core';
 import ArrowCircleUpRight from '@polkadot/react-components/ManageCollection/ArrowCircleUpRight.svg';
 import ArrowCircleUpRightGreen from '@polkadot/react-components/ManageCollection/ArrowCircleUpRightGreen.svg';
 import { useBalances, useNftContract } from '@polkadot/react-hooks';

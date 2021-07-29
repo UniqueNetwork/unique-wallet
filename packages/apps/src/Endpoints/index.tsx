@@ -12,7 +12,7 @@ import store from 'store';
 import styled from 'styled-components';
 
 import { createWsEndpoints, CUSTOM_ENDPOINT_KEY } from '@polkadot/apps-config';
-import { Button, Input, Sidebar } from '@polkadot/react-components';
+import { Button, Input, Sidebar } from 'ui-core';
 import { settings } from '@polkadot/ui-settings';
 import { isAscii } from '@polkadot/util';
 

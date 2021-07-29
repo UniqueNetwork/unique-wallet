@@ -6,7 +6,7 @@ import type { Network } from './types';
 import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 
-import { ChainImg } from '@polkadot/react-components';
+import { ChainImg } from 'ui-core';
 
 import Url from './Url';
 

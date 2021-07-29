@@ -4,7 +4,7 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
-import { Toggle } from '@polkadot/react-components';
+import { Toggle } from 'ui-core';
 
 interface Props {
   apiUrl: string;

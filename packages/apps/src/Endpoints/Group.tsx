@@ -6,7 +6,7 @@ import type { Group } from './types';
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
-import { Icon } from '@polkadot/react-components';
+import { Icon } from 'ui-core';
 
 import Network from './Network';
 
