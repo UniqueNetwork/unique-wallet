@@ -21941,9 +21941,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"ui-core@git+https://github.com/usetech-llc/ui-core.git":
+"ui-core@git+https://github.com/usetech-llc/ui-core.git#commit=d23525189e2dcb97272e44d8632ec4068da65e00":
   version: 0.1.0
-  resolution: "ui-core@https://github.com/usetech-llc/ui-core.git#commit=4a5b85ae037eab33167ea52edbb715cd87469eb3"
+  resolution: "ui-core@https://github.com/usetech-llc/ui-core.git#commit=d23525189e2dcb97272e44d8632ec4068da65e00"
   dependencies:
     "@jackfranklin/rollup-plugin-markdown": ^0.3.0
     "@polkadot/api-contract": ^4.15.1
@@ -21963,7 +21963,7 @@ resolve@^2.0.0-next.3:
     style-loader: ^2.0.0
     thread-loader: ^3.0.1
     xstate: ^4.15.0
-  checksum: edc5eb8cc170f42eb0a01e2143ed02b8e1735f5e5c59a7d82b223356256fb12bad568d86535de3d0b0ac193d7de0d71fd3d0f2606285a4d37dc088f1eeb470b6
+  checksum: 025c830d86518ff9308731c49341cc4fced8cc457f02b7efe9c6f1711e42df73ae523bfb1d48577df5a2cddf91c1148ec3a1eb3320339c31d98858afcafea69f
   languageName: node
   linkType: hard
 
@@ -22111,7 +22111,7 @@ resolve@^2.0.0-next.3:
     stylelint-config-recommended: ^5.0.0
     stylelint-config-styled-components: ^0.1.1
     thread-loader: ^3.0.1
-    ui-core: "git+https://github.com/usetech-llc/ui-core.git"
+    ui-core: "git+https://github.com/usetech-llc/ui-core.git#commit=d23525189e2dcb97272e44d8632ec4068da65e00"
     webpack: ^5.42.0
     webpack-cli: ^4.7.2
     webpack-manifest-plugin: ^3.0.0

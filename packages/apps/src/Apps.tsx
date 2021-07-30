@@ -3,7 +3,7 @@
 
 import './apps.scss';
 
-import type { BareProps as Props, ThemeDef } from '@polkadot/react-components/types';
+import type { BareProps as Props, ThemeDef } from 'ui-core';
 
 import React, { Suspense, useContext, useMemo, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';

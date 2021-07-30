@@ -1,7 +1,7 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeDef } from '@polkadot/react-components/types';
+import type { ThemeDef } from 'ui-core';
 
 import nf4Digital from '../public/logos/nf4Digital.png';
 import UniqueLogo from '../public/logos/unique.svg';

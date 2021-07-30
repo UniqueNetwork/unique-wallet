@@ -1,7 +1,7 @@
 // Copyright 2017-2021 @polkadot/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ThemeDef } from '@polkadot/react-components/types';
+import type { ThemeDef } from 'ui-core';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 
 import React, { Suspense, useEffect, useState } from 'react';
