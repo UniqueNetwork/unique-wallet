@@ -16,6 +16,7 @@
   --black-color: #000;
   --border-color: #ececec;
   --error-color: #ff6335;
+  --error-color-dark: #E65E35 ;
   --success-color: #93ff35;
   --divider-color: #f5f5f5;
   --tabs-color: #81858e;
@@ -35,6 +36,7 @@
     "Helvetica Neue", Arial, sans-serif;
 
   --link-color: #40bcff;
+  --link-light-color: #EBF8FF;
   --bg-page: #f9faff;
   --header-background: #fff;
   --header-text-color: #000000;
@@ -45,8 +47,14 @@
   --menu-font-size: 16px;
   --text-color: #000;
   --title-color: #040b1d;
+  --button-color: #1db0ff;
+  --button-background-hover: #F5FCFF;
+  --button-background-active: #40ABE6;
   --input-background-color: #ffffff;
+  --input-border-color-hover: #e1e1e1;
+  --input-border-color-outline: #cccccc;
   --input-background-disabled-color: #fafafa;
+  --input-placeholder-search-color: #81858E;
   --input-text-color: #040b1d;
   --max-header-width: 100%;
   --card-border-color: #ececec;
