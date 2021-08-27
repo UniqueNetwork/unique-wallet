@@ -5,9 +5,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 const findPackages = require('../../scripts/findPackages.cjs');
 
@@ -44,9 +45,7 @@ function createWebpack (context, mode = 'production') {
           exclude: /(node_modules)/,
           test: /\.(s[ac]|c)ss$/,
           use: [
-            mode === 'production'
-              ? MiniCssExtractPlugin.loader
-              : require.resolve('style-loader'),
+            mode === 'production' ? MiniCssExtractPlugin.loader : require.resolve('style-loader'),
             {
               loader: require.resolve('css-loader'),
               options: {
@@ -166,12 +165,10 @@ function createWebpack (context, mode = 'production') {
         process: 'process/browser.js'
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new Dotenv({ defaults: true, path: './.env', systemvars: true }),
       new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify(mode),
-          VERSION: JSON.stringify(pkgJson.version),
-          WS_URL: JSON.stringify(process.env.WS_URL)
-        }
+        'process.env.NODE_ENV': JSON.stringify(mode),
+        'process.env.VERSION': JSON.stringify(pkgJson.version)
       }),
       new webpack.optimize.SplitChunksPlugin(),
       new MiniCssExtractPlugin({

@@ -24,7 +24,7 @@ function NotFound ({ basePath, missingApis = [] }: Props): React.ReactElement {
   }
 
   return (
-    <Redirect to='/market' />
+    <Redirect to='/wallet' />
   );
 }
 

@@ -1,36 +1,35 @@
-FROM ubuntu:18.04 as builder
+FROM node:lts
 
-# Install any needed packages
-RUN apt-get update && apt-get install -y curl git gnupg
+# Get build args 
+ARG NODE_ENV="production"
 
-# install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get install -y nodejs
+# Set environment variables
+ENV NODE_ENV=${NODE_ENV}
 
-WORKDIR /apps
-COPY . .
+# Install system packages
+RUN apt-get update && apt-get install -y nginx
 
-RUN npm install yarn -g
-RUN yarn && NODE_ENV=production yarn build:www
-CMD ["ls", "-al", "build"]
+# Configuring Nginx
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf \
+    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
 
-# ===========================================================
-FROM nginx:stable-alpine
+# Cleanups
+RUN apt-get remove -y --purge software-properties-common \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# The following is mainly for doc purpose to show which ENV is supported
-# ENV WS_URL=
-
+# Set working directory and copy project files
 WORKDIR /usr/share/nginx/html
 
-# COPY env.sh .
+COPY ./packages/apps/build /usr/share/nginx/html
 
-# RUN apk add --no-cache bash; chmod +x env.sh
+# Copying Nginx's site configuration
+COPY ./nginx-default.conf /etc/nginx/sites-available/default
 
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY --from=builder /apps/packages/apps/build /usr/share/nginx/html
-
+# Port to expose for other containers
 EXPOSE 80
 
-# CMD ["/bin/bash", "-c", "/usr/share/nginx/html/env.sh"]
-
-CMD ["nginx", "-g", "daemon off;"]
+# Launching Nginx
+CMD ["nginx"]

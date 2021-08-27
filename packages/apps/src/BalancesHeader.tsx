@@ -5,15 +5,21 @@ import BN from 'bn.js';
 import React, { memo, useCallback, useState } from 'react';
 import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 
+import menuArrow from '@polkadot/apps/images/menu-arrow.svg';
 import { WithdrawModal } from '@polkadot/react-components';
 import ArrowCircleUpRight from '@polkadot/react-components/ManageCollection/ArrowCircleUpRight.svg';
 import ArrowCircleUpRightGreen from '@polkadot/react-components/ManageCollection/ArrowCircleUpRightGreen.svg';
 import { useBalances, useNftContract } from '@polkadot/react-hooks';
 import { formatKsmBalance, formatStrBalance } from '@polkadot/react-hooks/useKusamaApi';
 
-function BalancesHeader ({ account }: { account?: string }): React.ReactElement<{ account?: string }> {
+interface Props {
+  account?: string,
+}
+
+function BalancesHeader (props: Props): React.ReactElement<{ account?: string }> {
+  const { account } = props;
   const { contractInstance, deposited, getUserDeposit } = useNftContract(account || '');
-  const { balancesAll, kusamaBalancesAll } = useBalances(account, deposited, getUserDeposit);
+  const { freeBalance, freeKusamaBalance } = useBalances(account, getUserDeposit);
   const [showWithdrawModal, toggleWithdrawModal] = useState<boolean>(false);
 
   const closeModal = useCallback(() => {
@@ -29,12 +35,16 @@ function BalancesHeader ({ account }: { account?: string }): React.ReactElement<
     <div className='app-balances'>
       <div className='app-balance--item'>
         <small>balance</small>
-        {formatStrBalance(15, balancesAll?.freeBalance)} UNQ
+        {formatStrBalance(15, freeBalance)} UNQ
       </div>
       <div className='app-balance--item'>
         <small>balance</small>
-        {formatKsmBalance(kusamaBalancesAll?.freeBalance)} KSM
+        {formatKsmBalance(freeKusamaBalance)} KSM
       </div>
+      <img
+        alt='menu-arrow'
+        src={menuArrow as string}
+      />
       <div className='app-balance--item'>
         <small>deposit</small>
         { +formatKsmBalance(deposited) > 0.000001 ? formatKsmBalance(deposited) : 0}  KSM
