@@ -3,14 +3,12 @@
 
 import type { TFunction } from 'i18next';
 import type { Routes } from './types';
-import accounts from './accounts';
-// import faq from './faq';
+import faq from './faq';
 import nftWallet from './nft-wallet';
 
 export default function create (t: TFunction): Routes {
   return [
     nftWallet(t),
-    accounts(t),
-    /* faq(t) */
+    faq(t)
   ];
 }

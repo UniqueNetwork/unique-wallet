@@ -1,5 +1,5 @@
 {
-  "name": "unique-network-marketplace",
+  "name": "unique-network-wallet",
   "repository": "https://github.com/UniqueNetwork/unique-wallet",
   "main": "packages/apps-electron/build/electron.js",
   "description": "A wallet for unique NFT tokens",
