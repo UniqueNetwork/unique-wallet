@@ -2,8 +2,6 @@ tmp/
 build/
 coverage/
 node_modules/
-!.yarn/plugins
-!.yarn/releases
 .DS_Store
 .env
 .env.development.local
@@ -15,6 +13,8 @@ node_modules/
 .pnp.*
 .vscodet
 .yarn/*
+!.yarn/plugins
+!.yarn/releases
 NOTES.md
 ToDo.md
 cc-test-reporter
