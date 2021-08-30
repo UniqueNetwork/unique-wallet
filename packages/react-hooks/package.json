@@ -1,0 +1,13 @@
+{
+  "name": "@polkadot/react-hooks",
+  "version": "0.83.2-28",
+  "description": "A collection of React hooks the Polkadot JS Apps UI",
+  "main": "index.js",
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "maintainers": [],
+  "contributors": [],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@babel/runtime": "^7.14.0"
+  }
+}

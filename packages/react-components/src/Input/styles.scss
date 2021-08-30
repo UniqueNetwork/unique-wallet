@@ -1,0 +1,74 @@
+.ui--Labelled-content {
+
+  .ui.input.ui--Input {
+
+    input {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--input-text-color);
+      background: var(--input-background-color);
+      padding: 8px 16px;
+      width: 100%;
+      font-size: 16px;
+
+      &::-webkit-input-placeholder {
+        color:rgba(191,191,191,.87)
+      }
+
+      &::-moz-placeholder {
+        color:rgba(191,191,191,.87)
+      }
+
+      &:-ms-input-placeholder {
+        color:rgba(191,191,191,.87)
+      }
+
+      &:active {
+        background: var(--input-background-color);
+        border: 1px solid var(--border-color);
+        outline: none;
+      }
+
+      &:focus {
+        background: var(--input-background-color);
+        border: 1px solid var(--border-color);
+        outline: none;
+      }
+
+      &:active, &:focus {
+        &::-webkit-input-placeholder {
+          color: rgba(115, 115, 115, 0.87);
+        }
+
+        &::-moz-placeholder {
+          color: rgba(115, 115, 115, 0.87);
+        }
+
+        &:-ms-input-placeholder {
+          color: rgba(115, 115, 115, 0.87);
+        }
+      }
+
+      &:disabled {
+        border: 1px solid var(--border-color);
+        color: var(--tabs-color);
+        background: var(--input-background-disabled-color);
+        opacity: 1;
+      }
+    }
+  }
+}
+/*
+.ui.input.focus > input::-webkit-input-placeholder,
+.ui.input > input:focus::-webkit-input-placeholder {
+  color: rgba(115, 115, 115, 0.87);
+}
+.ui.input.focus > input::-moz-placeholder,
+.ui.input > input:focus::-moz-placeholder {
+  color: rgba(115, 115, 115, 0.87);
+}
+.ui.input.focus > input:-ms-input-placeholder,
+.ui.input > input:focus:-ms-input-placeholder {
+  color: rgba(115, 115, 115, 0.87);
+}
+ */

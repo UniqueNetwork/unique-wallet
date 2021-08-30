@@ -1,0 +1,72 @@
+.my-tokens {
+  position: relative;
+
+  h4.ui.header {
+    min-height: 0;
+    margin-bottom: calc(2 * var(--gap));
+  }
+
+  .button.create-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .token-image {
+    width: 60px;
+
+    .ui.mini.image {
+      width: 60px;
+      height: 60px;
+      overflow: hidden;
+      border-radius: 50%;
+      margin-right: var(--gap);
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+
+}
+
+@media (min-width: 1024px) {
+  .my-tokens {
+    h1.ui.header, h4.ui.header {
+      display: block;
+
+      &.mobile-header {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .my-tokens {
+    overflow: hidden;
+    background-color: var(--card-background);
+
+    h1.ui.header, h4.ui.header {
+      display: none;
+
+      &.mobile-header {
+        display: block;
+        margin: calc((var(--gap) / 2) * 3) 0 0 0;
+      }
+    }
+
+    .ui.header {
+      padding: 0 var(--gap);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+
+}
+
