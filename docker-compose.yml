@@ -1,15 +1,15 @@
 version: "3.7"
 
 networks:
-  unique-network:
+  unique.network:
     driver: bridge
-    name: ${DOCKER_NETWORK:-unique-network}
+    name: ${DOCKER_NETWORK:-unique.network}
     attachable: true
 
 services:
-  unique.marketplace:
-    container_name: ${DOCKER_NAME:-unique.marketplace.latest}
-    image: ${DOCKER_IMAGE:-unique.marketplace:latest}
+  unique.wallet:
+    container_name: ${DOCKER_NAME:-unique.wallet.latest}
+    image: ${DOCKER_IMAGE:-unique.wallet:latest}
     build:
       context: .
       dockerfile: Dockerfile
@@ -19,9 +19,9 @@ services:
     tty: true
     stdin_open: true    
     ports:
-      - 127.0.0.1:${DOCKER_PORT:-3000}:80
+      - 127.0.0.1:${DOCKER_PORT:-3001}:80
     networks:
-      - ${DOCKER_NETWORK:-unique-network}
+      - ${DOCKER_NETWORK:-unique.network}
     logging:
       options:
         max-size: 10M
@@ -29,6 +29,6 @@ services:
     deploy:
       resources:
         limits:
-          cpus: ${DOCKER_CPUS_LIMIT:-0.5}
+          cpus: ${DOCKER_CPUS_LIMIT:-1}
           memory: ${DOCKER_MEMORY_LIMIT:-1024M}
     restart: always
