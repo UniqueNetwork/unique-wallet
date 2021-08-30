@@ -39,23 +39,7 @@ const MobileMenuHeader = (props: Props): React.ReactElement<Props> => {
         strict={true}
         to={'/wallet'}
       >
-        My tokens
-      </NavLink>
-      <NavLink
-        className={`menu-mobile--link ${location.pathname === '/trades' ? 'active' : ''}`}
-        exact={true}
-        strict={true}
-        to={'/trades'}
-      >
-        Trades
-      </NavLink>
-      <NavLink
-        className={`menu-mobile--link ${location.pathname === '/accounts' ? 'active' : ''}`}
-        exact={true}
-        strict={true}
-        to={'/accounts'}
-      >
-        Accounts
+        My stuff
       </NavLink>
       <NavLink
         className={`menu-mobile--link ${location.pathname === '/faq' ? 'active' : ''}`}
