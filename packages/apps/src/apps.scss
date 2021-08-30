@@ -301,6 +301,7 @@
 
     .btn-select {
       display: flex;
+      flex-direction: column;
 
       &.active {
         display: flex;
@@ -347,7 +348,7 @@
         position: absolute;
         background-color: var(--white-color);
         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
-        bottom: -120px;
+        top: 41px;
         left: 0;
         right: 0;
 
