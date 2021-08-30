@@ -29,7 +29,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onStatusChange }) => {
   };
 
   return <div className='unique-card welcome'>
-    <div>
+    <>
       {isCreateOpen && (
         <CreateModal
           onClose={toggleCreate}
@@ -87,7 +87,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onStatusChange }) => {
 
       </div>
 
-    </div>
+    </>
 
   </div>;
 };

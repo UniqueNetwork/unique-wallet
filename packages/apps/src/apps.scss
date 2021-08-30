@@ -271,7 +271,6 @@
 }
 
   .welcome-btns{
-    position: relative;
     display: flex;
     justify-content: center;
     gap: 16px;
@@ -301,21 +300,12 @@
     }
 
     .btn-select {
-      position: relative;
       display: flex;
-      flex-direction: column;
 
       &.active {
         display: flex;
         flex-direction: column;
-
-        .btn {
-
-          img {
-            transform: rotate(0deg);
-          }
-        }
-
+        position: relative;
         .drop-list {
           z-index: 1;
           display: flex;
@@ -348,7 +338,6 @@
         }
 
         img {
-          transform: rotate(-90deg);
           margin-left: 10.5px;
         }
       }
