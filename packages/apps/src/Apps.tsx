@@ -208,23 +208,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                               <div className='app-container'>
                                 {
                                   noAccounts
-                                    ? (
-                                      <Welcome onStatusChange={queueAction}/>
-                                      // <div className='no-account'>
-                                      //   <div className='error-info-svg'>
-                                      //     <img src={String(infoSvg)}/>
-                                      //   </div>
-                                      //   <div className='error-message-info'>
-                                      //     <div>
-                                      //       <p> Some features are currently hidden and will only become available once you
-                                      //       connect your wallet. </p>
-                                      //       <p> You can create new or add your existing substrate account on the
-                                      //         <Link to='accounts'> <span> account page</span> </Link>
-                                      //       </p>
-                                      //     </div>
-                                      //   </div>
-                                      // </div>
-                                    )
+                                    ? <Welcome onStatusChange={queueAction}/>
                                     : (
                                       <Component
                                         account = {account}
