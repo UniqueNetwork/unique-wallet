@@ -19,9 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="remove market actions from token page">
+    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="tar">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +46,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../marketplace" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
@@ -64,6 +64,7 @@
       <workItem from="1630304247609" duration="4408000" />
       <workItem from="1630476609666" duration="3177000" />
       <workItem from="1630482391888" duration="2049000" />
+      <workItem from="1630497074812" duration="1206000" />
     </task>
     <task id="LOCAL-00001" summary="copy code from marketplace">
       <created>1630052922697</created>
@@ -169,21 +170,22 @@
     <MESSAGE value="yarn plugins" />
     <MESSAGE value="resolve conflicts" />
     <MESSAGE value="remove market actions from token page" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove market actions from token page" />
+    <MESSAGE value="tar" />
+    <option name="LAST_COMMIT_MESSAGE" value="tar" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630484482902">
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630484799493">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630484482902" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630483189024">
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630484799493" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630488335294">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1630483189024" />
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1630484356618">
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1630488335294" />
+    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1630484702409">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630484356618" />
+    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630484702409" />
     <state x="679" y="254" key="VcsDiffUtil.ChangesDialog" timestamp="1630476773165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
