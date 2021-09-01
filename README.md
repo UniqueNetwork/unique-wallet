@@ -1,4 +1,4 @@
-# Unique Wallet
+# Wallet-app
 
 Unique network wallet application
 
