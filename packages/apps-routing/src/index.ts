@@ -3,6 +3,7 @@
 
 import type { TFunction } from 'i18next';
 import type { Routes } from './types';
+
 import faq from './faq';
 import nftWallet from './nft-wallet';
 

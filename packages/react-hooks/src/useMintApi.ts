@@ -66,7 +66,7 @@ export function useMintApi (): UseMintApiInterface {
         console.log('token minted successfully', response);
         setImgLoading(false);
         await addMintedTokenToWallet();
-        history.push('/wallet');
+        history.push('/myStuff');
       } else {
         setUploadingError(response.statusText);
         setImgLoading(false);

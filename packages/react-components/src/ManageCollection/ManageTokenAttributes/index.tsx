@@ -145,7 +145,7 @@ function ManageTokenAttributes ({ account, setShouldUpdateTokens }: Props): Reac
     if (collectionId) {
       // const tokensCount = await getCollectionTokensCount(collectionId);
       // const lastTokenNumber = parseFloat(tokensCount.toString());
-      history.replace('/wallet/');
+      history.replace('/myStuff/');
     }
   }, [collectionId, history]);
 
@@ -243,7 +243,7 @@ function ManageTokenAttributes ({ account, setShouldUpdateTokens }: Props): Reac
   const goBack = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setShouldUpdateTokens && setShouldUpdateTokens('all');
-    history.push('/wallet/');
+    history.push('/myStuff/');
   }, [history, setShouldUpdateTokens]);
 
   useEffect(() => {

@@ -19,12 +19,12 @@ function NotFound ({ basePath, missingApis = [] }: Props): React.ReactElement {
 
   if (walletMode) {
     return (
-      <Redirect to='/wallet' />
+      <Redirect to='/myStuff' />
     );
   }
 
   return (
-    <Redirect to='/wallet' />
+    <Redirect to='/myStuff' />
   );
 }
 

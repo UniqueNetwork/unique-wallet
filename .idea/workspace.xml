@@ -19,25 +19,23 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="git ignore">
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/accordionArrow.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/burnTokenIcon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/shareIcon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/closeIconBlack.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/copyIcon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/facebookIcon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/redditIcon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/styles.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/telegramIcon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/twitterIcon.svg" afterDir="false" />
+    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="token details page">
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/Breadcrumbs/breadcrumbArrow.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/Breadcrumbs/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/Breadcrumbs/styles.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.yarn/install-state.gz" beforeDir="false" afterPath="$PROJECT_DIR$/.yarn/install-state.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps-routing/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps-routing/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps-routing/src/nft-wallet.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps-routing/src/nft-wallet.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/Apps.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/Apps.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/MobileMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/MobileMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/NotFound.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/NotFound.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftTokenCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftTokenCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/ManageCollection/ManageTokenAttributes/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/ManageCollection/ManageTokenAttributes/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/ManageCollection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/ManageCollection/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/react-components/src/NftDetails/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/react-components/src/NftDetails/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/styles.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/react-components/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useMintApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useMintApi.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +91,7 @@
       <workItem from="1630304247609" duration="4408000" />
       <workItem from="1630476609666" duration="3177000" />
       <workItem from="1630482391888" duration="2049000" />
-      <workItem from="1630497074812" duration="13549000" />
+      <workItem from="1630497074812" duration="18470000" />
     </task>
     <task id="LOCAL-00001" summary="copy code from marketplace">
       <created>1630052922697</created>
@@ -151,7 +149,14 @@
       <option name="project" value="LOCAL" />
       <updated>1630500635672</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="token details page">
+      <created>1630573326435</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1630573326435</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,7 +213,8 @@
     <MESSAGE value="remove market actions from token page" />
     <MESSAGE value="tar" />
     <MESSAGE value="git ignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="git ignore" />
+    <MESSAGE value="token details page" />
+    <option name="LAST_COMMIT_MESSAGE" value="token details page" />
   </component>
   <component name="WindowStateProjectService">
     <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630500902387">
@@ -223,22 +229,26 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1630561186577" />
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1630500637549">
+    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1630573327583">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630500637549" />
+    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630573327583" />
     <state x="679" y="254" key="VcsDiffUtil.ChangesDialog" timestamp="1630476773165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="679" y="254" key="VcsDiffUtil.ChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630476773165" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1630592004809">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630592004808" />
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1630476616213">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630476616213" />
-    <state x="667" y="255" width="870" height="530" key="find.popup" timestamp="1630573118313">
+    <state x="667" y="255" width="870" height="530" key="find.popup" timestamp="1630592907851">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="255" width="870" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630573118313" />
+    <state x="667" y="255" width="870" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630592907851" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1630503710911">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

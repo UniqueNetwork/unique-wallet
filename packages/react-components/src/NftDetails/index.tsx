@@ -10,7 +10,7 @@ import Header from 'semantic-ui-react/dist/commonjs/elements/Header';
 import Image from 'semantic-ui-react/dist/commonjs/elements/Image';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
-import { SocialShareModal, TransferModal } from '@polkadot/react-components';
+import { Breadcrumbs, SocialShareModal, TransferModal } from '@polkadot/react-components';
 import { useDecoder, useMarketplaceStages, useSchema, useToggle } from '@polkadot/react-hooks';
 
 import AccordionArrow from './AccordionArrow';
@@ -36,10 +36,10 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
 
   const uOwnIt = tokenInfo?.Owner?.toString() === account;
 
-  const goBack = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+  /* const goBack = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     history.back();
-  }, []);
+  }, []); */
 
   const onTransferSuccess = useCallback(() => {
     setShowTransferForm(false);
@@ -47,7 +47,7 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
 
   return (
     <div className='toke-details'>
-      <a
+      {/* <a
         className='go-back'
         href='/'
         onClick={goBack}
@@ -67,7 +67,11 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
             strokeLinejoin='round'/>
         </svg>
         back
-      </a>
+      </a> */}
+      <Breadcrumbs
+        collectionInfo={collectionInfo}
+        tokenId={tokenId}
+      />
       <div className='token-info'>
         { !collectionInfo && (
           <Loader

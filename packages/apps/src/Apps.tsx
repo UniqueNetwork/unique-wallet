@@ -138,10 +138,10 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                               { !walletMode && (
                                 <>
                                   <Menu.Item
-                                    active={location.pathname === '/wallet'}
+                                    active={location.pathname === '/myStuff'}
                                     as={NavLink}
                                     name='myStuff'
-                                    to='/wallet'
+                                    to='/myStuff'
                                   />
                                   <Menu.Item
                                     active={location.pathname === '/faq'}
