@@ -19,9 +19,25 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="tar">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="git ignore">
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/accordionArrow.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/burnTokenIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/shareIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/closeIconBlack.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/copyIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/facebookIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/redditIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/styles.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/telegramIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/twitterIcon.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.yarn/install-state.gz" beforeDir="false" afterPath="$PROJECT_DIR$/.yarn/install-state.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/NftDetails/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/NftDetails/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,9 +62,22 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="js.linters.configure.manually.selectedeslint" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../marketplace" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="C:\Users\kpozd\WebstormProjects\unique-wallet\node_modules\eslint" />
+    <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\kpozd\WebstormProjects\unique-wallet\packages\react-components\src\SocialShareModal" />
+    </key>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -64,7 +93,7 @@
       <workItem from="1630304247609" duration="4408000" />
       <workItem from="1630476609666" duration="3177000" />
       <workItem from="1630482391888" duration="2049000" />
-      <workItem from="1630497074812" duration="1206000" />
+      <workItem from="1630497074812" duration="13549000" />
     </task>
     <task id="LOCAL-00001" summary="copy code from marketplace">
       <created>1630052922697</created>
@@ -115,7 +144,14 @@
       <option name="project" value="LOCAL" />
       <updated>1630483938814</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="git ignore">
+      <created>1630500635672</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1630500635672</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,21 +207,26 @@
     <MESSAGE value="resolve conflicts" />
     <MESSAGE value="remove market actions from token page" />
     <MESSAGE value="tar" />
-    <option name="LAST_COMMIT_MESSAGE" value="tar" />
+    <MESSAGE value="git ignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="git ignore" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630484799493">
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630500902387">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630484799493" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630488335294">
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630500902387" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630572979710">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1630488335294" />
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1630484702409">
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1630572979710" />
+    <state x="461" y="165" key="SettingsEditor" timestamp="1630561186577">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630484702409" />
+    <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1630561186577" />
+    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1630500637549">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630500637549" />
     <state x="679" y="254" key="VcsDiffUtil.ChangesDialog" timestamp="1630476773165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -194,9 +235,13 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630476616213" />
-    <state x="667" y="255" width="585" height="530" key="find.popup" timestamp="1630480089809">
+    <state x="667" y="255" width="870" height="530" key="find.popup" timestamp="1630573118313">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="255" width="585" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630480089809" />
+    <state x="667" y="255" width="870" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630573118313" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1630503710911">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630503710911" />
   </component>
 </project>
