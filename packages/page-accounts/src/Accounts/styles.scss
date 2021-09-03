@@ -1,18 +1,71 @@
 .page-accounts {
-  .ui {
-    &.buttons {
 
-      &.account-actions {
-        float: right;
+  &--card {
+    background: var(--card-background);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    padding: calc(var(--gap) * 2);
+
+    &--header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: calc(var(--gap) * 2);
+    }
+
+    .accounts-table {
+
+      &--header {
+        background: var(--divider-color);
+        border-radius: 2px;
+        padding: calc(var(--gap) / 2) calc((var(--gap) / 2) * 3);
         display: flex;
-        grid-column-gap: var(--gap);
-        margin-top: var(--gap);
-        margin-bottom: var(--gap);
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: 500;
+
+        span {
+          color: var(--input-placeholder-search-color);
+          font-family: var(--font-roboto);
+
+          &:last-child {
+            margin-right: 37px;
+          }
+        }
+      }
+
+      &--body {
+        .accounts-table-item {
+          padding: var(--gap) calc((var(--gap) / 2) * 3);
+          border: 1px solid var(--border-color);
+          border-bottom: none;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          &:last-child {
+            border-bottom: 1px solid var(--border-color);
+          }
+
+          .item {
+            svg {
+              opacity: 0.5;
+
+              &:hover {
+                opacity: 1;
+              }
+            }
+          }
+
+          a {
+            cursor: pointer;
+            color: var(--link-color);
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
       }
     }
-  }
-
-  td.button {
-    float: right;
   }
 }
