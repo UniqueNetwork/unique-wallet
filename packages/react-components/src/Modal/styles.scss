@@ -1,6 +1,83 @@
 .ui.modal {
+  max-width: 640px;
+
+  .content {
+    padding: 24px 24px 0 24px;
+  }
 
   .header {
     text-transform: none !important;
+    font-size: 28px !important;
+    font-weight: bold !important;
+    color: var(--title-color) !important;
+    font-family: var(--font-inter) !important;
+    padding: 24px 24px 0 24px !important;
+    line-height: 42px !important;
+    display: flex;
+    justify-content: space-between;
+
+    .close-btn{
+      cursor: pointer;
+      margin-right: 4.5px;
+    }
+  }
+
+  .footer {
+    padding: 32px 24px 24px 24px;
+
+    .btn-container{
+      display: flex;
+    }
+  }
+
+  .info-text {
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-family: var(--font-roboto);
+    color: var(--tabs-color);
+    line-height: 22px;
+
+    &.label {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+  }
+  .ui--Password {
+    .ui--Labelled-content{
+      .ui--Input{
+        position: relative;
+
+        .see-password-button {
+          position: absolute;
+          cursor: pointer;
+          right: 16.25px;
+          top: 7px;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 767px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start !important;
+
+  .actions{
+    width: 100%;
+
+    .ui--Button-Group{
+      width: 100%;
+    }
+  }
+    .btn-container{
+      margin-top: 24px;
+      width: 100%;
+
+      button{
+        width: 100%;
+      }
+    }
   }
 }

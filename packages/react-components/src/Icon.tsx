@@ -66,5 +66,6 @@ export default React.memo(styled(Icon)`
 
   &.whiteColor {
     color: white;
+    background-color: var(--button-color);
   }
 `);

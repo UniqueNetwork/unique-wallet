@@ -37,9 +37,18 @@ export const styles = `
     }
   }
 
+  .ui--Row-label {
+    display: flex;
+    font-size: 14px;
+    color: #81858E;
+    font-family: Roboto;
+  }
+
   .ui--Row-base {
     display: flex;
+    align-items: center;
     min-width: 16rem;
+    padding-top: 12px;
   }
 
   .ui--Row-buttons {
@@ -62,27 +71,17 @@ export const styles = `
   }
 
   .ui--Row-details {
-    flex: 1;
-    margin-right: 1rem;
-    padding: 0.25rem 0 0;
-    width: 100%;
-    min-width: 0;
 
-    .account-label{
-      margin: -0.75rem 0 0 0
-    }
-
-    * {
-      vertical-align: middle;
-    }
   }
 
   .ui--Row-address,
   .ui--Row-accountIndex {
-    font-family: monospace;
-    font-size: 1.25em;
+    font-size: 16px;
+    font-family: Roboto;
+    font-weight: normal;
+    color: #040B1D;
     padding: 0;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0;
   }
 
   .ui--Row-name {
@@ -100,8 +99,9 @@ export const styles = `
   }
 
   .ui--Row-icon {
-    flex: 0;
-    margin-right: 1em;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
     position: relative;
 
     .ui--Row-icon-info {
@@ -165,9 +165,10 @@ export interface RowProps {
   onSaveName?: () => void;
   onSaveTags?: () => void;
   tags?: string[];
+  label?: string
 }
 
-function Row ({ address, buttons, children, className = '', defaultName, details, icon, iconInfo, isDisabled, isEditableName, isEditableTags, isInline, name, onChangeName, onChangeTags, onSaveName, onSaveTags, tags }: RowProps): React.ReactElement<RowProps> {
+function Row ({ address, buttons, children, className = '', defaultName, details, icon, iconInfo, isDisabled, isEditableName, isEditableTags, isInline, label, name, onChangeName, onChangeTags, onSaveName, onSaveTags, tags }: RowProps): React.ReactElement<RowProps> {
   const [isEditingName, toggleIsEditingName] = useToggle();
   const [isEditingTags, toggleIsEditingTags] = useToggle();
 
@@ -180,6 +181,7 @@ function Row ({ address, buttons, children, className = '', defaultName, details
     <div
       className={`ui--Row${isDisabled ? ' isDisabled' : ''}${isInline ? ' isInline' : ''} ${className}`}
     >
+      <div className='ui--Row-label'>{label}</div>
       <div className='ui--Row-base'>
         {icon && (
           <div className='ui--Row-icon'>

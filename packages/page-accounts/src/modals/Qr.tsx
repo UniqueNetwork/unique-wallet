@@ -99,9 +99,11 @@ function QrModal ({ className = '', onClose, onStatusChange }: Props): React.Rea
   return (
     <Modal
       className={className}
-      header={'Add account via Qr'}
+      header={'Add an account via QR-code'}
+      onCancel={onClose}
       size='large'
     >
+      <p className='info-text-qr'>Provide the account QR from the module/external application for scanning. Once detected as valid, you will be taken to the next step to add the account to your list.</p>
       <Modal.Content>
         {scanned
           ? (
@@ -154,13 +156,16 @@ function QrModal ({ className = '', onClose, onStatusChange }: Props): React.Rea
           )
         }
       </Modal.Content>
-      <Modal.Actions onCancel={onClose}>
-        <Button
-          icon='plus'
-          isDisabled={!scanned || !isValid || (!isAddress && isIpfs)}
-          label={'Save'}
-          onClick={_onSave}
-        />
+      <Modal.Actions className='footer'
+        onCancel={onClose}>
+        <div className='btn-container'>
+          <Button
+            isDisabled={!scanned || !isValid || (!isAddress && isIpfs)}
+            isFilled={true}
+            label={'Save'}
+            onClick={_onSave}
+          />
+        </div>
       </Modal.Actions>
     </Modal>
   );
@@ -170,5 +175,12 @@ export default React.memo(styled(QrModal)`
   .qr-wrapper {
     margin: 0 auto;
     max-width: 30rem;
+  }
+  .info-text-qr{
+    margin: 24px 24px 12px 24px;
+    font-size: 14px;
+    line-height: 22px;
+    font-family: var(--font-roboto);
+    color: var(--tabs-color);
   }
 `);

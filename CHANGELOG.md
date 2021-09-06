@@ -460,7 +460,7 @@ Changes:
 - Adjust base fonts with saner cross-platform (from new.css) defaults
 - Adjust staking targets to display nominations for those dropped next session
 - Use `batchAll` on staking creation as available (failure reverses all)
-- Add CopyButton on all `Hash`-like fields
+- Add Index on all `Hash`-like fields
 - Cleanup component detection with non-primitives only (allows for greater configurability)
 - Improve `useCall` typing, e.g. no hacks for `.entries` or `.at` in usage
 - Adjust most type imports via `import type { ... }`
