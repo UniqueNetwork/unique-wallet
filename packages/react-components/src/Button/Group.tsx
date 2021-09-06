@@ -15,9 +15,6 @@ function ButtonGroup ({ children, className = '', isCentered }: GroupProps): Rea
 }
 
 export default React.memo(styled(ButtonGroup)`
-  margin: 1rem 0;
-  text-align: right;
-
   &.isCentered {
     margin-bottom: 0.5rem;
     text-align: center;
@@ -25,13 +22,5 @@ export default React.memo(styled(ButtonGroup)`
 
   &+.ui--Table {
     margin-top: 1.5rem;
-  }
-
-  .ui--Button {
-    margin: 0 0.25rem;
-  }
-
-  .ui--CopyButton {
-    display: inline-block;
   }
 `);
