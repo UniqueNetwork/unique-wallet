@@ -20,12 +20,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="breadcrumbs">
+      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountTableItem.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountsTable.tsx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/question.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/Breadcrumbs/breadcrumbArrow.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/Breadcrumbs/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/Breadcrumbs/styles.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/CopyIcon.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/AccordionArrow.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/burnTokenIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/shareIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/closeIconBlack.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/copyIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/facebookIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/redditIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/styles.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/telegramIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SocialShareModal/twitterIcon.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.yarn/install-state.gz" beforeDir="false" afterPath="$PROJECT_DIR$/.yarn/install-state.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps-routing/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps-routing/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps-routing/src/nft-wallet.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps-routing/src/nft-wallet.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/Apps.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/Apps.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/MobileMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/MobileMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/NotFound.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/NotFound.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/apps/src/apps.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/apps.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountsTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountsTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/styles/global.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/styles/global.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Tooltip.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Tooltip.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftTokenCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftTokenCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/ManageCollection/ManageTokenAttributes/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/ManageCollection/ManageTokenAttributes/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/ManageCollection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/ManageCollection/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/NftDetails/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/NftDetails/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useKusamaApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useKusamaApi.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useMintApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useMintApi.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +93,7 @@
     <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
-    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2021.1.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -222,43 +255,5 @@
     <MESSAGE value="token details page" />
     <MESSAGE value="breadcrumbs" />
     <option name="LAST_COMMIT_MESSAGE" value="breadcrumbs" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630910469673">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630910469673" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630669066870">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1630669066870" />
-    <state x="461" y="165" key="SettingsEditor" timestamp="1630561186577">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1630561186577" />
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1630595755558">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630595755558" />
-    <state x="679" y="254" key="VcsDiffUtil.ChangesDialog" timestamp="1630476773165">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="679" y="254" key="VcsDiffUtil.ChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630476773165" />
-    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1630677762556">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630677762556" />
-    <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1630476616213">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630476616213" />
-    <state x="667" y="255" width="870" height="530" key="find.popup" timestamp="1630911345626">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="667" y="255" width="870" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630911345626" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1630503710911">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630503710911" />
   </component>
 </project>

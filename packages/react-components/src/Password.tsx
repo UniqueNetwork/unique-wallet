@@ -1,8 +1,10 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
+import React, { useState } from 'react';
 
+import EyeIcon from './images/eye.svg';
+import EyeCloseIcon from './images/eye-close.svg';
 import Input from './Input';
 
 interface Props {
@@ -27,6 +29,8 @@ interface Props {
 }
 
 function Password ({ autoFocus, children, className = '', defaultValue, help, isDisabled, isError, isFull, label, labelExtra, name, onChange, onEnter, onEscape, placeholder, tabIndex, value, withLabel }: Props): React.ReactElement<Props> {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
   return (
     <Input
       autoFocus={autoFocus}
@@ -44,11 +48,20 @@ function Password ({ autoFocus, children, className = '', defaultValue, help, is
       onEscape={onEscape}
       placeholder={placeholder}
       tabIndex={tabIndex}
-      type='password'
+      type={isPasswordVisible ? 'text' : 'password'}
       value={value}
       withLabel={withLabel}
     >
       {children}
+      <div className='see-password-button'
+        onClick={setIsPasswordVisible.bind(null, (prev) => !prev)}>
+        {isPasswordVisible
+          ? <img alt='see'
+            src={EyeIcon as string}/>
+          : <img alt='see'
+            src={EyeCloseIcon as string}/>
+        }
+      </div>
     </Input>
   );
 }

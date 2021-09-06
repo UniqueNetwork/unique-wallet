@@ -46,7 +46,6 @@ function Index ({ children, className, help, isDisabled, isError, isReadOnly, la
           onChange={_onChange}
           placeholder={placeholder}
           readOnly={isReadOnly}
-          rows={2}
           spellCheck={false}
           value={seed}
         />

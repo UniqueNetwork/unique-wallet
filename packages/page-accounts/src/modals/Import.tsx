@@ -95,7 +95,8 @@ function Import ({ className = '', onClose, onStatusChange }: Props): React.Reac
   return (
     <Modal
       className={className}
-      header={'Add via backup file'}
+      header={'Add an account via backup JSON file'}
+      onCancel={onClose}
       size='small'
     >
       <Modal.Content>
@@ -103,6 +104,7 @@ function Import ({ className = '', onClose, onStatusChange }: Props): React.Reac
           <Modal.Column>
             <AddressRow
               defaultName={(pair?.meta.name as string) || null}
+              label='Account'
               noDefaultNameOpacity
               value={pair?.address || null}
             />
@@ -122,9 +124,7 @@ function Import ({ className = '', onClose, onStatusChange }: Props): React.Reac
             {differentGenesis && (
               <MarkWarning content={'The network from which this account was originally generated is different than the network you are currently connected to. Once imported ensure you toggle the "allow on any network" option for the account to keep it visible on the current network.'} />
             )}
-          </Modal.Column>
-          <Modal.Column>
-            <p>Supply a backed-up JSON file, encrypted with your account-specific password.</p>
+            <p className='info-text'>Provide a backup JSON file encrypted with your account password</p>
           </Modal.Column>
         </Modal.Columns>
         <Modal.Columns>
@@ -139,21 +139,22 @@ function Import ({ className = '', onClose, onStatusChange }: Props): React.Reac
               onEnter={_onSave}
               value={password}
             />
-          </Modal.Column>
-          <Modal.Column>
-            <p>The password previously used to encrypt this account.</p>
+            <p className='info-text'>The password that was previously used to encrypt this account</p>
           </Modal.Column>
         </Modal.Columns>
         <ExternalWarning />
       </Modal.Content>
-      <Modal.Actions onCancel={onClose}>
-        <Button
-          icon='sync'
-          isBusy={isBusy}
-          isDisabled={!pair || !isPassValid}
-          label={'Restore'}
-          onClick={_onSave}
-        />
+      <Modal.Actions className='footer'
+        onCancel={onClose}>
+        <div className='btn-container'>
+          <Button
+            isBusy={isBusy}
+            isDisabled={!pair || !isPassValid}
+            isFilled={true}
+            label={'Restore'}
+            onClick={_onSave}
+          />
+        </div>
       </Modal.Actions>
     </Modal>
   );

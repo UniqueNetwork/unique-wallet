@@ -4,8 +4,6 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
-import Icon from './Icon';
-
 interface Props {
   className?: string;
   isDisabled?: boolean;
@@ -27,17 +25,17 @@ function Checkbox ({ className = '', isDisabled, label, onChange, value }: Props
       className={`ui--Checkbox${isDisabled ? ' isDisabled' : ''} ${className}`}
       onClick={_onClick}
     >
-      <Icon
-        color={value ? 'normal' : 'transparent'}
-        icon='check'
-      />
+      <input checked={value}
+        onChange={_onClick}
+        type='checkbox'/>
       {label && <label>{label}</label>}
     </div>
   );
 }
 
 export default React.memo(styled(Checkbox)`
-  display: inline-block;
+  display: flex;
+  align-items: center;
   cursor: pointer;
 
   &.isDisabled {
@@ -51,19 +49,55 @@ export default React.memo(styled(Checkbox)`
   > label {
     color: var(--color-text);
     display: inline-block;
-    margin: 0 0.5rem;
     opacity: 1;
     cursor: pointer;
     user-select: none;
+    margin-left: 8px;
   }
 
-  > label,
-  > .ui--Icon {
-    vertical-align: middle;
-  }
+  input[type="checkbox"] {
+    position: relative;
+    cursor: pointer;
+    width: 22px;
 
-  .ui--Icon {
-    border: 1px solid var(--color-checkbox);
-    border-radius: 0.125rem;
+    &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--card-border-color);
+      background-color: white;
+      border-radius: 4px;
+      transform: translateY(-20%);
+    }
+
+    &:checked {
+
+      &:before {
+        border-radius: 4px;
+        content: "";
+        display: block;
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        background-color: var(--button-color);
+      }
+
+      &:after {
+        content: "";
+        display: block;
+        width: 9px;
+        height: 15px;
+        border: 1px solid var(--input-background-color);
+        border-width: 0 2px 2px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+        position: absolute;
+        top: -3px;
+        left: 6.5px;
+      }
+    }
   }
 `);

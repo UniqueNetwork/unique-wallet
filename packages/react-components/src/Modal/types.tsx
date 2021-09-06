@@ -14,6 +14,7 @@ export interface ModalProps {
   className?: string;
   header?: React.ReactNode;
   open?: boolean;
+  onCancel?: () => void;
   [index: string]: any;
 }
 
@@ -22,5 +23,5 @@ export interface ActionsProps {
   cancelLabel?: string;
   children?: React.ReactNode;
   withOr?: boolean;
-  onCancel: () => void;
+  onCancel?: () => void;
 }

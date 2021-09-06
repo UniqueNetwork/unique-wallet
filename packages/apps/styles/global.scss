@@ -42,6 +42,7 @@ hr {
 
 .ui.modal {
   border: 1px solid var(--modal-border-color);
+  background-color: var(--card-background) !important;
   color: var(--modal-text-color);
 
   .header {
@@ -70,41 +71,6 @@ hr {
   &.small.visible {
     .content {
       font-size: 18px;
-    }
-    .actions {
-      display: flex;
-      float: right;
-      padding: 1rem !important;
-    }
-  }
-
-  .actions {
-    .ui--Button {
-      background: var(--link-color);
-      color: var(--text-color);
-      margin: 0 1rem;
-
-      &:active {
-        background: var(--link-color);
-        color: var(--text-color);
-      }
-
-      &:hover {
-        background: var(--link-color);
-        color: var(--text-color);
-      }
-
-      &.isDisabled {
-        opacity: 0.5;
-      }
-
-      &:last-child {
-        margin: 0;
-      }
-
-      .ui--Icon {
-        background: var(--link-color) !important;
-      }
     }
   }
 }
