@@ -34,11 +34,11 @@ function NftTokenCard ({ account, canTransferTokens, collection, onHold, openTra
   const history = useHistory();
 
   const openDetailedInformationModal = useCallback((collectionId: string | number, tokenId: string) => {
-    history.push(`/wallet/token-details?collectionId=${collectionId}&tokenId=${tokenId}`);
+    history.push(`/myStuff/token-details?collectionId=${collectionId}&tokenId=${tokenId}`);
   }, [history]);
 
   const editToken = useCallback((collectionId: string, tokenId: string) => {
-    history.push(`/wallet/manage-token?collectionId=${collectionId}&tokenId=${tokenId}`);
+    history.push(`/myStuff/manage-token?collectionId=${collectionId}&tokenId=${tokenId}`);
   }, [history]);
 
   const attrebutesToShow = useMemo(() => {

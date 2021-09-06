@@ -264,7 +264,7 @@ function ManageCollection (props: Props): React.ReactElement<Props> {
 
     localStorage.setItem('tokenCollections', JSON.stringify(newCollections));
 
-    history.push('/wallet/');
+    history.push('/myStuff/');
   }, [history, getDetailedCollectionInfo, getCreatedCollectionCount]);
 
   const onCreateCollection = useCallback(() => {
@@ -283,7 +283,7 @@ function ManageCollection (props: Props): React.ReactElement<Props> {
   const goBack = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setShouldUpdateTokens && setShouldUpdateTokens('all');
-    history.push('/wallet/');
+    history.push('/myStuff/');
   }, [history, setShouldUpdateTokens]);
 
   const presetOnChainData = useCallback(() => {

@@ -27,13 +27,100 @@
 
   .token-info {
     margin-top: 40px;
-    padding: 24px;
-    background-color: var(--card-background);
 
     &--row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-column-gap: calc(var(--gap) * 2);
+
+      &--image {
+        background-color: var(--card-background);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border-radius: 4px;
+      }
+
+      &--attributes {
+        &--block {
+          padding: calc(var(--gap) * 2);
+          background-color: var(--card-background);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          border-radius: 4px;
+          margin-bottom: calc((var(--gap) / 2) * 3);
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .share {
+            margin-top: var(--gap);
+
+            .share-link {
+              color: var(--input-placeholder-search-color);
+              cursor: pointer;
+              font-size: 14px;
+              font-family: var(--font-roboto);
+              display: flex;
+              align-items: center;
+              grid-column-gap: calc(var(--gap) / 4);
+            }
+          }
+
+          .action-block {
+            margin-top: calc(var(--gap) * 2);
+            display: flex;
+            justify-content: space-between;
+
+            .ui.button.warning-action {
+              background-color: transparent !important;
+              color: var(--error-color) !important;
+              border: none;
+              display: flex;
+              grid-column-gap: calc(var(--gap) / 2);
+            }
+          }
+
+          .accordion-left {
+            font-family: var(--font-roboto);
+
+            &--header {
+              font-size: 18px;
+              font-weight: 500;
+              padding-bottom: calc((var(--gap) / 2) * 3);
+              position: relative;
+              cursor: pointer;
+              border-bottom: 1px solid #ECECEC;
+
+              &.closed {
+                svg {
+                  transform: rotate(-90deg);
+                }
+              }
+
+              svg {
+                position: absolute;
+                right: 0;
+                top: 0;
+              }
+            }
+
+            &--body {
+              padding-top: calc((var(--gap) / 2) * 3);
+              p {
+                margin-bottom: calc((var(--gap) / 4) * 3);
+                font-size: 16px;
+
+                &:last-child {
+                  margin-bottom: 0;
+                }
+
+                strong {
+                  text-transform: capitalize;
+                }
+              }
+            }
+          }
+        }
+      }
     }
 
     h2 {
