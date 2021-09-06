@@ -8,15 +8,18 @@ import type { AccountId, ProxyDefinition, ProxyType, Voting } from '@polkadot/ty
 import type { Delegation, SortedAccount } from '../types';
 
 import BN from 'bn.js';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 // import Button from 'semantic-ui-react/dist/commonjs/elements/Button';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header';
-import { Input } from '@polkadot/react-components';
+
+import clearIcon from '@polkadot/app-nft-wallet/components/CollectionSearch/clearIcon.svg';
+import searchIcon from '@polkadot/app-nft-wallet/components/CollectionSearch/searchIcon.svg';
+import { Input, StatusContext } from '@polkadot/react-components';
+import AccountButtonsGroup from '@polkadot/react-components/AccountButtonGroup';
 import { useAccounts, useApi, useCall, useFavorites, /* useIpfs, */ useLoadingDelay/*, useToggle */ } from '@polkadot/react-hooks';
+
 // import { FormatBalance } from '@polkadot/react-query';
 // import { BN_ZERO } from '@polkadot/util';
-
 /* import CreateModal from '../modals/Create';
 import ImportModal from '../modals/Import';
 import Ledger from '../modals/Ledger';
@@ -26,8 +29,6 @@ import Qr from '../modals/Qr'; */
 import { sortAccounts } from '../util';
 // import Account from './Account';
 import AccountsTable from './AccountsTable';
-import searchIcon from "@polkadot/app-nft-wallet/components/CollectionSearch/searchIcon.svg";
-import clearIcon from "@polkadot/app-nft-wallet/components/CollectionSearch/clearIcon.svg";
 
 interface Balances {
   accounts: Record<string, BN>;
@@ -47,6 +48,7 @@ interface Props {
 function Overview ({ className = 'page-accounts', onStatusChange }: Props): React.ReactElement<Props> {
   const { api } = useApi();
   const { allAccounts } = useAccounts();
+  const { queueAction } = useContext(StatusContext);
   /* const { isIpfs } = useIpfs();
   const [isCreateOpen, toggleCreate] = useToggle();
   const [isRestoreOpen, toggleRestore] = useToggle();
@@ -139,12 +141,11 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
 
   return (
     <div className='page-accounts'>
-      <Header as='h1'>Manage accounts</Header>
+      <Header as='h1'
+        className='account-header'>Manage accounts</Header>
       <div className='page-accounts--card'>
         <div className='page-accounts--card--header'>
-          <div className='account-actions'>
-            Vaagn please put your buttons here
-          </div>
+          <AccountButtonsGroup onStatusChange={queueAction} />
           <div className='accounts-filter'>
             {/* <Input
               autoFocus
