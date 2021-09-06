@@ -19,13 +19,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="breadcrumbs">
-      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/question.svg" afterDir="false" />
+    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="accounts page">
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/Tabs/styles.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/apps/src/apps.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/apps.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountsTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountsTable.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Tooltip.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Tooltip.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Tabs/Tab.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Tabs/Tab.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Tabs/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Tabs/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Tabs/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Tabs/types.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +51,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js.linters.configure.manually.selectedeslint" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../mu-freshdesk-service" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../marketplace" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -83,7 +83,7 @@
       <workItem from="1630482391888" duration="2049000" />
       <workItem from="1630497074812" duration="21677000" />
       <workItem from="1630652297014" duration="11046000" />
-      <workItem from="1630859997289" duration="4786000" />
+      <workItem from="1630859997289" duration="10967000" />
     </task>
     <task id="LOCAL-00001" summary="copy code from marketplace">
       <created>1630052922697</created>
@@ -162,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1630595754536</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="accounts page">
+      <created>1630913504302</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1630913504302</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,25 +228,26 @@
     <MESSAGE value="git ignore" />
     <MESSAGE value="token details page" />
     <MESSAGE value="breadcrumbs" />
-    <option name="LAST_COMMIT_MESSAGE" value="breadcrumbs" />
+    <MESSAGE value="accounts page" />
+    <option name="LAST_COMMIT_MESSAGE" value="accounts page" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630910469673">
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630931213490">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630910469673" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630669066870">
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630931213490" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630927937554">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1630669066870" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1630927937554" />
     <state x="461" y="165" key="SettingsEditor" timestamp="1630561186577">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1630561186577" />
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1630595755558">
+    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1630913505639">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630595755558" />
+    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630913505639" />
     <state x="679" y="254" key="VcsDiffUtil.ChangesDialog" timestamp="1630476773165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -252,10 +260,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630476616213" />
-    <state x="667" y="255" width="870" height="530" key="find.popup" timestamp="1630911345626">
+    <state x="667" y="255" width="870" height="530" key="find.popup" timestamp="1630930421827">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="255" width="870" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630911345626" />
+    <state x="667" y="255" width="870" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630930421827" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1630503710911">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
