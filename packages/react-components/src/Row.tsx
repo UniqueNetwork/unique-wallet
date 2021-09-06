@@ -90,12 +90,10 @@ export const styles = `
     height: 1.5rem;
     margin: 0;
     padding: 0;
-    overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    text-transform: uppercase;
     overflow: hidden;
-    text-overflow: inherit;
+    width: 600px;
+    text-transform: uppercase;
   }
 
   .ui--Row-icon {

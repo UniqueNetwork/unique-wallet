@@ -38,7 +38,7 @@ function Static ({ children, className = '', defaultValue, help, isFull, isHidde
         {children}
       </div>
       {withCopy && (
-        <CopyButton value={value} />
+        <CopyButton value={value as string} />
       )}
     </Labelled>
   );
