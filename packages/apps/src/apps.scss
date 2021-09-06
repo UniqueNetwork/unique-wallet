@@ -714,6 +714,17 @@
   }
 }
 
+.ui.popup.help {
+  width: 360px;
+  background-color: var(--text-color) !important;
+  color: var(--header-background);
+  max-width: 360px;
+
+  &:before {
+    background-color: var(--text-color) !important;
+  }
+}
+
 .ui.popup.mobile.withdraw-popup {
   background-color: var(--link-color) !important;
   padding: var(--gap);

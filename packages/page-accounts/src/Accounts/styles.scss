@@ -22,6 +22,13 @@
         justify-content: space-between;
         font-size: 14px;
         font-weight: 500;
+        margin-bottom: calc((var(--gap) / 2) * 3);
+
+        .with-tooltip {
+          display: flex;
+          align-items: center;
+          grid-column-gap: calc(var(--gap) / 4);
+        }
 
         span {
           color: var(--input-placeholder-search-color);
@@ -47,12 +54,26 @@
           }
 
           .item {
-            svg {
-              opacity: 0.5;
 
-              &:hover {
-                opacity: 1;
+            &--address {
+              color: var(--input-placeholder-search-color);
+              font-size: 14px;
+              display: flex;
+              grid-column-gap: 10px;
+              align-items: center;
+
+              svg {
+                opacity: 0.5;
+
+                &:hover {
+                  opacity: 1;
+                }
               }
+            }
+
+            .ui--AccountName {
+              font-size: 16px;
+              font-weight: 500;
             }
           }
 

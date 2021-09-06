@@ -20,18 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="breadcrumbs">
-      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountTableItem.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountsTable.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/react-components/src/CopyIcon.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/question.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.yarn/install-state.gz" beforeDir="false" afterPath="$PROJECT_DIR$/.yarn/install-state.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/apps-routing/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps-routing/src/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/apps/src/apps.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/apps.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/apps/styles/global.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/styles/global.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountsTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountsTable.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/react-components/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useKusamaApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useKusamaApi.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Tooltip.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Tooltip.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +83,7 @@
       <workItem from="1630482391888" duration="2049000" />
       <workItem from="1630497074812" duration="21677000" />
       <workItem from="1630652297014" duration="11046000" />
+      <workItem from="1630859997289" duration="4786000" />
     </task>
     <task id="LOCAL-00001" summary="copy code from marketplace">
       <created>1630052922697</created>
@@ -229,10 +224,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="breadcrumbs" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630677976639">
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630910469673">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630677976639" />
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630910469673" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630669066870">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -257,10 +252,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630476616213" />
-    <state x="667" y="255" width="870" height="530" key="find.popup" timestamp="1630681961197">
+    <state x="667" y="255" width="870" height="530" key="find.popup" timestamp="1630911345626">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="255" width="870" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630681961197" />
+    <state x="667" y="255" width="870" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630911345626" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1630503710911">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
