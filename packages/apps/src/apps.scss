@@ -62,7 +62,7 @@
 }
 
 .app-main {
-  padding: 44px 0;
+  padding: calc(var(--gap) * 2) 0;
   flex: 1 1 auto;
 }
 
@@ -711,6 +711,17 @@
       grid-column-gap: 6px;
       align-items: center;
     }
+  }
+}
+
+.ui.popup.help {
+  width: 360px;
+  background-color: var(--text-color) !important;
+  color: var(--header-background);
+  max-width: 360px;
+
+  &:before {
+    background-color: var(--text-color) !important;
   }
 }
 

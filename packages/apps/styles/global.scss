@@ -112,7 +112,7 @@ hr {
 h1.ui.header {
   font: 700 36px/48px var(--font-inter);
   color: var(--title-color);
-  margin-bottom: calc(var(--gap) / 0.6);
+  margin-bottom: calc(var(--gap) * 2);
 }
 
 h2.ui.header {
@@ -667,38 +667,40 @@ button.ui.button,
         }
       }
     }
+  }
+}
 
-    .ui--Labelled {
-      .input {
-        .loader {
-          position: absolute;
-          left: 95%;
-          top: 7px;
-        }
+.ui--Labelled {
+  .ui.input.ui--Input {
+    .loader {
+      position: absolute;
+      left: 95%;
+      top: 7px;
+    }
 
-        img {
-          position: absolute;
-          &.search-icon {
-            left: var(--gap);
-            top: calc(var(--gap) / 2);
-          }
+    img {
+      position: absolute;
 
-          &.clear-icon {
-            cursor: pointer;
-            right: var(--gap);
-            top: calc(var(--gap) / 2);
-          }
-        }
-
-        input {
-          border-radius: 4px;
-          padding-right: 4rem !important;
-          height: 40px;
-        }
+      &.search-icon {
+        left: var(--gap);
+        top: calc(var(--gap) / 2);
       }
+
+      &.clear-icon {
+        cursor: pointer;
+        right: var(--gap);
+        top: calc(var(--gap) / 2);
+      }
+    }
+
+    input {
+      border-radius: 4px;
+      padding-right: 4rem !important;
+      height: 40px;
     }
   }
 }
+
 .modalDescription {
   margin: 0 !important;
   div {

@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import './styles.scss';
@@ -9,21 +9,25 @@ import type { Delegation, SortedAccount } from '../types';
 
 import BN from 'bn.js';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Button from 'semantic-ui-react/dist/commonjs/elements/Button';
 
-import { Input, Table } from '@polkadot/react-components';
-import { useAccounts, useApi, useCall, useFavorites, useIpfs, useLoadingDelay, useToggle } from '@polkadot/react-hooks';
-import { FormatBalance } from '@polkadot/react-query';
-import { BN_ZERO } from '@polkadot/util';
+// import Button from 'semantic-ui-react/dist/commonjs/elements/Button';
+import Header from 'semantic-ui-react/dist/commonjs/elements/Header';
+import { Input } from '@polkadot/react-components';
+import { useAccounts, useApi, useCall, useFavorites, /* useIpfs, */ useLoadingDelay/*, useToggle */ } from '@polkadot/react-hooks';
+// import { FormatBalance } from '@polkadot/react-query';
+// import { BN_ZERO } from '@polkadot/util';
 
-import CreateModal from '../modals/Create';
+/* import CreateModal from '../modals/Create';
 import ImportModal from '../modals/Import';
 import Ledger from '../modals/Ledger';
 import Multisig from '../modals/MultisigCreate';
 import Proxy from '../modals/ProxiedAdd';
-import Qr from '../modals/Qr';
+import Qr from '../modals/Qr'; */
 import { sortAccounts } from '../util';
-import Account from './Account';
+// import Account from './Account';
+import AccountsTable from './AccountsTable';
+import searchIcon from "@polkadot/app-nft-wallet/components/CollectionSearch/searchIcon.svg";
+import clearIcon from "@polkadot/app-nft-wallet/components/CollectionSearch/clearIcon.svg";
 
 interface Balances {
   accounts: Record<string, BN>;
@@ -40,21 +44,17 @@ interface Props {
   onStatusChange: (status: ActionStatus) => void;
 }
 
-const STORE_FAVS = 'accounts:favorites';
-
 function Overview ({ className = 'page-accounts', onStatusChange }: Props): React.ReactElement<Props> {
   const { api } = useApi();
   const { allAccounts } = useAccounts();
-  const { isIpfs } = useIpfs();
+  /* const { isIpfs } = useIpfs();
   const [isCreateOpen, toggleCreate] = useToggle();
   const [isRestoreOpen, toggleRestore] = useToggle();
   const [isImportOpen, toggleImport] = useToggle();
   const [isLedgerOpen, toggleLedger] = useToggle();
   const [isMultisigOpen, toggleMultisig] = useToggle();
   const [isProxyOpen, toggleProxy] = useToggle();
-  const [isQrOpen, toggleQr] = useToggle();
-  const [favorites, toggleFavorite] = useFavorites(STORE_FAVS);
-  const [{ balanceTotal }, setBalances] = useState<Balances>({ accounts: {} });
+  const [isQrOpen, toggleQr] = useToggle(); */
   const [filterOn, setFilter] = useState<string>('');
   const [sortedAccountsWithDelegation, setSortedAccountsWithDelegation] = useState<SortedAccount[] | undefined>();
   const [{ sortedAccounts, sortedAddresses }, setSorted] = useState<Sorted>({ sortedAccounts: [], sortedAddresses: [] });
@@ -67,21 +67,17 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
           [arr.map(([delegate, proxyType]): ProxyDefinition => api.createType('ProxyDefinition', { delegate, proxyType })), bn]
         )
   });
-  const isLoading = useLoadingDelay();
 
-  const headerRef = useRef([
-    ['accounts', 'start', 3],
-    ['type'],
-    ['balances', 'expand'],
-    []
-  ]);
+  const clearSearch = useCallback(() => {
+    setFilter('');
+  }, []);
 
   useEffect((): void => {
-    const sortedAccounts = sortAccounts(allAccounts, favorites);
+    const sortedAccounts = sortAccounts(allAccounts, []);
     const sortedAddresses = sortedAccounts.map((a) => a.account.address);
 
     setSorted({ sortedAccounts, sortedAddresses });
-  }, [allAccounts, favorites]);
+  }, [allAccounts]);
 
   useEffect(() => {
     setSortedAccountsWithDelegation(
@@ -106,7 +102,7 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
     );
   }, [api, delegations, sortedAccounts]);
 
-  const _setBalance = useCallback(
+  /* const _setBalance = useCallback(
     (account: string, balance: BN) =>
       setBalances(({ accounts }: Balances): Balances => {
         accounts[account] = balance;
@@ -117,9 +113,9 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
         };
       }),
     []
-  );
+  ); */
 
-  const footer = useMemo(() => (
+  /* const footer = useMemo(() => (
     <tr>
       <td colSpan={3} />
       <td colSpan={2} />
@@ -127,9 +123,9 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
         {balanceTotal && <FormatBalance value={balanceTotal} />}
       </td>
     </tr>
-  ), [balanceTotal]);
+  ), [balanceTotal]); */
 
-  const filter = useMemo(() => (
+  /* const filter = useMemo(() => (
     <div className='filter--tags'>
       <Input
         autoFocus
@@ -139,11 +135,55 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
         value={filterOn}
       />
     </div>
-  ), [filterOn]);
+  ), [filterOn]); */
 
   return (
-    <div className={className}>
-      {isCreateOpen && (
+    <div className='page-accounts'>
+      <Header as='h1'>Manage accounts</Header>
+      <div className='page-accounts--card'>
+        <div className='page-accounts--card--header'>
+          <div className='account-actions'>
+            Vaagn please put your buttons here
+          </div>
+          <div className='accounts-filter'>
+            {/* <Input
+              autoFocus
+              className='isSmall'
+              label={'filter by name or tags'}
+              onChange={setFilter}
+              value={filterOn}
+            /> */}
+            <Input
+              autoFocus
+              className='isSmall'
+              icon={
+                <img
+                  alt='search'
+                  className='search-icon'
+                  src={searchIcon as string}
+                />
+              }
+              onChange={setFilter}
+              placeholder='Search by account name'
+              value={filterOn}
+              withLabel
+            >
+              { filterOn?.length > 0 && (
+                <img
+                  alt='clear'
+                  className='clear-icon'
+                  onClick={clearSearch}
+                  src={clearIcon as string}
+                />
+              )}
+            </Input>
+          </div>
+        </div>
+        <AccountsTable
+          accounts={sortedAccountsWithDelegation}
+        />
+      </div>
+      {/* {isCreateOpen && (
         <CreateModal
           onClose={toggleCreate}
           onStatusChange={onStatusChange}
@@ -203,8 +243,8 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
           content={'Add via Qr'}
           onClick={toggleQr}
         />
-      </Button.Group>
-      <Table
+      </Button.Group> */}
+      {/* <Table
         empty={!isLoading && sortedAccountsWithDelegation && 'You don\'t have any accounts. Some features are currently hidden and will only become available once you have accounts.'}
         filter={filter}
         footer={footer}
@@ -222,7 +262,7 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
             toggleFavorite={toggleFavorite}
           />
         ))}
-      </Table>
+      </Table> */}
     </div>
   );
 }
