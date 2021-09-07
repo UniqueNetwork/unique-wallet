@@ -15,7 +15,7 @@ interface Props {
   setAccount: (account?: string) => void;
 }
 
-function AccountTable ({ accounts,   setAccount }: Props): React.ReactElement<Props> | null {
+function AccountTable ({ accounts, setAccount }: Props): React.ReactElement<Props> | null {
   return (
     <div className='accounts-table'>
       <div className='accounts-table--header'>

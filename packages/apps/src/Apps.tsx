@@ -103,9 +103,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                     ? (
                       <NotFound
                         basePath={`/${name}`}
-                        location={location}
                         missingApis={missingApis}
-                        onStatusChange={queueAction}
                       />
                     )
                     : (
@@ -161,7 +159,10 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                                   setIsMobileMenu={setOpenPanel}
                                 />
                                 <div className='account-selector-block'>
-                                  <AccountSelector onChange={setAccount} account = {account}/>
+                                  <AccountSelector
+                                    account={account}
+                                    onChange={setAccount}
+                                  />
                                   <MobileAccountSelector
                                     address={account}
                                     openPanel={openPanel}
@@ -216,8 +217,8 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                                         location={location}
                                         onStatusChange={queueAction}
                                         openPanel={openPanel}
-                                        setOpenPanel={setOpenPanel}
                                         setAccount={setAccount}
+                                        setOpenPanel={setOpenPanel}
                                       />)
                                 }
                                 <ConnectingOverlay />

@@ -3,170 +3,87 @@
 
 import './styles.scss';
 
-import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+import type { OfferType } from '@polkadot/react-hooks/useCollections';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router';
-import Item from 'semantic-ui-react/dist/commonjs/views/Item';
+import BN from 'bn.js';
+import React, { useCallback } from 'react';
+import Image from 'semantic-ui-react/dist/commonjs/elements/Image';
+import Card from 'semantic-ui-react/dist/commonjs/views/Card';
 
 import envConfig from '@polkadot/apps-config/envConfig';
-import pencil from '@polkadot/react-components/ManageCollection/pencil.svg';
-import transfer from '@polkadot/react-components/ManageCollection/transfer.svg';
-import Tooltip from '@polkadot/react-components/Tooltip';
-import { useSchema } from '@polkadot/react-hooks';
-import { HoldType } from '@polkadot/react-hooks/useCollections';
+import formatPrice from '@polkadot/react-components/util/formatPrice';
+import { useDecoder, useSchema } from '@polkadot/react-hooks';
+import { formatKsmBalance } from '@polkadot/react-hooks/useKusamaApi';
 
-const { canEditToken } = envConfig;
+const { commission } = envConfig;
 
 interface Props {
-  account: string;
-  canTransferTokens: boolean;
-  collection: NftCollectionInterface;
-  onHold: HoldType[];
-  openTransferModal: (collection: NftCollectionInterface, tokenId: string, balance: number) => void;
-  token: string;
-  tokensSelling: string[];
+  account: string | undefined;
+  collectionId: string;
+  openDetailedInformationModal: (collectionId: string, tokenId: string) => void;
+  token: OfferType;
 }
 
-function NftTokenCard ({ account, canTransferTokens, collection, onHold, openTransferModal, token, tokensSelling }: Props): React.ReactElement<Props> {
-  const { attributes, reFungibleBalance, tokenUrl } = useSchema(account, collection.id, token);
-  const [tokenState, setTokenState] = useState<'none' | 'selling' | 'onHold'>('none');
-  const history = useHistory();
+const NftTokenCard = ({ account, collectionId, openDetailedInformationModal, token }: Props): React.ReactElement<Props> => {
+  const { collectionInfo, tokenName, tokenUrl } = useSchema(account, collectionId, token.tokenId);
+  const { collectionName16Decoder, hex2a } = useDecoder();
 
-  const openDetailedInformationModal = useCallback((collectionId: string | number, tokenId: string) => {
-    history.push(`/myStuff/token-details?collectionId=${collectionId}&tokenId=${tokenId}`);
-  }, [history]);
+  const getFee = useCallback((price: BN): BN => {
+    return new BN(price).mul(new BN(commission)).div(new BN(100));
+  }, []);
 
-  const editToken = useCallback((collectionId: string, tokenId: string) => {
-    history.push(`/myStuff/manage-token?collectionId=${collectionId}&tokenId=${tokenId}`);
-  }, [history]);
-
-  const attrebutesToShow = useMemo(() => {
-    if (attributes) {
-      return [...Object.keys(attributes).map((attr: string) => {
-        if (attr.toLowerCase().includes('hash')) {
-          return `${attr}: ${(attributes[attr] as string).substring(0, 8)}...`;
-        }
-
-        if (Array.isArray(attributes[attr])) {
-          return `${attr}: ${((attributes[attr] as string[]).join(', '))}`;
-        }
-
-        return `${attr}: ${(attributes[attr] as string)}`;
-      })].join(', ');
-    }
-
-    return '';
-  }, [attributes]);
-
-  const updateTokenState = useCallback(() => {
-    let tState: 'none' | 'selling' | 'onHold' = 'none';
-
-    if (tokensSelling.indexOf(token) !== -1) {
-      tState = 'selling';
-    } else if (onHold.find((item) => item.tokenId === token)) {
-      tState = 'onHold';
-    }
-
-    setTokenState(tState);
-  }, [onHold, token, tokensSelling]);
-
-  useEffect(() => {
-    updateTokenState();
-  }, [updateTokenState]);
-
-  if (!reFungibleBalance && collection?.Mode?.reFungible) {
-    return <></>;
-  }
+  const getMarketPrice = useCallback((price: BN) => {
+    return formatPrice(formatKsmBalance(new BN(price).add(getFee(price))));
+  }, [getFee]);
 
   return (
-    <div
-      className='token-row'
-      key={token}
+    <Card
+      className='token-card'
+      key={token.tokenId}
+      onClick={openDetailedInformationModal.bind(null, collectionId, token.tokenId)}
     >
-      <div
-        className='token-image'
-        onClick={openDetailedInformationModal.bind(null, collection.id, token)}
-      >
-        { tokenUrl && (
-          <Item.Image
-            size='mini'
-            src={tokenUrl}
-          />
-        )}
-      </div>
-      <div
-        className='token-info-attributes'
-        onClick={openDetailedInformationModal.bind(null, collection.id, token)}
-      >
-        <div className='token-name'>
-          #{token.toString()}
-        </div>
-        <div className='token-balance'>
-          { collection && Object.prototype.hasOwnProperty.call(collection.Mode, 'reFungible') && <span>Balance: {reFungibleBalance}</span> }
-        </div>
-        <div className='token-attributes'>
-          { attributes && Object.values(attributes).length > 0 && (
-            <span>
-              <strong>Attributes: </strong>{attrebutesToShow}
+      { token && (
+        <Image
+          src={tokenUrl}
+          ui={false}
+          wrapped
+        />
+      )}
+      { !!(token && collectionInfo) && (
+        <Card.Content>
+          <Card.Description>
+            <div className='card-name'>
+              <div className='card-name__title'>{hex2a(collectionInfo.TokenPrefix)} {`#${token.tokenId}`} {tokenName?.value}</div>
+              <div className='card-name__field'>{ collectionName16Decoder(collectionInfo.Name)}</div>
+            </div>
+            { token.price && (
+              <div className='card-price'>
+                <div className='card-price__title'> {getMarketPrice(token.price)} KSM</div>
+              </div>
+            )}
+          </Card.Description>
+          <Card.Meta>
+            <span className='link'>View
+              <svg fill='none'
+                height='16'
+                viewBox='0 0 16 16'
+                width='16'
+                xmlns='http://www.w3.org/2000/svg'>
+                <path d='M2.5 8H13.5'
+                  stroke='var(--card-link-color)'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'/>
+                <path d='M9 3.5L13.5 8L9 12.5'
+                  stroke='var(--card-link-color)'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'/>
+              </svg>
             </span>
-          )}
-        </div>
-      </div>
-      <div className='token-actions'>
-        { canEditToken && tokenState === 'none' && (
-          <>
-            <img
-              alt={'add'}
-              data-for='Edit nft'
-              data-tip='Edit nft'
-              onClick={editToken.bind(null, collection.id, token)}
-              src={pencil as string}
-              title='add'
-            />
-            <Tooltip
-              arrowColor={'transparent'}
-              backgroundColor={'var(--border-color)'}
-              place='bottom'
-              text={'Edit nft'}
-              textColor={'var(--sub-header-text-transform)'}
-              trigger={'Edit nft'}
-            />
-          </>
-        )}
-        { canTransferTokens && tokenState === 'none' && (
-          <>
-            <img
-              alt={'add'}
-              data-for='Transfer nft'
-              data-tip='Transfer nft'
-              onClick={openTransferModal.bind(null, collection, token, reFungibleBalance)}
-              src={transfer as string}
-              title='add'
-            />
-            <Tooltip
-              arrowColor={'transparent'}
-              backgroundColor={'var(--border-color)'}
-              place='bottom'
-              text={'Transfer nft'}
-              textColor={'var(--sub-header-text-transform)'}
-              trigger={'Transfer nft'}
-            />
-          </>
-        )}
-        { tokenState === 'selling' && (
-          <span className='token-state'>
-            Selling
-          </span>
-        )}
-        { tokenState === 'onHold' && (
-          <span className='token-state'>
-            On hold
-          </span>
-        )}
-      </div>
-    </div>
+          </Card.Meta>
+        </Card.Content>
+      )}
+    </Card>
   );
-}
+};
 
 export default React.memo(NftTokenCard);

@@ -1,11 +1,12 @@
-// Copyright 2017-2021 @polkadot/react-components authors & contributors
+// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
+
+import './styles.scss';
 
 import type { TabItem } from './types';
 
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 
 import Tab from './Tab';
 
@@ -56,40 +57,4 @@ function Tabs ({ basePath, className = '', hidden, items }: Props): React.ReactE
   );
 }
 
-export default React.memo(styled(Tabs)`
-  text-align: left;
-  z-index: 1;
-
-  & .tabs-container {
-    max-width: var(--width-full);
-    margin: 0 auto;
-    width: 100%;
-    display: flex;
-    margin-bottom: 28px;
-  }
-
-  &::-webkit-scrollbar {
-    display: none;
-    width: 0px;
-  }
-
-  .ui--Tab {
-    font: 400 18px/27px var(--font-roboto);
-    color: var(--tabs-color) !important;
-    letter-spacing: 0.1em;
-    padding: calc(var(--gap) / 2) var(--gap);
-    border-color: transparent;
-    border-bottom: 1px solid transparent;
-    background-color: transparent;
-
-    &.active {
-      color: var(--link-color) !important;
-      border-bottom:1px solid var(--link-color) !important;
-    }
-
-    &.tabLinkActive {
-      color: var(--link-color) !important;
-      border-bottom:1px solid var(--link-color) !important;
-    }
-}
-`);
+export default React.memo(Tabs);

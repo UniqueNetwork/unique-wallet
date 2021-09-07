@@ -4,13 +4,13 @@
 import './styles.scss';
 
 // external imports
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Route, Switch } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header/Header';
 
 import envConfig from '@polkadot/apps-config/envConfig';
-import { NftDetails } from '@polkadot/react-components';
+import { NftDetails, Tabs } from '@polkadot/react-components';
 // local imports and components
 import { AppProps as Props } from '@polkadot/react-components/types';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
@@ -24,6 +24,8 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
   const [shouldUpdateTokens, setShouldUpdateTokens] = useState<string>();
   const collectionsStorage: NftCollectionInterface[] = JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
   const [collections, setCollections] = useState<NftCollectionInterface[]>(collectionsStorage);
+
+  console.log('collections', collections);
 
   const addCollection = useCallback((collection: NftCollectionInterface) => {
     setCollections((prevCollections: NftCollectionInterface[]) => {
@@ -46,6 +48,23 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
     localStorage.setItem('tokenCollections', JSON.stringify(newCollectionList));
   }, [collections]);
 
+  const items = useMemo(() => [
+    {
+      isRoot: true,
+      name: 'MyStuff',
+      text: 'NFT'
+    },
+    {
+      disabled: true,
+      name: 'RFT',
+      text: 'RFT'
+    },
+    {
+      name: 'Tokens',
+      text: 'Tokens'
+    }
+  ], []);
+
   // reset collections if we can't add another except uniqueCollectionId
   useEffect(() => {
     if (!canAddCollections) {
@@ -53,13 +72,21 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
     }
   }, []);
 
+  console.log('location', location, 'items', items);
+
   return (
     <div className='my-tokens'>
       { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && (
         <>
-          <Header as='h1'>My Tokens</Header>
-          <Header as='h4'>NFTs owned by me</Header>
+          <Header as='h1'>{location.pathname === '/myStuff' ? 'My stuff' : 'Tokens'}</Header>
         </>
+      )}
+      { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && (
+        <Tabs
+          basePath={basePath}
+          className='stuff-tabs'
+          items={items}
+        />
       )}
       <Switch>
         <Route path={`${basePath}/token-details`}>
