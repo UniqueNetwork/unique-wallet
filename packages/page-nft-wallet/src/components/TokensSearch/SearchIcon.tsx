@@ -4,7 +4,7 @@
 // eslint-disable-next-line header/header
 import React, { memo } from 'react';
 
-const ClearIcon: React.FC = () => {
+const SearchIcon: React.FC = () => {
   return <svg
     height='19.5'
     viewBox='0 0 20 20'
@@ -22,4 +22,4 @@ const ClearIcon: React.FC = () => {
   </svg>;
 };
 
-export default memo(ClearIcon);
+export default memo(SearchIcon);
