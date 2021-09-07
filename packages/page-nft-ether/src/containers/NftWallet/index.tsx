@@ -11,7 +11,7 @@ import Header from 'semantic-ui-react/dist/commonjs/elements/Header/Header';
 import envConfig from '@polkadot/apps-config/envConfig';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
 import { Table, TransferModal } from '@polkadot/react-components';
-import { useCollections } from '@polkadot/react-hooks';
+import { useCollectionsOpenSea } from '@polkadot/react-hooks';
 
 import CollectionSearch from '../../components/CollectionSearch';
 import NftCollectionCard from '../../components/NftCollectionCard';
@@ -36,7 +36,7 @@ function NftWallet ({ account, addCollection, collections, openPanel, removeColl
   const [canTransferTokens] = useState<boolean>(true);
   const [tokensSelling, setTokensSelling] = useState<{ [collectionId: string]: string[] }>({});
   const currentAccount = useRef<string | null | undefined>();
-  const { getHoldByMe, getOffers, myHold, offers, presetCollections } = useCollections();
+  const { getHoldByMe, getOffers, myHold, offers, presetCollections } = useCollectionsOpenSea();
   const cleanup = useRef<boolean>(false);
 
   const fetchOffersForCollections = useCallback(() => {

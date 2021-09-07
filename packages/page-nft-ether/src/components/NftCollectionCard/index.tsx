@@ -4,7 +4,7 @@
 import './styles.scss';
 
 import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
-import type { HoldType } from '@polkadot/react-hooks/useCollections';
+import type { HoldType } from '@polkadot/react-hooks/useCollectionsOpenSea';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';

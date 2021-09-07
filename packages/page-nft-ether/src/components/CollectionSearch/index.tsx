@@ -12,7 +12,7 @@ import Header from 'semantic-ui-react/dist/commonjs/elements/Header';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import { Input } from '@polkadot/react-components';
-import { useCollections, useDecoder } from '@polkadot/react-hooks';
+import { useCollectionsOpenSea, useDecoder } from '@polkadot/react-hooks';
 
 import clearIcon from './clearIcon.svg';
 import searchIcon from './searchIcon.svg';
@@ -27,7 +27,7 @@ function CollectionSearch ({ account, addCollection, collections }: Props): Reac
   const [collectionsAvailable, setCollectionsAvailable] = useState<Array<NftCollectionInterface>>([]);
   const [collectionsMatched, setCollectionsMatched] = useState<Array<NftCollectionInterface>>([]);
   const [searchString, setSearchString] = useState<string>('');
-  const { presetTokensCollections } = useCollections();
+  const { presetTokensCollections } = useCollectionsOpenSea();
   const currentAccount = useRef<string | null | undefined>();
   const { collectionName16Decoder } = useDecoder();
 

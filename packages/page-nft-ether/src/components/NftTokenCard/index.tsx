@@ -14,7 +14,7 @@ import pencil from '@polkadot/react-components/ManageCollection/pencil.svg';
 import transfer from '@polkadot/react-components/ManageCollection/transfer.svg';
 import Tooltip from '@polkadot/react-components/Tooltip';
 import { useSchema } from '@polkadot/react-hooks';
-import { HoldType } from '@polkadot/react-hooks/useCollections';
+import { HoldType } from '@polkadot/react-hooks/useCollectionsOpenSea';
 
 const { canEditToken } = envConfig;
 

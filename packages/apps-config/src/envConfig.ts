@@ -17,6 +17,7 @@ export type EnvConfigType = {
   maxGas: number; // 1000000000000
   midTedCollection: number;
   minPrice: number;
+  openseaApi: string;
   quoteId: number; // 2
   showMarketActions: boolean; // buy, sell, cancel and withdraw buttons on the token details page
   uniqueCollectionIds: string[]; // ['23']
@@ -45,6 +46,7 @@ const envConfig: EnvConfigType = {
   maxGas: +(process.env.MAX_GAS as string),
   midTedCollection: +(process.env.MIN_TED_COLLECTION as string),
   minPrice: +(process.env.MIN_PRICE as string),
+  openseaApi: (process.env.OPENSEA_API as string),
   quoteId: +(process.env.QUOTE_ID as string),
   showMarketActions: JSON.parse(process.env.SHOW_MARKET_ACTIONS as string) as boolean,
   uniqueApi: (process.env.UNIQUE_API as string),

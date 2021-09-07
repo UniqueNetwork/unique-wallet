@@ -27,3 +27,4 @@ yarn.lock
 yarn.lock
 packages/page-nft-ether/.skip-build
 packages/page-nft-ether/.skip-npm
+/out/*

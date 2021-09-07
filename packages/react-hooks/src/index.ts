@@ -18,6 +18,7 @@ export { useCallMulti } from './useCallMulti';
 export { useContracts } from './useContracts';
 export { useCollection } from './useCollection';
 export { useCollections } from './useCollections';
+export { useCollectionsOpenSea } from './useCollectionsOpenSea';
 export { useDecoder } from './useDecoder';
 export { useFetch } from './useFetch';
 export { useFormField } from './useFormField';

@@ -144,6 +144,12 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                                     to='/myStuff'
                                   />
                                   <Menu.Item
+                                    active={location.pathname === '/myStuffEther'}
+                                    as={NavLink}
+                                    name='myStuffEther'
+                                    to='/myStuffEther'
+                                  />
+                                  <Menu.Item
                                     active={location.pathname === '/faq'}
                                     as={NavLink}
                                     name='FAQ'
