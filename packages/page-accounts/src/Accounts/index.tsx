@@ -9,14 +9,12 @@ import type { SortedAccount } from '../types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header';
 
-import { Input, StatusContext } from '@polkadot/react-components';
+import { SearchFilter, StatusContext } from '@polkadot/react-components';
 import AccountButtonsGroup from '@polkadot/react-components/AccountButtonGroup';
 import { useAccounts } from '@polkadot/react-hooks';
 
 import { sortAccounts } from '../util';
 import AccountsTable from './AccountsTable';
-import clearIcon from './clearIcon.svg';
-import searchIcon from './searchIcon.svg';
 
 interface Sorted {
   sortedAccounts: SortedAccount[];
@@ -49,7 +47,7 @@ function Overview ({ setAccount }: Props): React.ReactElement<Props> {
   }, [allAccounts]);
 
   useEffect(() => {
-    setSortedAccountsWithAccountName(sortedAccounts?.filter((item) => item.account.meta.name?.includes(filterOn.toLowerCase()) || item.account.meta.name?.includes(filterOn.toLocaleUpperCase())));
+    setSortedAccountsWithAccountName(sortedAccounts?.filter((item) => item.account.meta.name?.toLowerCase().includes(filterOn.toLowerCase())));
   }, [filterOn, sortedAccounts]);
 
   return (
@@ -60,37 +58,11 @@ function Overview ({ setAccount }: Props): React.ReactElement<Props> {
         <div className='page-accounts--card--header'>
           <AccountButtonsGroup onStatusChange={queueAction} />
           <div className='accounts-filter'>
-            {/* <Input
-              autoFocus
-              className='isSmall'
-              label={'filter by name or tags'}
-              onChange={setFilter}
-              value={filterOn}
-            /> */}
-            <Input
-              autoFocus
-              className='isSmall'
-              icon={
-                <img
-                  alt='search'
-                  className='search-icon'
-                  src={searchIcon as string}
-                />
-              }
-              onChange={setFilter}
-              placeholder='Search by account name'
-              value={filterOn}
-              withLabel
-            >
-              { filterOn?.length > 0 && (
-                <img
-                  alt='clear'
-                  className='clear-icon'
-                  onClick={clearSearch}
-                  src={clearIcon as string}
-                />
-              )}
-            </Input>
+            <SearchFilter
+              clearSearch={clearSearch}
+              searchString={filterOn}
+              setSearchString={setFilter}
+            />
           </div>
         </div>
         <AccountsTable

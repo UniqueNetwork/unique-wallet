@@ -7,16 +7,13 @@ import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Form from 'semantic-ui-react/dist/commonjs/collections/Form';
-import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 import Dropdown, { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown';
 
-import { Input } from '@polkadot/react-components';
+import { SearchFilter } from '@polkadot/react-components';
 import { useCollections, useDecoder } from '@polkadot/react-hooks';
 
 import ArrowDown from './ArrowDown';
 import ArrowUp from './ArrowUp';
-import ClearIcon from './ClearIcon';
-import searchIcon from './searchIcon.svg';
 
 interface Props {
   account: string | null | undefined;
@@ -133,36 +130,11 @@ function TokensSearch ({ account, addCollection, collections }: Props): React.Re
   return (
     <Form className='tokens-search'>
       <Form.Field className='search-field'>
-        <Input
-          className='isSmall'
-          icon={
-            <img
-              alt='search'
-              className='search-icon'
-              src={searchIcon as string}
-            />
-          }
-          onChange={setSearchString}
-          placeholder='Search for tokens or attributes'
-          value={searchString}
-          withLabel
-        >
-          { collectionsLoading && (
-            <Loader
-              active
-              inline='centered'
-              key='offers-loading'
-            />
-          )}
-          { searchString?.length > 0 && (
-            <div
-              className='clear-icon'
-              onClick={clearSearch}
-            >
-              <ClearIcon/>
-            </div>
-          )}
-        </Input>
+        <SearchFilter
+          clearSearch={clearSearch}
+          searchString={searchString}
+          setSearchString={setSearchString}
+        />
       </Form.Field>
       <Form.Field className='sort-field'>
         <Dropdown
