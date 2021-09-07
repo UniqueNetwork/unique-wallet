@@ -4,7 +4,7 @@
 // eslint-disable-next-line header/header
 import React from 'react';
 
-export const ClearIcon: React.FC = () => {
+const ClearIcon: React.FC = () => {
   return <svg
     height='19.5'
     viewBox='0 0 20 20'
@@ -21,3 +21,5 @@ export const ClearIcon: React.FC = () => {
       fillRule='evenodd' />
   </svg>;
 };
+
+export default ClearIcon;

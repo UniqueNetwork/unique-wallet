@@ -8,13 +8,14 @@ import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header/Header';
 
-import envConfig from '@polkadot/apps-config/envConfig';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
-import { Table, TransferModal } from '@polkadot/react-components';
-import { useCollections } from '@polkadot/react-hooks';
+import { TransferModal } from '@polkadot/react-components';
 
-import CollectionSearch from '../../components/CollectionSearch';
-import NftCollectionCard from '../../components/NftCollectionCard';
+import CollectionFilter from '../../components/CollectionFilter';
+// import { useCollections } from '@polkadot/react-hooks';
+import TokensSearch from '../../components/TokensSearch';
+// import NftCollectionCard from '../../components/NftCollectionCard';
+// import noMyTokensIcon from './noMyTokensIcon.svg';
 
 interface NftWalletProps {
   account?: string;
@@ -28,94 +29,42 @@ interface NftWalletProps {
   shouldUpdateTokens?: string;
 }
 
-const { canAddCollections } = envConfig;
-
 function NftWallet ({ account, addCollection, collections, openPanel, removeCollectionFromList, setCollections, setOpenPanel, setShouldUpdateTokens, shouldUpdateTokens }: NftWalletProps): React.ReactElement {
   const [openTransfer, setOpenTransfer] = useState<{ collection: NftCollectionInterface, tokenId: string, balance: number } | null>(null);
-  const [selectedCollection, setSelectedCollection] = useState<NftCollectionInterface>();
-  const [canTransferTokens] = useState<boolean>(true);
-  const [tokensSelling, setTokensSelling] = useState<{ [collectionId: string]: string[] }>({});
+  const [showCollectionsFilter, toggleCollectionsFilter] = useState<boolean>(true);
+  const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
   const currentAccount = useRef<string | null | undefined>();
-  const { getHoldByMe, getOffers, myHold, offers, presetCollections } = useCollections();
+  // const { presetCollections } = useCollections();
   const cleanup = useRef<boolean>(false);
 
-  const fetchOffersForCollections = useCallback(() => {
-    if (account && collections?.length) {
-      // collect collections data for expander component and set filters
-      const targetCollectionIds = collections.map((collection) => collection.id);
-      const filters = { collectionIds: targetCollectionIds, sort: '', traitsCount: [] };
-
-      getOffers(1, 20000, filters);
-      getHoldByMe(account, 1, 20000, targetCollectionIds);
-    }
-  }, [account, collections, getHoldByMe, getOffers]);
-
-  const filterTokensFromOffers = useCallback(() => {
-    if (Object.keys(offers).length) {
-      const myOffers = Object.values(offers).filter((offer) => offer.seller === account);
-
-      const tokensSellingByMe: { [collectionId: string]: string[] } = {};
-
-      myOffers.forEach((offer) => {
-        if (!tokensSellingByMe[offer.collectionId]) {
-          tokensSellingByMe[offer.collectionId] = [offer.tokenId];
-        } else {
-          tokensSellingByMe[offer.collectionId].push(offer.tokenId);
-        }
-      });
-
-      setTokensSelling(tokensSellingByMe);
-    }
-  }, [account, offers]);
-
-  const addMintCollectionToList = useCallback(async () => {
-    const firstCollections: NftCollectionInterface[] = await presetCollections();
-
-    if (cleanup.current) {
-      return;
-    }
-
-    setCollections((prevCollections: NftCollectionInterface[]) => {
-      if (JSON.stringify(firstCollections) !== JSON.stringify(prevCollections)) {
-        return [...firstCollections];
-      } else {
-        return prevCollections;
-      }
-    });
-  }, [setCollections, presetCollections]);
-
-  const removeCollection = useCallback((collectionToRemove: string) => {
-    if (selectedCollection && selectedCollection.id === collectionToRemove) {
-      setSelectedCollection(undefined);
-    }
-
-    removeCollectionFromList(collectionToRemove);
-  }, [removeCollectionFromList, selectedCollection]);
-
-  const openTransferModal = useCallback((collection: NftCollectionInterface, tokenId: string, balance: number) => {
+  /* const openTransferModal = useCallback((collection: NftCollectionInterface, tokenId: string, balance: number) => {
     setOpenTransfer({ balance, collection, tokenId });
-  }, []);
+  }, []); */
 
   const updateTokens = useCallback((collectionId) => {
     setShouldUpdateTokens(collectionId);
   }, [setShouldUpdateTokens]);
 
+  const clearCheckedValues = useCallback(() => {
+    setSelectedCollections([]);
+  }, []);
+
+  const onCollectionCheck = useCallback((id: string) => {
+    let newIds: string[] = [];
+
+    if (selectedCollections.includes(id)) {
+      newIds = selectedCollections.filter((item) => item !== id);
+    } else {
+      newIds = [...selectedCollections, id];
+    }
+
+    setSelectedCollections(newIds);
+  }, [selectedCollections]);
+
   useEffect(() => {
     currentAccount.current = account;
     setShouldUpdateTokens('all');
   }, [account, setShouldUpdateTokens]);
-
-  useEffect(() => {
-    void addMintCollectionToList();
-  }, [addMintCollectionToList]);
-
-  useEffect(() => {
-    fetchOffersForCollections();
-  }, [fetchOffersForCollections]);
-
-  useEffect(() => {
-    filterTokensFromOffers();
-  }, [filterTokensFromOffers]);
 
   useEffect(() => {
     return () => {
@@ -124,25 +73,33 @@ function NftWallet ({ account, addCollection, collections, openPanel, removeColl
   }, []);
 
   return (
-    <div className={`nft-wallet unique-card ${openPanel || ''}`}>
-      { openPanel === 'tokens' && (
-        <Header
-          as='h1'
-          className='mobile-header'
-        >
-          My tokens
-        </Header>
-      )}
-      { canAddCollections && (
-        <>
-          <CollectionSearch
+    <div className={`nft-wallet ${openPanel || ''}`}>
+      {/* {(collections.length === 0) && (
+          <div className='market-pallet empty'>
+            <img
+              alt='no tokens'
+              src={noMyTokensIcon as string}
+            />
+            <p className='no-tokens-text'>You have no tokens</p>
+          </div>
+        )} */}
+      <div className='nft-wallet--row'>
+        <CollectionFilter
+          clearCheckedValues={clearCheckedValues}
+          collections={collections}
+          filterCurrent={onCollectionCheck}
+          isShowCollection={showCollectionsFilter}
+          selectedCollections={selectedCollections}
+          setIsShowCollection={toggleCollectionsFilter}
+        />
+        <div className='collection-list unique-card'>
+          <TokensSearch
             account={account}
             addCollection={addCollection}
             collections={collections}
           />
-          <br />
-        </>
-      )}
+        </div>
+      </div>
       <Header as='h3'>
         My collections
       </Header>
@@ -151,27 +108,13 @@ function NftWallet ({ account, addCollection, collections, openPanel, removeColl
           You haven`t added anything yet. Use the collection search.
         </div>
       )}
-      { collections?.length > 0 && (
-        <Table
-          header={[]}
-        >
-          { collections.map((collection) => (
-            <tr key={collection.id}>
-              <td className='overflow'>
-                <NftCollectionCard
-                  account={account}
-                  canTransferTokens={canTransferTokens}
-                  collection={collection}
-                  onHold={myHold[collection.id] || []}
-                  openTransferModal={openTransferModal}
-                  removeCollection={removeCollection}
-                  tokensSelling={tokensSelling[collection.id] || []}
-                />
-              </td>
-            </tr>
-          ))}
-        </Table>
-      )}
+      {/* { collections?.length > 0 && collections.map((collection: NftCollectionInterface) => (
+        <NftCollectionCard
+          account={account}
+          collection={collection}
+          openTransferModal={openTransferModal}
+        />
+      )} */}
       { openTransfer && openTransfer.tokenId && openTransfer.collection && (
         <TransferModal
           account={account}
