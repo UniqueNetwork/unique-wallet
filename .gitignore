@@ -22,3 +22,8 @@ yarn-error.log*
 .idea/
 NOTES.md
 .vscode
+.yarn/install-state.gz
+yarn.lock
+yarn.lock
+packages/page-nft-ether/.skip-build
+packages/page-nft-ether/.skip-npm

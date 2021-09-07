@@ -18,6 +18,8 @@
       "@polkadot/app-accounts/*": [ "packages/page-accounts/src/*" ],
       "@polkadot/app-nft-wallet": [ "packages/page-nft-wallet/src" ],
       "@polkadot/app-nft-wallet/*": [ "packages/page-nft-wallet/src/*" ],
+      "@polkadot/app-nft-ether": [ "packages/page-nft-ether/src" ],
+      "@polkadot/app-nft-ether/*": [ "packages/page-nft-ether/src/*" ],
       "@polkadot/app-nft-market": [ "packages/page-nft-market/src" ],
       "@polkadot/app-nft-market/*": [ "packages/page-nft-market/src/*" ],
       "@polkadot/app-nft-trades": [ "packages/page-nft-trades/src" ],
