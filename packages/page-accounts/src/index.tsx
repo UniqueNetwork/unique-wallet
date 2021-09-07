@@ -12,11 +12,12 @@ import useCounter from './useCounter';
 
 export { useCounter };
 
-function AccountsApp ({ onStatusChange }: Props): React.ReactElement<Props> {
+function AccountsApp ({ onStatusChange, setAccount }: Props): React.ReactElement<Props> {
   return (
     <main className='accounts--App'>
       <Accounts
         onStatusChange={onStatusChange}
+        setAccount={setAccount}
       />
     </main>
   );
