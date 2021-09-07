@@ -8,15 +8,18 @@ import type { AccountId, ProxyDefinition, ProxyType, Voting } from '@polkadot/ty
 import type { Delegation, SortedAccount } from '../types';
 
 import BN from 'bn.js';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 // import Button from 'semantic-ui-react/dist/commonjs/elements/Button';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header';
-import { Input } from '@polkadot/react-components';
+
+import clearIcon from '@polkadot/app-nft-wallet/components/CollectionSearch/clearIcon.svg';
+import searchIcon from '@polkadot/app-nft-wallet/components/CollectionSearch/searchIcon.svg';
+import { Input, StatusContext } from '@polkadot/react-components';
+import AccountButtonsGroup from '@polkadot/react-components/AccountButtonGroup';
 import { useAccounts, useApi, useCall, useFavorites, /* useIpfs, */ useLoadingDelay/*, useToggle */ } from '@polkadot/react-hooks';
+
 // import { FormatBalance } from '@polkadot/react-query';
 // import { BN_ZERO } from '@polkadot/util';
-
 /* import CreateModal from '../modals/Create';
 import ImportModal from '../modals/Import';
 import Ledger from '../modals/Ledger';
@@ -26,8 +29,6 @@ import Qr from '../modals/Qr'; */
 import { sortAccounts } from '../util';
 // import Account from './Account';
 import AccountsTable from './AccountsTable';
-import searchIcon from "@polkadot/app-nft-wallet/components/CollectionSearch/searchIcon.svg";
-import clearIcon from "@polkadot/app-nft-wallet/components/CollectionSearch/clearIcon.svg";
 
 interface Balances {
   accounts: Record<string, BN>;
@@ -42,11 +43,13 @@ interface Sorted {
 interface Props {
   className?: string;
   onStatusChange: (status: ActionStatus) => void;
+  setAccount?: (account?: string) => void;
 }
 
-function Overview ({ className = 'page-accounts', onStatusChange }: Props): React.ReactElement<Props> {
-  const { api } = useApi();
+function Overview ({ className = 'page-accounts', onStatusChange, setAccount }: Props): React.ReactElement<Props> {
+  //const { api } = useApi();
   const { allAccounts } = useAccounts();
+  const { queueAction } = useContext(StatusContext);
   /* const { isIpfs } = useIpfs();
   const [isCreateOpen, toggleCreate] = useToggle();
   const [isRestoreOpen, toggleRestore] = useToggle();
@@ -56,17 +59,17 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
   const [isProxyOpen, toggleProxy] = useToggle();
   const [isQrOpen, toggleQr] = useToggle(); */
   const [filterOn, setFilter] = useState<string>('');
-  const [sortedAccountsWithDelegation, setSortedAccountsWithDelegation] = useState<SortedAccount[] | undefined>();
   const [{ sortedAccounts, sortedAddresses }, setSorted] = useState<Sorted>({ sortedAccounts: [], sortedAddresses: [] });
-  const delegations = useCall<Voting[]>(api.query.democracy?.votingOf?.multi, [sortedAddresses]);
-  const proxies = useCall<[ProxyDefinition[], BN][]>(api.query.proxy?.proxies.multi, [sortedAddresses], {
-    transform: (result: [([AccountId, ProxyType] | ProxyDefinition)[], BN][]): [ProxyDefinition[], BN][] =>
-      api.tx.proxy.addProxy.meta.args.length === 3
-        ? result as [ProxyDefinition[], BN][]
-        : (result as [[AccountId, ProxyType][], BN][]).map(([arr, bn]): [ProxyDefinition[], BN] =>
-          [arr.map(([delegate, proxyType]): ProxyDefinition => api.createType('ProxyDefinition', { delegate, proxyType })), bn]
-        )
-  });
+  const [sortedAccountsWithAccountName, setSortedAccountsWithAccountName] = useState<SortedAccount[] | undefined>();
+  // const delegations = useCall<Voting[]>(api.query.democracy?.votingOf?.multi, [sortedAddresses]);
+  // const proxies = useCall<[ProxyDefinition[], BN][]>(api.query.proxy?.proxies.multi, [sortedAddresses], {
+  //   transform: (result: [([AccountId, ProxyType] | ProxyDefinition)[], BN][]): [ProxyDefinition[], BN][] =>
+  //     api.tx.proxy.addProxy.meta.args.length === 3
+  //       ? result as [ProxyDefinition[], BN][]
+  //       : (result as [[AccountId, ProxyType][], BN][]).map(([arr, bn]): [ProxyDefinition[], BN] =>
+  //         [arr.map(([delegate, proxyType]): ProxyDefinition => api.createType('ProxyDefinition', { delegate, proxyType })), bn]
+  //       )
+  // });
 
   const clearSearch = useCallback(() => {
     setFilter('');
@@ -77,30 +80,13 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
     const sortedAddresses = sortedAccounts.map((a) => a.account.address);
 
     setSorted({ sortedAccounts, sortedAddresses });
+    setSortedAccountsWithAccountName(sortedAccounts)
   }, [allAccounts]);
 
   useEffect(() => {
-    setSortedAccountsWithDelegation(
-      sortedAccounts?.map((account, index) => {
-        let delegation: Delegation | undefined;
+    setSortedAccountsWithAccountName(sortedAccounts?.filter((item) => item.account.meta.name?.includes(filterOn.toLowerCase()) || item.account.meta.name?.includes(filterOn.toLocaleUpperCase()) ));
+  }, [filterOn]);
 
-        if (delegations && delegations[index]?.isDelegating) {
-          const { balance: amount, conviction, target } = delegations[index].asDelegating;
-
-          delegation = {
-            accountDelegated: target.toString(),
-            amount,
-            conviction
-          };
-        }
-
-        return ({
-          ...account,
-          delegation
-        });
-      })
-    );
-  }, [api, delegations, sortedAccounts]);
 
   /* const _setBalance = useCallback(
     (account: string, balance: BN) =>
@@ -139,12 +125,11 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
 
   return (
     <div className='page-accounts'>
-      <Header as='h1'>Manage accounts</Header>
+      <Header as='h1'
+        className='mobile-header'>Manage accounts</Header>
       <div className='page-accounts--card'>
         <div className='page-accounts--card--header'>
-          <div className='account-actions'>
-            Vaagn please put your buttons here
-          </div>
+          <AccountButtonsGroup onStatusChange={queueAction} />
           <div className='accounts-filter'>
             {/* <Input
               autoFocus
@@ -180,7 +165,8 @@ function Overview ({ className = 'page-accounts', onStatusChange }: Props): Reac
           </div>
         </div>
         <AccountsTable
-          accounts={sortedAccountsWithDelegation}
+          accounts={sortedAccountsWithAccountName}
+          setAccount={setAccount}
         />
       </div>
       {/* {isCreateOpen && (
