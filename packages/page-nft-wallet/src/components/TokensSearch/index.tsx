@@ -26,7 +26,7 @@ function TokensSearch ({ account, addCollection, collections }: Props): React.Re
   const [collectionsMatched, setCollectionsMatched] = useState<Array<NftCollectionInterface>>([]);
   const [searchString, setSearchString] = useState<string>('');
   const [sortValue, setSortValue] = useState<string>('creationDate-desc');
-  const { collectionsLoading, presetTokensCollections } = useCollections();
+  const { presetTokensCollections } = useCollections();
   const currentAccount = useRef<string | null | undefined>();
   const { collectionName16Decoder } = useDecoder();
 

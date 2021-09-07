@@ -24,6 +24,18 @@
     display: grid;
     grid-template-columns: 280px 1fr;
     grid-column-gap: calc(var(--gap) * 2);
+
+    .collection-list {
+      display: flex;
+      flex-direction: column;
+      grid-row-gap: var(--gap);
+
+      .tokens-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-column-gap: calc((var(--gap) / 2) * 3);
+      }
+    }
   }
 
   .collection-filter {
