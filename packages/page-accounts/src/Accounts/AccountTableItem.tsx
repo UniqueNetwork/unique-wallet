@@ -10,9 +10,10 @@ import { AddressSmall, CopyIcon } from '@polkadot/react-components';
 
 interface Props {
   account: KeyringAddress;
+  setAccount: (account?: string) => void;
 }
 
-function AccountTableItem ({ account }: Props): React.ReactElement<Props> | null {
+function AccountTableItem ({ account, setAccount }: Props): React.ReactElement<Props> | null {
   const history = useHistory();
 
   const copyAddress = useCallback(() => {
@@ -21,6 +22,7 @@ function AccountTableItem ({ account }: Props): React.ReactElement<Props> | null
   }, []);
 
   const viewAllTokens = useCallback(() => {
+    setAccount(account.address)
     history.push('/myStuff');
   }, []);
 

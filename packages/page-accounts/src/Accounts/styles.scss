@@ -2,7 +2,7 @@
 
   &--card {
     background: var(--card-background);
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     border-radius: 4px;
     padding: calc(var(--gap) * 2);
 
@@ -10,7 +10,13 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       margin-bottom: calc(var(--gap) * 2);
+
+      .accounts-filter {
+        margin-left: 24px;
+      }
     }
+
+
 
     .accounts-table {
 
@@ -46,21 +52,24 @@
           border: 1px solid var(--border-color);
           border-bottom: none;
           display: flex;
-          justify-content: space-between;
           align-items: center;
+          overflow: hidden;
 
           &:last-child {
             border-bottom: 1px solid var(--border-color);
           }
 
           .item {
+            flex: 1;
 
             &--address {
               color: var(--input-placeholder-search-color);
               font-size: 14px;
               display: flex;
               grid-column-gap: 10px;
+              word-break: break-all;
               align-items: center;
+              width: 100%;
 
               svg {
                 opacity: 0.5;
@@ -79,7 +88,9 @@
 
           a {
             cursor: pointer;
-            color: var(--link-color);
+            color: var(--button-color);
+            font-family: var(--font-roboto);
+            text-align: right;
 
             &:hover {
               text-decoration: underline;
@@ -87,6 +98,53 @@
           }
         }
       }
+    }
+  }
+}
+
+@media (max-width: 1023px) {
+
+  .page-accounts--card--header {
+    grid-template-columns: 5fr 3fr;
+  }
+
+  .mobile-header {
+    display: block;
+    padding: 0 16px !important;
+  }
+
+  .accounts-table {
+
+    &--body {
+
+      .accounts-table-item {
+        flex-direction: column;
+        align-items: flex-start !important;
+        border: 1px solid red;
+
+          a {
+            display: block;
+            margin-top: 16px;
+          }
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+
+  .account-header {
+     margin: 16px 24px;
+  }
+
+  .page-accounts--card--header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    .accounts-filter {
+      margin-left: 0;
+      margin-top: 32px;
     }
   }
 }

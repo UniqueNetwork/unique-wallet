@@ -161,7 +161,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                                   setIsMobileMenu={setOpenPanel}
                                 />
                                 <div className='account-selector-block'>
-                                  <AccountSelector onChange={setAccount} />
+                                  <AccountSelector onChange={setAccount} account = {account}/>
                                   <MobileAccountSelector
                                     address={account}
                                     openPanel={openPanel}
@@ -217,6 +217,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                                         onStatusChange={queueAction}
                                         openPanel={openPanel}
                                         setOpenPanel={setOpenPanel}
+                                        setAccount={setAccount}
                                       />)
                                 }
                                 <ConnectingOverlay />

@@ -7,9 +7,10 @@ import { InputAddress } from '@polkadot/react-components';
 
 interface Props {
   onChange: (accountId: string | undefined) => void;
+  account?: string;
 }
 
-function AccountSelector ({ onChange }: Props): React.ReactElement<Props> {
+function AccountSelector ({ onChange, account }: Props): React.ReactElement<Props> {
   const [accountId, setAccountId] = useState<string>();
 
   useEffect(
@@ -23,6 +24,7 @@ function AccountSelector ({ onChange }: Props): React.ReactElement<Props> {
         label='my default account'
         onChange={setAccountId}
         type='account'
+        value={account}
       />
     </section>
   );
