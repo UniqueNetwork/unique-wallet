@@ -10,7 +10,7 @@ interface Props {
   account?: string;
 }
 
-function AccountSelector ({ onChange, account }: Props): React.ReactElement<Props> {
+function AccountSelector ({ account, onChange }: Props): React.ReactElement<Props> {
   const [accountId, setAccountId] = useState<string>();
 
   useEffect(

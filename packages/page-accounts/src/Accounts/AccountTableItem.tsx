@@ -3,28 +3,43 @@
 
 import type { KeyringAddress } from '@polkadot/ui-keyring/types';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 
-import { AddressSmall, CopyIcon } from '@polkadot/react-components';
+import { AddressSmall, CopyIcon, StatusContext } from '@polkadot/react-components';
+import { useTranslation } from '@polkadot/react-components/translate';
 
 interface Props {
   account: KeyringAddress;
-  setAccount: (account?: string) => void;
+  setAccount?: (account?: string) => void;
 }
 
 function AccountTableItem ({ account, setAccount }: Props): React.ReactElement<Props> | null {
   const history = useHistory();
+  const { t } = useTranslation();
+  const { queueAction } = useContext(StatusContext);
 
-  const copyAddress = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    navigator.clipboard.writeText(window.location.href);
-  }, []);
+  const copyAddress = useCallback(
+    (account: string) => {
+      void navigator.clipboard.writeText(account);
+
+      return queueAction({
+        account,
+        action: t('clipboard'),
+        message: t('address copied'),
+        status: 'queued'
+      });
+    },
+    [queueAction, t]
+  );
 
   const viewAllTokens = useCallback(() => {
-    setAccount(account.address)
-    history.push('/myStuff');
-  }, []);
+    if (setAccount) {
+      setAccount(account.address);
+    }
+
+    history.push('/myStuff/Tokens');
+  }, [account.address, history, setAccount]);
 
   return (
     <div className='accounts-table-item'>
@@ -33,7 +48,7 @@ function AccountTableItem ({ account, setAccount }: Props): React.ReactElement<P
         <div className='item--address'>
           <span>{account.address}</span>
           <a
-            onClick={copyAddress}
+            onClick={copyAddress.bind(null, account.address)}
           >
             <CopyIcon />
           </a>

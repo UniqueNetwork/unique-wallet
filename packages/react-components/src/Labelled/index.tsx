@@ -49,6 +49,7 @@ export default React.memo(styled(Labelled)`
   &.ui--Labelled {
     display: block;
     position: relative;
+    background-color: var(--white-color);
 
     .ui--CopyButton {
       position: absolute;

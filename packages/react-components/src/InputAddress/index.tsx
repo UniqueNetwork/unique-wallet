@@ -17,7 +17,7 @@ import { isNull, isUndefined } from '@polkadot/util';
 import Dropdown from '../Dropdown';
 import { getAddressName } from '../util';
 import addressToAddress from '../util/toAddress';
-import createHeader from './createHeader';
+import CreateHeader from './CreateHeader';
 import createItem from './createItem';
 
 interface Props {
@@ -163,11 +163,10 @@ class InputAddress extends React.PureComponent<Props, State> {
           ? lastValue
           : (lastOption && lastOption.value)
     );
-    const actualOptions: Option[] = options
-      ? options.map((o): Option => createItem(o))
-      : isDisabled && actualValue
-        ? [createOption(actualValue)]
-        : this.getFiltered();
+    const actualOptions: Option[] = options &&
+      isDisabled && actualValue
+      ? [createOption(actualValue)]
+      : this.getFiltered();
     const _defaultValue = (isMultiple || !isUndefined(value))
       ? undefined
       : actualValue;
@@ -299,7 +298,8 @@ const ExportedComponent = withMulti(
       Object.entries(optionsAll).reduce((result: Record<string, (Option | React.ReactNode)[]>, [type, options]): Record<string, (Option | React.ReactNode)[]> => {
         result[type] = options.map((option): Option | React.ReactNode =>
           option.value === null
-            ? createHeader(option)
+            ? <CreateHeader key={option.key || option.name}
+              option={option}/>
             : createItem(option)
         );
 

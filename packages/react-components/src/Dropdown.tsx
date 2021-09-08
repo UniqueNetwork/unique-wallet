@@ -160,7 +160,36 @@ const Dropdown = React.memo(styled(BaseDropdown)`
     }
   }
 
+   .header {
+     text-transform: none !important;
+     font-weight: normal !important;
+     font-size: 14px !important;
+     margin: 16px 0 !important;
+     font-family: var(--font-roboto);
+   }
+
   .ui.selection.dropdown {
+
+    &:hover .menu{
+      border-color: transparent;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    border: 1px solid transparent;
+    border-radius: 4px;
+    height: 48px;
+
+    .menu {
+      background-color: var(--white-color);
+      border-color: transparent;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+
+      &:hover {
+        border-color: transparent;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      }
+    }
+
     > .text > .ui--Dropdown-item {
       .ui--Dropdown-icon {
         left: -2.6rem;
