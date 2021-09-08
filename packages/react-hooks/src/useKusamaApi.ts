@@ -17,6 +17,7 @@ import { encodeAddress } from '@polkadot/util-crypto';
 const { kusamaDecimals, minPrice } = envConfig;
 
 interface UseKusamaApiInterface {
+  encodedKusamaAccount: string | undefined;
   formatKsmBalance: (balance: BN | undefined) => string;
   getKusamaTransferFee: (recipient: string, value: BN) => Promise<BN | null>;
   kusamaApi: ApiPromise | undefined;
@@ -59,6 +60,8 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
     const types = {} as Record<string, Record<string, string>>;
 
     const api = new ApiPromise({ provider, registry, signer, types, typesBundle, typesChain });
+
+    console.log('api.rpc.system.chain()', api.rpc.system.chain());
 
     api.on('ready', (): void => {
       // console.log('kusama api ready');
@@ -113,6 +116,7 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
   }, []);
 
   return {
+    encodedKusamaAccount,
     formatKsmBalance,
     getKusamaTransferFee,
     kusamaApi,

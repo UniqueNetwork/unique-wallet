@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { useApi, useCall, useKusamaApi } from '@polkadot/react-hooks';
 
 interface UseBalancesInterface {
+  encodedKusamaAccount: string | undefined;
   freeBalance: BN | undefined;
   freeKusamaBalance: BN | undefined;
   fullBalance: DeriveBalancesAll | undefined;
@@ -17,7 +18,7 @@ interface UseBalancesInterface {
 
 export const useBalances = (account: string | undefined, getUserDeposit?: () => Promise<BN | null>): UseBalancesInterface => {
   const { api } = useApi();
-  const { kusamaApi } = useKusamaApi(account || '');
+  const { encodedKusamaAccount, kusamaApi } = useKusamaApi(account || '');
   const balancesAll = useCall<DeriveBalancesAll>(api.derive.balances?.all, [account]);
   const kusamaBalancesAll = useCall<DeriveBalancesAll>(kusamaApi?.derive.balances?.all, [account]);
   const [freeBalance, setFreeBalance] = useState<BN>();
@@ -47,6 +48,7 @@ export const useBalances = (account: string | undefined, getUserDeposit?: () => 
   }, [freeBalance, freeKusamaBalance]);
 
   return {
+    encodedKusamaAccount,
     freeBalance,
     freeKusamaBalance,
     fullBalance,

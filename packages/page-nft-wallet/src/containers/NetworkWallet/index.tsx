@@ -5,12 +5,13 @@ import './styles.scss';
 
 import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 
-import React, {useCallback} from 'react';
+import React, { useCallback, useContext } from 'react';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 
 import { OpenPanelType } from '@polkadot/apps-routing/types';
-import { AddressInfo, AddressSmall } from '@polkadot/react-components';
-import { useBalances } from '@polkadot/react-hooks';
+import { ChainImg, CopyIcon } from '@polkadot/react-components';
+import StatusContext from '@polkadot/react-components/Status/Context';
+import { useBalances, useNetworkInfo } from '@polkadot/react-hooks';
 import { formatKsmBalance } from '@polkadot/react-hooks/useKusamaApi';
 import { FormatBalance } from '@polkadot/react-query';
 
@@ -27,9 +28,9 @@ interface NftWalletProps {
 }
 
 function NetworkWallet ({ account, addCollection, collections, openPanel, removeCollectionFromList, setCollections, setOpenPanel, setShouldUpdateTokens, shouldUpdateTokens }: NftWalletProps): React.ReactElement {
-  const { fullBalance, fullKusamaBalance } = useBalances(account);
-
-  console.log('fullBalance', fullBalance);
+  const { encodedKusamaAccount, fullBalance, fullKusamaBalance } = useBalances(account);
+  const { chain, kusamaChain } = useNetworkInfo();
+  const { queueAction } = useContext(StatusContext);
 
   const onSend = useCallback(() => {
     console.log('onSend');
@@ -39,6 +40,16 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
     console.log('onGet');
   }, []);
 
+  const _onCopy = useCallback(
+    (address: string) => queueAction({
+      account: address,
+      action: 'clipboard',
+      message: 'address copied',
+      status: 'queued'
+    }),
+    [queueAction]
+  );
+
   return (
     <div className='network-wallet'>
       <div className='network-wallet--block'>
@@ -47,7 +58,17 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
         </div>
         <div className='network-wallet--block--body'>
           <div className='token-item'>
-            <AddressSmall value={account} />
+            <div className='token-item--account'>
+              <span>
+                {kusamaChain}
+              </span>
+              <span>
+                {encodedKusamaAccount}
+                <a onClick={account ? _onCopy.bind(null, account) : () => null }>
+                  <CopyIcon />
+                </a>
+              </span>
+            </div>
             <div className='token-item--balances'>
               <strong>{formatKsmBalance(fullBalance?.freeBalance)} KSM</strong>
               <small>
@@ -59,7 +80,22 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
             </div>
           </div>
           <div className='token-item'>
-            <AddressSmall value={account} />
+            <div className='token-item--account'>
+              <ChainImg
+                className='endpointIcon'
+                isInline
+                withoutHl
+              />
+              <span>
+                {chain}
+              </span>
+              <span>
+                {account}
+                <a onClick={account ? _onCopy.bind(null, account) : () => null }>
+                  <CopyIcon />
+                </a>
+              </span>
+            </div>
             <div className='token-item--balances'>
               <strong>
                 <FormatBalance

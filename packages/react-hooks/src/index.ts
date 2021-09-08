@@ -36,6 +36,7 @@ export { useMembers } from './useMembers';
 export { useMetadata } from './useMetadata';
 export { useMintApi } from './useMintApi';
 export { useModal } from './useModal';
+export { useNetworkInfo } from './useNetworkInfo';
 export { useNftContract } from './useNftContract';
 export { useNonEmptyString } from './useNonEmptyString';
 export { useNonZeroBn } from './useNonZeroBn';

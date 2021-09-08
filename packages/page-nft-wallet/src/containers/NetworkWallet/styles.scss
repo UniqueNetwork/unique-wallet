@@ -16,6 +16,11 @@
 
     &--body {
       padding-top: calc((var(--gap) / 2) * 3);
+
+      .token-item {
+        display: grid;
+        grid-template-columns: 1fr 450px 155px;
+      }
     }
   }
 }
