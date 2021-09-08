@@ -11,6 +11,8 @@ import { useApi, useCall, useKusamaApi } from '@polkadot/react-hooks';
 interface UseBalancesInterface {
   freeBalance: BN | undefined;
   freeKusamaBalance: BN | undefined;
+  fullBalance: DeriveBalancesAll | undefined;
+  fullKusamaBalance: DeriveBalancesAll | undefined;
 }
 
 export const useBalances = (account: string | undefined, getUserDeposit?: () => Promise<BN | null>): UseBalancesInterface => {
@@ -20,11 +22,14 @@ export const useBalances = (account: string | undefined, getUserDeposit?: () => 
   const kusamaBalancesAll = useCall<DeriveBalancesAll>(kusamaApi?.derive.balances?.all, [account]);
   const [freeBalance, setFreeBalance] = useState<BN>();
   const [freeKusamaBalance, setFreeKusamaBalance] = useState<BN>();
+  const [fullBalance, setFullBalance] = useState<DeriveBalancesAll>();
+  const [fullKusamaBalance, setFullKusamaBalance] = useState<DeriveBalancesAll>();
 
   useEffect(() => {
     // available balance used as free (transferable)
     if (balancesAll) {
       setFreeBalance(balancesAll.availableBalance);
+      setFullBalance(balancesAll);
     }
   }, [balancesAll]);
 
@@ -32,6 +37,7 @@ export const useBalances = (account: string | undefined, getUserDeposit?: () => 
     // available balance used as free (transferable)
     if (kusamaBalancesAll) {
       setFreeKusamaBalance(kusamaBalancesAll.availableBalance);
+      setFullKusamaBalance(kusamaBalancesAll);
     }
   }, [kusamaBalancesAll]);
 
@@ -42,6 +48,8 @@ export const useBalances = (account: string | undefined, getUserDeposit?: () => 
 
   return {
     freeBalance,
-    freeKusamaBalance
+    freeKusamaBalance,
+    fullBalance,
+    fullKusamaBalance
   };
 };

@@ -1,0 +1,21 @@
+.network-wallet {
+
+  .network-wallet--block {
+    background: var(--card-background);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    padding: calc(var(--gap) * 2);
+    font-family: var(--font-roboto);
+
+    &--header {
+      font-size: 18px;
+      font-weight: 500;
+      padding-bottom: calc((var(--gap) / 2) * 3);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    &--body {
+      padding-top: calc((var(--gap) / 2) * 3);
+    }
+  }
+}

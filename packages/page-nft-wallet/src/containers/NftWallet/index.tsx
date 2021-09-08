@@ -14,10 +14,7 @@ import { TransferModal } from '@polkadot/react-components';
 import { useCollections } from '@polkadot/react-hooks';
 
 import CollectionFilter from '../../components/CollectionFilter';
-// import { useCollections } from '@polkadot/react-hooks';
 import TokensSearch from '../../components/TokensSearch';
-// import NftCollectionCard from '../../components/NftCollectionCard';
-// import noMyTokensIcon from './noMyTokensIcon.svg';
 
 interface NftWalletProps {
   account?: string;

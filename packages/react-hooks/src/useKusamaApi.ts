@@ -112,8 +112,6 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log('encodedKusamaAccount', encodedKusamaAccount);
-
   return {
     formatKsmBalance,
     getKusamaTransferFee,
