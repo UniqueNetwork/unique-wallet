@@ -192,7 +192,7 @@ h4.ui.header {
     height: 48px;
 
     & .menu > .item {
-      padding: 8px calc(var(--gap) * 2 + 8px) !important;
+      padding: 8px calc( (var(--gap) / 2) * 5) !important;
     }
   }
 

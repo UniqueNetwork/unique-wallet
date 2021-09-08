@@ -47,7 +47,7 @@ function Overview ({ className = 'page-accounts', onStatusChange, setAccount }: 
   }, [allAccounts]);
 
   useEffect(() => {
-    setSortedAccountsWithAccountName(sortedAccounts?.filter((item) => item.account.meta.name?.includes(filterOn.toLowerCase()) || item.account.meta.name?.includes(filterOn.toLocaleUpperCase())));
+    setSortedAccountsWithAccountName(sortedAccounts?.filter((item) => item.account.meta.name?.toLowerCase().includes(filterOn.toLowerCase())));
   }, [filterOn, sortedAccounts]);
 
   return (
