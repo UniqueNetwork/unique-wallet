@@ -192,7 +192,7 @@ h4.ui.header {
     height: 48px;
 
     & .menu > .item {
-      padding: calc(var(--gap) / 3) calc(var(--gap) * 2) !important;
+      padding: 8px calc(var(--gap) * 2 + 8px) !important;
     }
   }
 
@@ -570,7 +570,7 @@ button.ui.button,
 }
 
 .template--AccountSelector {
-  background: var(--account-selector-background);
+  background: var(--title-color);
   border-radius: 6px;
 
   .ui.dropdown {

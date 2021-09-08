@@ -168,9 +168,12 @@ function AccountName ({ children, className = '', defaultName, label, onClick, o
 export default React.memo(styled(AccountName)`
   align-items: center;
   border: 1px dotted transparent;
-  display: inline-flex;
+  display: inline-block;
+  max-width: 400px;
   vertical-align: middle;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &.withSidebar:hover {
     border-bottom-color: #333;
@@ -189,8 +192,6 @@ export default React.memo(styled(AccountName)`
       filter: grayscale(100%);
       line-height: 1;
       opacity: 0.6;
-      overflow: hidden;
-      text-overflow: ellipsis;
 
       &:not(.isAddress) {
         text-transform: uppercase;

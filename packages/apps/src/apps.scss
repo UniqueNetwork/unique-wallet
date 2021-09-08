@@ -57,7 +57,11 @@
   }
 
   .account-selector-block {
-    width: 230px;
+    max-width: 500px;
+
+    .address{
+      text-align: left;
+    }
   }
 }
 
@@ -391,23 +395,6 @@
       text-align: center;
       margin-bottom: var(--gap);
     }
-
-    &--link {
-      display: block;
-      width: 100%;
-      font-family: var(--font-roboto);
-      font-weight: 500;
-      font-size: 16px;
-      margin: 4px 0;
-      padding: 8px 16px;
-      color: var(--header-text-color);
-
-      &.active {
-        background-color: var(--link-color);
-        border-radius: 4px;
-        color: var(--card-background);
-      }
-    }
   }
 
   .app-main  {
@@ -560,10 +547,15 @@
     font-family: var(--font-roboto);
     display: block;
     width: 100%;
-    margin: 0 var(--gap);
-    padding: var(--gap) 0;
+    padding: 16px;
     border-bottom: 1px solid var(--border-color);
-    color: var(--link-color);
+    color: var(--button-color);
+
+    &:hover {
+      color: var(--button-color);
+      text-decoration: underline;
+      cursor: pointer;
+    }
   }
 
   header {
@@ -642,11 +634,5 @@
     margin-bottom: 6px;
     font-family: var(--font-roboto);
     border: 1px solid var(--input-background-color);
-  }
-
-  a {
-    text-decoration: underline;
-    color: var(--input-background-color);
-    margin: 0 3px;
   }
 }

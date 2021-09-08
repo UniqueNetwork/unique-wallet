@@ -24,10 +24,10 @@ interface Sorted {
 interface Props {
   className?: string;
   onStatusChange: (status: ActionStatus) => void;
-  setAccount: (account?: string) => void;
+  setAccount?: (account?: string) => void;
 }
 
-function Overview ({ setAccount }: Props): React.ReactElement<Props> {
+function Overview ({ className = 'page-accounts', onStatusChange, setAccount }: Props): React.ReactElement<Props> {
   const { allAccounts } = useAccounts();
   const { queueAction } = useContext(StatusContext);
   const [filterOn, setFilter] = useState<string>('');
@@ -47,7 +47,7 @@ function Overview ({ setAccount }: Props): React.ReactElement<Props> {
   }, [allAccounts]);
 
   useEffect(() => {
-    setSortedAccountsWithAccountName(sortedAccounts?.filter((item) => item.account.meta.name?.toLowerCase().includes(filterOn.toLowerCase())));
+    setSortedAccountsWithAccountName(sortedAccounts?.filter((item) => item.account.meta.name?.includes(filterOn.toLowerCase()) || item.account.meta.name?.includes(filterOn.toLocaleUpperCase())));
   }, [filterOn, sortedAccounts]);
 
   return (

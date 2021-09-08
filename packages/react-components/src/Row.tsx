@@ -49,6 +49,7 @@ export const styles = `
     align-items: center;
     min-width: 16rem;
     padding-top: 12px;
+    overflow: hidden;
   }
 
   .ui--Row-buttons {

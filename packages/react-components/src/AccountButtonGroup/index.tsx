@@ -4,7 +4,7 @@
 // eslint-disable-next-line header/header
 import './style.scss';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import CreateModal from '@polkadot/app-accounts/modals/Create';
 import ImportModal from '@polkadot/app-accounts/modals/Import';
@@ -29,6 +29,22 @@ const AccountButtonsGroup: React.FC<AccountButtonsGroupProps> = ({ onStatusChang
   const handleClick = () => {
     setActive((prev) => !prev);
   };
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (buttonRef.current && !buttonRef.current.contains(event.target as HTMLButtonElement)) {
+      setActive(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   return <>
     {isCreateOpen && (
@@ -71,7 +87,8 @@ const AccountButtonsGroup: React.FC<AccountButtonsGroupProps> = ({ onStatusChang
             onClick={toggleQr}>QR-code</span>
         </div>
         <button className='btn'
-          onClick={handleClick}>
+          onClick={handleClick}
+          ref={buttonRef}>
             Add account via
           <img alt='>'
             src= {ArrowIcon as string}/>

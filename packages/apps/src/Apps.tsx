@@ -160,7 +160,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                                 />
                                 <div className='account-selector-block'>
                                   <AccountSelector
-                                    account={account}
+                                    account = {account}
                                     onChange={setAccount}
                                   />
                                   <MobileAccountSelector

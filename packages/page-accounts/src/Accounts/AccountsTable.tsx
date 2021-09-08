@@ -12,7 +12,7 @@ import question from './question.svg';
 
 interface Props {
   accounts: SortedAccount[] | undefined;
-  setAccount: (account?: string) => void;
+  setAccount?: (account?: string) => void;
 }
 
 function AccountTable ({ accounts, setAccount }: Props): React.ReactElement<Props> | null {
@@ -41,8 +41,8 @@ function AccountTable ({ accounts, setAccount }: Props): React.ReactElement<Prop
         { accounts?.map(({ account }: { account: KeyringAddress }) => (
           <AccountTableItem
             account={account}
-            setAccount={setAccount}
             key={account.address}
+            setAccount={setAccount}
           />
         ))}
       </div>
