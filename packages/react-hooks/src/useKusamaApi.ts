@@ -61,8 +61,6 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
 
     const api = new ApiPromise({ provider, registry, signer, types, typesBundle, typesChain });
 
-    console.log('api.rpc.system.chain()', api.rpc.system.chain());
-
     api.on('ready', (): void => {
       // console.log('kusama api ready');
       setKusamaApi(api);

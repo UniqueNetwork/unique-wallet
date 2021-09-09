@@ -50,6 +50,8 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
     [queueAction]
   );
 
+  console.log('kusamaChain', kusamaChain);
+
   return (
     <div className='network-wallet'>
       <div className='network-wallet--block'>
@@ -57,42 +59,56 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
           Network tokens
         </div>
         <div className='network-wallet--block--body'>
+          { kusamaChain && (
+            <div className='token-item'>
+              <div className='token-item--account'>
+                <span>
+                  <ChainImg
+                    className='endpointIcon'
+                    isInline
+                    logo={kusamaChain.toLowerCase()}
+                    withoutHl
+                  />
+                  {kusamaChain}
+                </span>
+                <span>
+                  {encodedKusamaAccount}
+                  <a onClick={account ? _onCopy.bind(null, account) : () => null }>
+                    <CopyIcon color={'var(--input-placeholder-search-color)'} />
+                  </a>
+                </span>
+              </div>
+              <div className='token-item--balances'>
+                <span className='token-item--balances--row'>
+                  {formatKsmBalance(fullKusamaBalance?.freeBalance)} KSM
+                </span>
+                <span className='token-item--balances--row'>
+                  <span>{formatKsmBalance(fullKusamaBalance?.availableBalance)} KSM transferrable</span>
+                  <span>{formatKsmBalance(fullKusamaBalance?.lockedBalance)} KSM locked</span>
+                </span>
+              </div>
+              <div className='token-item--actions'>
+                <Button
+                  onClick={onSend}
+                >
+                  Send
+                </Button>
+                <Button
+                  onClick={onGet}
+                >
+                  Get
+                </Button>
+              </div>
+            </div>
+          )}
           <div className='token-item'>
             <div className='token-item--account'>
-              <ChainImg
-                className='endpointIcon'
-                isInline
-                logo={kusamaChain.toLowerCase()}
-                withoutHl
-              />
               <span>
-                {kusamaChain}
-              </span>
-              <span>
-                {encodedKusamaAccount}
-                <a onClick={account ? _onCopy.bind(null, account) : () => null }>
-                  <CopyIcon />
-                </a>
-              </span>
-            </div>
-            <div className='token-item--balances'>
-              <strong>{formatKsmBalance(fullBalance?.freeBalance)} KSM</strong>
-              <small>
-                {formatKsmBalance(fullKusamaBalance?.availableBalance)} KSM transferrable
-              </small>
-              <small>
-                {formatKsmBalance(fullKusamaBalance?.lockedBalance)} KSM locked
-              </small>
-            </div>
-          </div>
-          <div className='token-item'>
-            <div className='token-item--account'>
-              <ChainImg
-                className='endpointIcon'
-                isInline
-                withoutHl
-              />
-              <span>
+                <ChainImg
+                  className='endpointIcon'
+                  isInline
+                  withoutHl
+                />
                 {chain}
               </span>
               <span>
@@ -103,25 +119,26 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
               </span>
             </div>
             <div className='token-item--balances'>
-              <strong>
+              <span className='token-item--balances--row'>
                 <FormatBalance
                   className='result'
                   value={fullBalance?.freeBalance}
                 />
-              </strong>
-              <small>
-                <FormatBalance
-                  className='result'
-                  value={fullBalance?.availableBalance}
-                /> transferable
-              </small>
-              <small>
-                {/* {formatStrBalance(15, fullBalance?.lockedBalance)} UNQ locked */}
-                <FormatBalance
-                  className='result'
-                  value={fullBalance?.lockedBalance}
-                /> locked
-              </small>
+              </span>
+              <span className='token-item--balances--row'>
+                <span>
+                  <FormatBalance
+                    className='result'
+                    value={fullBalance?.availableBalance}
+                  /> transferable
+                </span>
+                <span>
+                  <FormatBalance
+                    className='result'
+                    value={fullBalance?.lockedBalance}
+                  /> locked
+                </span>
+              </span>
             </div>
             <div className='token-item--actions'>
               <Button
