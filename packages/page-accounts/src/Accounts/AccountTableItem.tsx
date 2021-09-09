@@ -22,9 +22,9 @@ function AccountTableItem ({ account, setAccount }: Props): React.ReactElement<P
   }, []);
 
   const viewAllTokens = useCallback(() => {
-    setAccount(account.address)
+    setAccount(account.address);
     history.push('/myStuff');
-  }, []);
+  }, [account, history, setAccount]);
 
   return (
     <div className='accounts-table-item'>

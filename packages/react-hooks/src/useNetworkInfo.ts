@@ -20,8 +20,6 @@ export const useNetworkInfo = (): UseBalancesInterface => {
   const [kusamaName, setKusamaName] = useState<string>('');
   const [kusamaChain, setKusamaChain] = useState<string>('');
 
-  console.log('chain', chain, 'kusamaName', kusamaName, 'chain', chain, 'kusamaChain', kusamaChain);
-
   const getKusamaNetworkInfo = useCallback(async () => {
     if (kusamaApi) {
       const kusamaSystemChain = await kusamaApi.rpc.system.chain();

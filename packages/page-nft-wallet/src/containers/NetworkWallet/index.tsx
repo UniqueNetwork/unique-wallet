@@ -59,6 +59,12 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
         <div className='network-wallet--block--body'>
           <div className='token-item'>
             <div className='token-item--account'>
+              <ChainImg
+                className='endpointIcon'
+                isInline
+                logo={kusamaChain.toLowerCase()}
+                withoutHl
+              />
               <span>
                 {kusamaChain}
               </span>
