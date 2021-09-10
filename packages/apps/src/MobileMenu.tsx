@@ -13,7 +13,7 @@ interface Props {
 }
 
 const MobileMenuHeader = (props: Props): React.ReactElement<Props> => {
-  const { account, setOpenPanel, theme } = props;
+  const { account, setOpenPanel } = props;
   const location = useLocation();
   const currentLocation = useRef<string>();
 
@@ -27,14 +27,8 @@ const MobileMenuHeader = (props: Props): React.ReactElement<Props> => {
 
   return (
     <div className={`menu-mobile ${account ? '' : 'no-accounts'}`}>
-      <div className='menu-mobile--logo'>
-        <img
-          alt={`logo ${theme.theme}`}
-          src={theme.logo}
-        />
-      </div>
       <NavLink
-        className={`menu-mobile--link ${location.pathname === '/myStuff' ? 'active' : ''}`}
+        className={`menu-mobile--link ${location.pathname.includes('myStuff') ? 'active' : ''}`}
         exact={true}
         strict={true}
         to={'/myStuff'}
@@ -42,7 +36,7 @@ const MobileMenuHeader = (props: Props): React.ReactElement<Props> => {
         My stuff
       </NavLink>
       <NavLink
-        className={`menu-mobile--link ${location.pathname === '/faq' ? 'active' : ''}`}
+        className={`menu-mobile--link ${location.pathname.includes('faq') ? 'active' : ''}`}
         exact={true}
         strict={true}
         to={'/faq'}
