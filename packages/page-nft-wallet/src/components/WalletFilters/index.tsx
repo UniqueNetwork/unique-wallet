@@ -15,15 +15,14 @@ interface Props {
   selectedCollections: string[];
   filterCurrent: (id: string) => void;
   isShowCollection: boolean;
-  openFilters: boolean;
   setIsShowCollection: (isShowCollection: boolean) => void;
 }
 
 const WalletFilters = (props: Props): ReactElement => {
-  const { clearCheckedValues, collections, filterCurrent, isShowCollection, openFilters, selectedCollections, setIsShowCollection } = props;
+  const { clearCheckedValues, collections, filterCurrent, isShowCollection, selectedCollections, setIsShowCollection } = props;
 
   return (
-    <div className={`filter-main ${openFilters ? 'open' : ''}`}>
+    <div className='filter-main'>
       <CollectionFilter
         clearCheckedValues={clearCheckedValues}
         collections={collections}

@@ -11,11 +11,10 @@ import { Filters } from '../../containers/NftWallet';
 
 interface PropTypes {
   filters: Filters;
-  openSort: boolean;
   setFilters: (filters: Filters) => void;
 }
 
-const WalletSort = ({ filters, openSort, setFilters }: PropTypes): ReactElement => {
+const WalletSort = ({ filters, setFilters }: PropTypes): ReactElement => {
   const [sortValue, setSortValue] = useState<string>('creationDate-desc');
 
   const setSort = useCallback((key: string) => {
@@ -65,7 +64,7 @@ const WalletSort = ({ filters, openSort, setFilters }: PropTypes): ReactElement 
   // console.log('filters', filters, 'sortValue', sortValue);
 
   return (
-    <div className={`sort-main ${openSort ? 'open' : ''}`}>
+    <div className='sort-main'>
       {sortItem(sortValue === 'tokenId-desc', 'desc', 'Token ID', 'tokenId-desc')}
       {sortItem(sortValue === 'tokenId-asc', 'asc', 'Token ID', 'tokenId-asc')}
     </div>
