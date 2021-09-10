@@ -17,6 +17,7 @@ import { encodeAddress } from '@polkadot/util-crypto';
 const { kusamaDecimals, minPrice } = envConfig;
 
 interface UseKusamaApiInterface {
+  encodedKusamaAccount: string | undefined;
   formatKsmBalance: (balance: BN | undefined) => string;
   getKusamaTransferFee: (recipient: string, value: BN) => Promise<BN | null>;
   kusamaApi: ApiPromise | undefined;
@@ -112,9 +113,8 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log('encodedKusamaAccount', encodedKusamaAccount);
-
   return {
+    encodedKusamaAccount,
     formatKsmBalance,
     getKusamaTransferFee,
     kusamaApi,

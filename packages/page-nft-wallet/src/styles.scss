@@ -30,11 +30,7 @@
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1279px) {
-
-}
-
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
   .my-tokens {
     h1.ui.header, h4.ui.header {
       display: block;
@@ -51,16 +47,12 @@
     overflow: hidden;
     background-color: var(--card-background);
 
-    h1.ui.header, h4.ui.header {
-      display: none;
-
-      &.mobile-header {
-        display: block;
-        margin: calc((var(--gap) / 2) * 3) 0 0 0;
-      }
+    h1.ui.header {
+      margin-top: calc((var(--gap) / 2) * 3);
+      padding: 0 var(--gap);
     }
 
-    .ui.header {
+    .stuff-tabs {
       padding: 0 var(--gap);
     }
   }

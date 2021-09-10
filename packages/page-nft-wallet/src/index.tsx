@@ -5,27 +5,24 @@ import './styles.scss';
 
 // external imports
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Route, Switch } from 'react-router';
+import { Route, Switch, useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header/Header';
 
-import envConfig from '@polkadot/apps-config/envConfig';
 import { NftDetails, Tabs } from '@polkadot/react-components';
 // local imports and components
 import { AppProps as Props } from '@polkadot/react-components/types';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 
+import NetworkWallet from './containers/NetworkWallet';
 import NftWallet from './containers/NftWallet';
-
-const { canAddCollections } = envConfig;
 
 function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): React.ReactElement<Props> {
   const location = useLocation();
+  const history = useHistory();
   const [shouldUpdateTokens, setShouldUpdateTokens] = useState<string>();
   const collectionsStorage: NftCollectionInterface[] = JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
   const [collections, setCollections] = useState<NftCollectionInterface[]>(collectionsStorage);
-
-  console.log('collections', collections);
 
   const addCollection = useCallback((collection: NftCollectionInterface) => {
     setCollections((prevCollections: NftCollectionInterface[]) => {
@@ -50,8 +47,7 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
 
   const items = useMemo(() => [
     {
-      isRoot: true,
-      name: 'MyStuff',
+      name: 'nft',
       text: 'NFT'
     },
     {
@@ -60,25 +56,22 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
       text: 'RFT'
     },
     {
-      name: 'Tokens',
+      name: 'tokens',
       text: 'Tokens'
     }
   ], []);
 
-  // reset collections if we can't add another except uniqueCollectionId
   useEffect(() => {
-    if (!canAddCollections) {
-      localStorage.setItem('tokenCollections', JSON.stringify([]));
+    if (location.pathname === '/myStuff') {
+      history.push('/myStuff/nft');
     }
-  }, []);
-
-  console.log('location', location, 'items', items);
+  }, [history, location]);
 
   return (
     <div className='my-tokens'>
       { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && (
         <>
-          <Header as='h1'>{location.pathname === '/myStuff' ? 'My stuff' : 'Tokens'}</Header>
+          <Header as='h1'>My stuff</Header>
         </>
       )}
       { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && (
@@ -94,8 +87,18 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
             account={account || ''}
           />
         </Route>
-        <Route path={basePath}>
+        <Route path={`${basePath}/nft`}>
           <NftWallet
+            account={account}
+            addCollection={addCollection}
+            collections={collections}
+            openPanel={openPanel}
+            setCollections={setCollections}
+            setOpenPanel={setOpenPanel}
+          />
+        </Route>
+        <Route path={`${basePath}/tokens`}>
+          <NetworkWallet
             account={account}
             addCollection={addCollection}
             collections={collections}
