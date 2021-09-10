@@ -4,9 +4,11 @@
 import BN from 'bn.js';
 import React, { memo, useCallback, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import Menu from 'semantic-ui-react/dist/commonjs/collections/Menu';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 
+import { OpenPanelType } from '@polkadot/apps-routing/types';
 import { WithdrawModal } from '@polkadot/react-components';
 import { useBalances, useNftContract } from '@polkadot/react-hooks';
 import { formatKsmBalance, formatStrBalance } from '@polkadot/react-hooks/useKusamaApi';
@@ -15,10 +17,11 @@ import question from './images/question.svg';
 
 interface Props {
   account?: string;
+  setOpenPanel: (isOpen: OpenPanelType) => void;
 }
 
 const ManageBalances = (props: Props) => {
-  const { account } = props;
+  const { account, setOpenPanel } = props;
   const { contractInstance, deposited, getUserDeposit } = useNftContract(account || '');
   const { freeBalance, freeKusamaBalance } = useBalances(account, getUserDeposit);
   const [showWithdrawModal, toggleWithdrawModal] = useState<boolean>(false);
@@ -52,7 +55,7 @@ const ManageBalances = (props: Props) => {
   }, [openModal]);
 
   return (
-    <div className='manage-balances'>
+    <div className='manage-balances mobile'>
       <div className='main-balance'>
         {formatStrBalance(15, freeBalance)}
         <span className='unit'>UNQ</span>
@@ -69,6 +72,7 @@ const ManageBalances = (props: Props) => {
             <Popup
               className='mobile withdraw-popup'
               content={withdrawPopup}
+              on='click'
               position='bottom left'
               trigger={<img
                 alt='withdraw'
@@ -77,11 +81,18 @@ const ManageBalances = (props: Props) => {
             />
           )}
         </div>
-        {/* <div className='footer-balance'>
-          <a onClick={}>
-            View all coins
-          </a>
-        </div> */}
+        <div className='footer-balance'
+          onClick={setOpenPanel.bind(null, 'tokens')}>
+
+          <Menu.Item
+            active={location.pathname === '/myStuff/Tokens'}
+            as={NavLink}
+            className=''
+            name='View all tokens'
+            to='/myStuff/Tokens'
+          />
+
+        </div>
       </div>
       { showWithdrawModal && (
         <WithdrawModal
