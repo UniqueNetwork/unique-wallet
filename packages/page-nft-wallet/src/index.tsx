@@ -93,11 +93,8 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
             addCollection={addCollection}
             collections={collections}
             openPanel={openPanel}
-            removeCollectionFromList={removeCollectionFromList}
             setCollections={setCollections}
             setOpenPanel={setOpenPanel}
-            setShouldUpdateTokens={setShouldUpdateTokens}
-            shouldUpdateTokens={shouldUpdateTokens}
           />
         </Route>
         <Route path={`${basePath}/tokens`}>

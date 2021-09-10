@@ -12,8 +12,8 @@ import Dropdown, { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules
 import { SearchFilter } from '@polkadot/react-components';
 import { useCollections, useDecoder } from '@polkadot/react-hooks';
 
-import ArrowDown from './ArrowDown';
-import ArrowUp from './ArrowUp';
+import ArrowDown from '../ArrowDown';
+import ArrowUp from '../ArrowUp';
 
 interface Props {
   account: string | null | undefined;
