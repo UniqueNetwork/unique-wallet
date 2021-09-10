@@ -683,3 +683,34 @@
     border: 1px solid var(--input-background-color);
   }
 }
+
+@media (max-width: 1279px) {
+  .menu-mobile {
+    padding: var(--gap);
+    display: flex;
+    flex-direction: column;
+    background-color: var(--card-background);
+
+    &--logo {
+      text-align: center;
+      margin-bottom: var(--gap);
+    }
+
+    &--link {
+      display: block;
+      width: 100%;
+      font-family: var(--font-roboto);
+      font-weight: 500;
+      font-size: 16px;
+      margin: 4px 0;
+      padding: 8px 16px;
+      color: var(--header-text-color);
+
+      &.active {
+        background-color: var(--link-color);
+        border-radius: 4px;
+        color: var(--card-background);
+      }
+    }
+  }
+}

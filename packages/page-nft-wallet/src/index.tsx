@@ -7,6 +7,7 @@ import './styles.scss';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
+import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header/Header';
 
 import { NftDetails, Tabs } from '@polkadot/react-components';
@@ -69,17 +70,33 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
 
   return (
     <div className='my-tokens'>
-      { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && (
+      { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && openPanel === 'tokens' && (
         <>
           <Header as='h1'>My stuff</Header>
         </>
       )}
-      { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && (
+      { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && openPanel === 'tokens' && (
         <Tabs
           basePath={basePath}
           className='stuff-tabs'
           items={items}
         />
+      )}
+      { (openPanel === 'filters' || openPanel === 'sort') && (
+        <Button.Group className='stuff-filter-tabs'>
+          <Button
+            onClick={setOpenPanel && setOpenPanel.bind(null, 'filters')}
+            primary={openPanel === 'filters'}
+          >
+            Filter
+          </Button>
+          <Button
+            onClick={setOpenPanel && setOpenPanel.bind(null, 'sort')}
+            primary={openPanel === 'sort'}
+          >
+            Sort
+          </Button>
+        </Button.Group>
       )}
       <Switch>
         <Route path={`${basePath}/token-details`}>
