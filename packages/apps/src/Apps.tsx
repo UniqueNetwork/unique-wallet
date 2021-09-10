@@ -152,8 +152,6 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                               <div className={`app-user${account ? '' : ' hidden'}`}>
                                 <BalancesHeader
                                   account={account}
-                                  isMobileMenu={openPanel}
-                                  setOpenPanel={setOpenPanel}
                                 />
                                 <div className='account-selector-block'>
                                   <AccountSelector

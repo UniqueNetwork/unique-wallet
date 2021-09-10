@@ -1,8 +1,6 @@
 // Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { OpenPanelType } from '@polkadot/apps-routing/types';
-
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 
 import menuArrow from '@polkadot/apps/images/menu-arrow.svg';
@@ -13,12 +11,10 @@ import { FormatBalance } from '@polkadot/react-query';
 
 interface Props {
   account?: string,
-  isMobileMenu: OpenPanelType;
-  setOpenPanel: (isOpen: OpenPanelType) => void;
 }
 
 function BalancesHeader (props: Props): React.ReactElement<{ account?: string }> {
-  const { account, isMobileMenu, setOpenPanel } = props;
+  const { account } = props;
   const { freeBalance } = useBalances(account);
 
   const [isPopupActive, setIsPopupActive] = useState<boolean>(false);
@@ -41,13 +37,7 @@ function BalancesHeader (props: Props): React.ReactElement<{ account?: string }>
 
   const onClick = useCallback(() => {
     setIsPopupActive((prev) => !prev);
-
-    if (isMobileMenu !== 'balances') {
-      setOpenPanel('balances');
-    } else {
-      setOpenPanel('tokens');
-    }
-  }, [isMobileMenu, setOpenPanel]);
+  }, []);
 
   return (
     <div
