@@ -7,8 +7,9 @@ import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 
 import menuArrow from '@polkadot/apps/images/menu-arrow.svg';
 import PopupMenu from '@polkadot/react-components/PopupMenu';
+import { WalletIconSvg } from '@polkadot/react-components/WalletIconSvg';
 import { useBalances } from '@polkadot/react-hooks';
-import { formatKsmBalance, formatStrBalance } from '@polkadot/react-hooks/useKusamaApi';
+import { FormatBalance } from '@polkadot/react-query';
 
 interface Props {
   account?: string,
@@ -18,7 +19,7 @@ interface Props {
 
 function BalancesHeader (props: Props): React.ReactElement<{ account?: string }> {
   const { account, isMobileMenu, setOpenPanel } = props;
-  const { freeBalance, freeKusamaBalance } = useBalances(account);
+  const { freeBalance } = useBalances(account);
 
   const [isPopupActive, setIsPopupActive] = useState<boolean>(false);
 
@@ -56,12 +57,13 @@ function BalancesHeader (props: Props): React.ReactElement<{ account?: string }>
       <div className='app-balances-items'
         onClick={onClick}>
         <div className='app-balances-items-item'>
-          {formatStrBalance(15, freeBalance)}
-          <span className='unit'>UNQ</span>
-        </div>
-        <div className='app-balances-items-item'>
-          {formatKsmBalance(freeKusamaBalance)}
-          <span className='unit'>KSM</span>
+          <div className='item-icon'>
+            <WalletIconSvg/>
+          </div>
+          <FormatBalance
+            className='result'
+            value={freeBalance}
+          />
         </div>
       </div>
       <div className={isPopupActive ? 'rotate-icon' : 'icon'}>

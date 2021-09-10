@@ -64,9 +64,26 @@
       flex-direction: column;
 
       .app-balances-items-item {
+        display: flex;
+        align-items: center;
         text-align: right;
         font-weight: 500;
         font-family: var(--font-roboto);
+
+        .item-icon {
+          padding-right: 10.25px;
+          display: flex;
+          align-items: center;
+        }
+
+        &:hover {
+          .item-icon{
+
+            svg{
+              fill: var(--button-color);
+            }
+          }
+        }
 
         .unit {
           color: var(--tabs-color);
@@ -538,7 +555,10 @@
     display: block;
 
     .app-logo {
-      display: none;
+      img {
+        width: auto;
+        height: 40px;
+      }
     }
   }
 
@@ -573,7 +593,8 @@
     font-family: var(--font-roboto);
     display: block;
     width: 100%;
-    padding: 16px;
+    padding: 16px 0;
+    margin: 0 16px;
     border-bottom: 1px solid var(--border-color);
     color: var(--button-color);
 
