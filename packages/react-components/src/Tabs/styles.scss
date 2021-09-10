@@ -39,6 +39,10 @@
           border: none;
           color: var(--header-background) !important;
         }
+
+        &.disabled {
+          cursor: not-allowed;
+        }
       }
     }
   }

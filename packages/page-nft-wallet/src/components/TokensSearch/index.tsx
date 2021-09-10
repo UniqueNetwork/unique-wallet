@@ -12,8 +12,8 @@ import Dropdown, { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules
 import { SearchFilter } from '@polkadot/react-components';
 import { useCollections, useDecoder } from '@polkadot/react-hooks';
 
-import ArrowDown from './ArrowDown';
-import ArrowUp from './ArrowUp';
+import ArrowDown from '../ArrowDown';
+import ArrowUp from '../ArrowUp';
 
 interface Props {
   account: string | null | undefined;
@@ -26,7 +26,7 @@ function TokensSearch ({ account, addCollection, collections }: Props): React.Re
   const [collectionsMatched, setCollectionsMatched] = useState<Array<NftCollectionInterface>>([]);
   const [searchString, setSearchString] = useState<string>('');
   const [sortValue, setSortValue] = useState<string>('creationDate-desc');
-  const { collectionsLoading, presetTokensCollections } = useCollections();
+  const { presetTokensCollections } = useCollections();
   const currentAccount = useRef<string | null | undefined>();
   const { collectionName16Decoder } = useDecoder();
 

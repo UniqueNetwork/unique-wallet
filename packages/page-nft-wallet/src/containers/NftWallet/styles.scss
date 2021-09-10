@@ -20,10 +20,22 @@
     }
   }
 
-  .nft-wallet--row {
+  &--row {
     display: grid;
     grid-template-columns: 280px 1fr;
     grid-column-gap: calc(var(--gap) * 2);
+
+    .collection-list {
+      display: flex;
+      flex-direction: column;
+      grid-row-gap: var(--gap);
+
+      .tokens-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-column-gap: calc((var(--gap) / 2) * 3);
+      }
+    }
   }
 
   .collection-filter {
@@ -178,19 +190,23 @@
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1279px) {
+@media (min-width: 1025px) and (max-width: 1279px) {
+  .nft-wallet {
 
+    &--row {
+      .collection-list {
+        .tokens-list {
+          grid-template-columns: 1fr 1fr 1fr;
+        }
+      }
+    }
+  }
 }
 
-@media (min-width: 1024px) {
-
+@media (min-width: 1025px) {
   .nft-wallet {
-    h1.ui.header {
-      display: block;
-
-      &.mobile-header {
-        display: none;
-      }
+    &--footer {
+      display: none;
     }
   }
 }
@@ -201,42 +217,67 @@
     overflow-x: hidden;
     overflow-y: auto;
 
-    h1.ui.header {
-      display: none;
+    .unique-card {
+      padding: 0;
+      box-shadow: none;
+      padding: 0 var(--gap);
 
-      &.mobile-header {
-        display: block;
+      .ui.form.tokens-search {
+        display: flex;
+        flex-direction: column;
+
+        .sort-field {
+          display: none;
+        }
+      }
+
+      &.tokens-list {
+        display: flex;
+        flex-direction: column;
+
+        .ui.card.token-card {
+          margin-left: 0;
+          margin-right: 0;
+        }
       }
     }
 
-    .empty-label {
-      padding: 0 var(--gap);
+    &--row {
+      display: flex;
+      flex-direction: column;
+
+      .collection-filter {
+        display: none;
+      }
     }
 
-    .ui--Table {
-      padding: 0 var(--gap);
+    &--footer {
+      height: 60px;
+      box-shadow: 0px -8px 12px rgba(0, 0, 0, 0.06);
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      background-color: var(--card-background);
+      padding: 10px var(--gap);
 
-      .nft-collection-item {
-        .ui--Expander-summary {
-          padding: calc(var(--gap) / 4);
+      &.hide {
+        display: none;
+      }
 
-          .ui--Expander-summary-header {
-            margin-left: calc(var(--gap) * 2);
-          }
+      button.ui.button.footer-button {
+        border: 1px solid var(--border-color);
+        background-color: var(--card-background) !important;
 
-          .expander-content {
-            display: block;
-          }
+        &.primary {
+          border: none;
+          background-color: var(--link-color) !important;
+          color: var(--card-background)
         }
 
-        .ui--Expander-content {
-          .expander-inner {
-            max-height: none;
-
-            &::-webkit-scrollbar {
-             display: none;
-            }
-          }
+        &.clear {
+          border: 1px solid var(--error-color) !important;
+          color: var(--error-color) !important;
+          background-color: var(--card-background);
         }
       }
     }

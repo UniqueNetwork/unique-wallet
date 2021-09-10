@@ -20,30 +20,26 @@ Docker build
 
 `docker run -p 8080:80 -t unique-marketplace:prod`
 
-apps - точка входа в приложение
+apps - application enter point
 
-apps-config - настройки, включая envConfig, api endpoints и другое, касаемо разных сетей.
+apps-config - settings including envConfig, api endpoints and others network things.
 
-apps-routing - роуты, здесь мы создаем файлы для каждой отдельной страницы, описываем ее свойства.
+apps-routing - router, if you want to add a new page describe it here.
 
-page-accounts - отвечает за создание, импорт, хранение и отображение non-extension аккаунтов, трансферы unique.
+page-accounts - create, import, and store non-extension accounts, transfer assets.
 
-page-nft-market - страница маркета, отвечает за отображение и поиск токенов, выставленных на продажу.
+page-nft-wallet - wallet, show and manage your tokens.
 
-page-nft-trades - отвечает за историю сделок (trades)
+react-api - the polkadot api connection context.
 
-page-nft-wallet - отвечает за кошелек, поиск и добавление токенов в кошелек, отображение их в кошельке, создание и редактирование коллекций и токенов.
+react-components - reusable components for pages.
 
-react-api - отвечает за подключение api - контекст, позволяющий работать с апи polkadot
+react-hooks - reusable hooks.
 
-react-components - переиспользуемые компоненты для разных страниц
+react-params - components settings.
 
-react-hooks - переиспользуемые хуки
+react-query - transactions query.
 
-react-params - различные настройки для компонент.
+react-signer - transactions signer.
 
-react-query - отвечает за очередь транзакций
-
-react-signer - подписчик транзакций
-
-test-support - моки для тестов
+test-support - tests and mocks.

@@ -1,0 +1,88 @@
+.network-wallet {
+
+  .network-wallet--block {
+    background: var(--card-background);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    padding: calc(var(--gap) * 2);
+    font-family: var(--font-roboto);
+
+    &--header {
+      font-size: 18px;
+      font-weight: 500;
+      padding-bottom: calc((var(--gap) / 2) * 3);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    &--body {
+      padding-top: calc(var(--gap) / 2);
+
+      .token-item {
+        display: grid;
+        grid-template-columns: 1fr 450px 195px;
+        padding: var(--gap) 0;
+        border-bottom: 1px solid var(--border-color);
+        align-items: center;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &--account {
+          display: flex;
+          flex-direction: column;
+          grid-row-gap: calc(var(--gap) / 4);
+
+          span {
+
+            &:first-child {
+              display: flex;
+              align-items: center;
+              font-size: 16px;
+              font-weight: 500;
+            }
+
+            &:last-child {
+              display: flex;
+              align-items: center;
+              color: var(--input-placeholder-search-color);
+              font-size: 14px;
+              grid-column-gap: calc(var(--gap) / 2);
+            }
+          }
+        }
+
+        &--balances {
+          display: flex;
+          flex-direction: column;
+          grid-row-gap: calc(var(--gap) / 4);
+
+          &--row {
+            &:first-child {
+              font-size: 16px;
+              font-weight: 500;
+            }
+
+            &:last-child {
+              display: flex;
+              color: var(--input-placeholder-search-color);
+              font-size: 14px;
+              flex-direction: column;
+            }
+          }
+        }
+
+        &--actions {
+          display: flex;
+          grid-column-gap: var(--gap);
+
+          button.ui.button {
+            background-color: var(--card-background) !important;
+            border: 1px solid var(--link-color);
+            color: var(--link-color) !important;
+          }
+        }
+      }
+    }
+  }
+}
