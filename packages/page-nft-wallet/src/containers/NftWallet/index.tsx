@@ -113,53 +113,53 @@ function NftWallet ({ account, addCollection, collections, openPanel, setCollect
             <p className='no-tokens-text'>You have no tokens</p>
           </div>
         )} */}
-      <div className='nft-wallet--body'>
-        <div className='nft-wallet--row'>
-          <CollectionFilter
-            clearCheckedValues={clearCheckedValues}
-            collections={collections}
-            filterCurrent={onCollectionCheck}
-            isShowCollection={showCollectionsFilter}
-            selectedCollections={selectedCollections}
-            setIsShowCollection={toggleCollectionsFilter}
-          />
-          <div className='collection-list'>
-            <div className='unique-card'>
-              <TokensSearch
+      <div className='nft-wallet--row'>
+        <CollectionFilter
+          clearCheckedValues={clearCheckedValues}
+          collections={collections}
+          filterCurrent={onCollectionCheck}
+          isShowCollection={showCollectionsFilter}
+          selectedCollections={selectedCollections}
+          setIsShowCollection={toggleCollectionsFilter}
+        />
+        <div className='collection-list'>
+          <div className='unique-card'>
+            <TokensSearch
+              account={account}
+              addCollection={addCollection}
+              collections={collections}
+            />
+          </div>
+          <div className='unique-card tokens-list'>
+            { collections?.length > 0 && collections.map((collection: NftCollectionInterface) => (
+              <NftTokenCard
                 account={account}
-                addCollection={addCollection}
-                collections={collections}
+                collectionId={collection.id}
+                key={collection.id}
+                openDetailedInformationModal={openDetailedInformationModal}
+                token={{ tokenId: '1' }}
               />
-            </div>
-            <div className='unique-card tokens-list'>
-              { collections?.length > 0 && collections.map((collection: NftCollectionInterface) => (
-                <NftTokenCard
-                  account={account}
-                  collectionId={collection.id}
-                  key={collection.id}
-                  openDetailedInformationModal={openDetailedInformationModal}
-                  token={{ tokenId: '1' }}
-                />
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </div>
-      <WalletFilters
-        clearCheckedValues={clearCheckedValues}
-        collections={collections}
-        filterCurrent={onCollectionCheck}
-        isShowCollection={showCollectionsFilter}
-        openFilters={openPanel === 'filters'}
-        selectedCollections={selectedCollections}
-        setIsShowCollection={toggleCollectionsFilter}
-      />
-      <WalletSort
-        filters={filters}
-        openSort={openPanel === 'sort'}
-        setFilters={setFilters}
-      />
-      <div className={`nft-wallet--footer ${openPanel === 'sort' ? 'hide' : ''}`}>
+      { openPanel === 'filters' && (
+        <WalletFilters
+          clearCheckedValues={clearCheckedValues}
+          collections={collections}
+          filterCurrent={onCollectionCheck}
+          isShowCollection={showCollectionsFilter}
+          selectedCollections={selectedCollections}
+          setIsShowCollection={toggleCollectionsFilter}
+        />
+      )}
+      { openPanel === 'sort' && (
+        <WalletSort
+          filters={filters}
+          setFilters={setFilters}
+        />
+      )}
+      <div className='nft-wallet--footer'>
         { openPanel === 'tokens' && (
           <>
             <Button
@@ -172,13 +172,22 @@ function NftWallet ({ account, addCollection, collections, openPanel, setCollect
             </Button>
           </>
         )}
+        { (openPanel === 'filters' || openPanel === 'sort') && (
+          <Button
+            className='footer-button'
+            fluid
+            onClick={setOpenPanel && setOpenPanel.bind(null, 'tokens')}
+          >
+            SHOW
+          </Button>
+        )}
         { openPanel === 'filters' && (
           <Button
             className='footer-button clear'
             fluid
             onClick={clearAllFilters}
           >
-            Clear all filters
+            Clear all
           </Button>
         )}
       </div>
