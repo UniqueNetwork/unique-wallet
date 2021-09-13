@@ -4,9 +4,11 @@
 import './styles.scss';
 
 import React, { memo } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import { useDecoder } from '@polkadot/react-hooks';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+
 import breadcrumbArrow from './breadcrumbArrow.svg';
 
 interface Props {
@@ -29,11 +31,15 @@ function Breadcrumbs ({ collectionInfo, tokenId }: Props): React.ReactElement<Pr
         />
       </div>
       <div className='unique-breadcrumbs--path'>
-        Tokens
-        <img
-          alt='breadcrumbArrow'
-          src={breadcrumbArrow as string}
-        />
+        <NavLink
+          to={'/myStuff/nft'}
+        >
+          NFT
+          <img
+            alt='breadcrumbArrow'
+            src={breadcrumbArrow as string}
+          />
+        </NavLink>
       </div>
       { collectionInfo && (
         <>
