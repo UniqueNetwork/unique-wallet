@@ -28,9 +28,7 @@ import Signer from '@polkadot/react-signer';
 import ConnectingOverlay from './overlays/Connecting';
 import BalancesHeader from './BalancesHeader';
 import ManageAccounts from './ManageAccounts';
-import ManageBalances from './ManageBalances';
 import MobileAccountSelector from './MobileAccountSelector';
-import MobileBalancesHeader from './MobileBalancesHeader';
 import MobileMenu from './MobileMenu';
 import MobileMenuHeader from './MobileMenuHeader';
 import ScrollToTop from './ScrollToTop';
@@ -152,11 +150,8 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                             </Menu>
                             { (isApiReady) && (
                               <div className={`app-user${account ? '' : ' hidden'}`}>
-                                <BalancesHeader account={account} />
-                                <MobileBalancesHeader
+                                <BalancesHeader
                                   account={account}
-                                  isMobileMenu={openPanel}
-                                  setIsMobileMenu={setOpenPanel}
                                 />
                                 <div className='account-selector-block'>
                                   <AccountSelector
@@ -198,12 +193,8 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                             setIsMobileMenu={setOpenPanel}
                           />
                         )}
-                        { openPanel === 'balances' && (
-                          <ManageBalances
-                            account={account}
-                          />
-                        )}
-                        { (openPanel !== 'balances' && openPanel !== 'accounts') && (
+
+                        { (openPanel !== 'accounts') && (
                           <Suspense fallback=''>
                             <main className={`app-main ${openPanel || ''} ${noAccounts ? 'no-accounts' : ''}`}>
                               <div className='app-container'>
