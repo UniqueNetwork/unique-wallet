@@ -15,6 +15,7 @@ import { Input, Label, StatusContext } from '@polkadot/react-components';
 import { useApi } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 
+import infoIcon from '../MarkWarning/info-icon.svg';
 import closeIcon from './closeIconBlack.svg';
 
 interface Props {
@@ -98,7 +99,7 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
       size='tiny'
     >
       <Modal.Header>
-        <h2>Transfer NFT Token</h2>
+        <h2>Send NFT token</h2>
         <img
           alt='Close modal'
           onClick={closeModal}
@@ -107,8 +108,17 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
       </Modal.Header>
       <Modal.Content>
         <Form className='transfer-form'>
+          <Modal.Description className='modalDescription'>
+            <img
+              src={infoIcon as string}
+            />
+            <div>
+              <p> Be careful, the transaction cannot be reverted.</p>
+              <p> Make sure to use the Substrate address created with polkadot&#123;.js&#125;.</p>
+              <p> Do not use address of third party wallets, exchanges or hardware signers, like ledger nano.</p>
+            </div>
+          </Modal.Description>
           <Form.Field>
-            <Label label={'Please enter an address you want to transfer'} />
             <Input
               className='isSmall'
               isError={isAddressError}
@@ -138,17 +148,10 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
             target='_blank'>Get testUNQ here.</a></div>
         )} */}
       </Modal.Content>
-      <Modal.Description className='modalDescription'>
-        <div>
-          <p> Be careful, the transaction cannot be reverted.</p>
-          <p> Make sure to use the Substrate address created with polkadot.js or this marketplace.</p>
-          <p> Do not use address of third party wallets, exchanges or hardware signers, like ledger nano.</p>
-        </div>
-      </Modal.Description>
 
       <Modal.Actions>
         <Button
-          content='Transfer token'
+          content='Submit'
           disabled={!recipient}
           onClick={transferToken}
         />

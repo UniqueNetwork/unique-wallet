@@ -1,4 +1,4 @@
-.toke-details {
+.token-details {
   font-family: var(--font-roboto) var(--font-mono);
 
   h1 {
@@ -45,7 +45,7 @@
           background-color: var(--card-background);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
           border-radius: 4px;
-          margin-bottom: calc((var(--gap) / 2) * 3);
+          margin-top: calc((var(--gap) / 2) * 3);
 
           &:last-child {
             margin-bottom: 0;
@@ -116,6 +116,11 @@
                 strong {
                   text-transform: capitalize;
                 }
+              }
+
+              .collection-name{
+                color: var(--link-color);
+                display: inline;
               }
             }
           }
@@ -203,6 +208,13 @@
         margin: 48px 0 16px 0;
       }
     }
+    .info-row{
+
+      p{
+        overflow-wrap: break-word;
+        color: var(--link-color);
+      }
+    }
   }
 
   .divider {
@@ -284,7 +296,7 @@
 }
 
 @media (max-width: 1024px) {
-  .toke-details {
+  .token-details {
     background-color: var(--card-background);
     padding-top: calc((var(--gap) / 2) * 3);
     overflow-x: hidden;
@@ -305,6 +317,10 @@
       &--row {
         display: block;
       }
+    }
+
+    .unique-breadcrumbs{
+      padding-left: 16px;
     }
   }
 }

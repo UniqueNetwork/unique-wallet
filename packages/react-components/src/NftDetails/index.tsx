@@ -46,7 +46,7 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
   }, []);
 
   return (
-    <div className='toke-details'>
+    <div className='token-details'>
       {/* <a
         className='go-back'
         href='/'
@@ -107,7 +107,7 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
                 </a>
               </div>
               { (!uOwnIt && tokenInfo?.Owner) && (
-                <div className='info-row'><strong>Owner:</strong> {tokenInfo?.Owner?.toString()}</div>
+                <div className='info-row'><strong>Owner:</strong> <p>{tokenInfo?.Owner?.toString()}</p></div>
               )}
               { uOwnIt && (
                 <div className='action-block'>
@@ -151,7 +151,7 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
                         {/* <a onClick={() => console.log('click')}>
                           {collectionName16Decoder(collectionInfo.Name)}
                         </a> */}
-                        {collectionName16Decoder(collectionInfo.Name)}
+                        <p className='collection-name'> {collectionName16Decoder(collectionInfo.Name)}</p>
                       </p>
                       <p>
                         <strong>Collection ID: </strong>

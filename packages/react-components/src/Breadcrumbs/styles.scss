@@ -1,6 +1,7 @@
 .unique-breadcrumbs {
   display: flex;
   grid-column-gap: calc(var(--gap) / 4);
+  flex-wrap: wrap;
 
   &--path {
     color: var(--input-placeholder-search-color);
