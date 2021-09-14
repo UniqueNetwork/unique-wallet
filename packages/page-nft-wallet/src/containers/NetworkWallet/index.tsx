@@ -14,6 +14,7 @@ import StatusContext from '@polkadot/react-components/Status/Context';
 import { useBalances, useNetworkInfo, useToggle } from '@polkadot/react-hooks';
 import { formatKsmBalance } from '@polkadot/react-hooks/useKusamaApi';
 import { FormatBalance } from '@polkadot/react-query';
+import { formatBalance } from '@polkadot/util';
 
 import TransferModal from '../../components/TransferModal';
 
@@ -29,12 +30,13 @@ interface NftWalletProps {
   shouldUpdateTokens?: string;
 }
 
-function NetworkWallet ({ account, addCollection, collections, openPanel, removeCollectionFromList, setCollections, setOpenPanel, setShouldUpdateTokens, shouldUpdateTokens }: NftWalletProps): React.ReactElement {
+function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
   const { encodedKusamaAccount, fullBalance, fullKusamaBalance } = useBalances(account);
   const { chain, kusamaChain } = useNetworkInfo();
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isKusamaTransferOpen, toggleKusamaTransfer] = useToggle();
   const { queueAction } = useContext(StatusContext);
+  const [major, rest] = formatBalance(fullBalance?.availableBalance);
 
   const onGet = useCallback(() => {
     console.log('onGet');
@@ -87,6 +89,7 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
               </div>
               <div className='token-item--actions'>
                 <Button
+                  disabled={!+formatKsmBalance(fullKusamaBalance?.availableBalance)}
                   onClick={toggleTransfer}
                 >
                   Send
@@ -112,7 +115,7 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
               <span>
                 {account}
                 <a onClick={account ? _onCopy.bind(null, account) : () => null }>
-                  <CopyIcon />
+                  <CopyIcon color={'var(--input-placeholder-search-color)'} />
                 </a>
               </span>
             </div>
@@ -140,6 +143,7 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
             </div>
             <div className='token-item--actions'>
               <Button
+                disabled={!+major && !+rest}
                 onClick={toggleTransfer}
               >
                 Send
