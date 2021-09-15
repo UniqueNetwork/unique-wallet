@@ -16,6 +16,7 @@ import StatusContext from '@polkadot/react-components/Status/Context';
 import { useBalances, useNetworkInfo, useToggle } from '@polkadot/react-hooks';
 import { formatKsmBalance } from '@polkadot/react-hooks/useKusamaApi';
 import { FormatBalance } from '@polkadot/react-query';
+import { formatBalance } from '@polkadot/util';
 
 import TransferModal from '../../components/TransferModal';
 
@@ -38,6 +39,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
   const [isKusamaTransferOpen, toggleKusamaTransfer] = useToggle();
   const [isGetModalOpen, toggleGetModal] = useToggle();
   const { queueAction } = useContext(StatusContext);
+  const [major, rest] = formatBalance(fullBalance?.availableBalance);
 
   const _onCopy = useCallback(
     (address: string) => queueAction({
@@ -97,6 +99,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
               </div>
               <div className='token-item--actions'>
                 <Button
+                  disabled={!+formatKsmBalance(fullKusamaBalance?.availableBalance)}
                   onClick={toggleTransfer}
                 >
                   Send
@@ -122,7 +125,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
               <span>
                 {account}
                 <a onClick={account ? _onCopy.bind(null, account) : () => null }>
-                  <CopyIcon />
+                  <CopyIcon color={'var(--input-placeholder-search-color)'} />
                 </a>
               </span>
             </div>
@@ -150,6 +153,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
             </div>
             <div className='token-item--actions'>
               <Button
+                disabled={!+major && !+rest}
                 onClick={toggleTransfer}
               >
                 Send
