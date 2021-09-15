@@ -305,7 +305,8 @@ const ExportedComponent = withMulti(
         );
 
         result[type].push(
-          <div className='accounts-footer'>
+          <div className='accounts-footer'
+            key='footer-text'>
             <div className='info-panel'>
               <img
                 alt='info'
