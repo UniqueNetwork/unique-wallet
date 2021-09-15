@@ -15,6 +15,7 @@ import { createOptionItem } from '@polkadot/ui-keyring/options/item';
 import { isNull, isUndefined } from '@polkadot/util';
 
 import Dropdown from '../Dropdown';
+import infoBlue from '../images/infoBlue.svg';
 import { getAddressName } from '../util';
 import addressToAddress from '../util/toAddress';
 import CreateHeader from './CreateHeader';
@@ -301,6 +302,18 @@ const ExportedComponent = withMulti(
             ? <CreateHeader key={option.key || option.name}
               option={option}/>
             : createItem(option)
+        );
+
+        result[type].push(
+          <div className='accounts-footer'>
+            <div className='info-panel'>
+              <img
+                alt='info'
+                src={infoBlue as string}
+              />
+              Click on image to copy the address
+            </div>
+          </div>
         );
 
         return result;

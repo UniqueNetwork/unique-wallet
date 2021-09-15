@@ -5,9 +5,11 @@ import './styles.scss';
 
 import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 
+import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import React, { useCallback, useContext } from 'react';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 
+import GetModal from '@polkadot/app-nft-wallet/components/GetModal';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
 import { ChainImg, CopyIcon } from '@polkadot/react-components';
 import StatusContext from '@polkadot/react-components/Status/Context';
@@ -29,16 +31,13 @@ interface NftWalletProps {
   shouldUpdateTokens?: string;
 }
 
-function NetworkWallet ({ account, addCollection, collections, openPanel, removeCollectionFromList, setCollections, setOpenPanel, setShouldUpdateTokens, shouldUpdateTokens }: NftWalletProps): React.ReactElement {
+function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
   const { encodedKusamaAccount, fullBalance, fullKusamaBalance } = useBalances(account);
   const { chain, kusamaChain } = useNetworkInfo();
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isKusamaTransferOpen, toggleKusamaTransfer] = useToggle();
+  const [isGetModalOpen, toggleGetModal] = useToggle();
   const { queueAction } = useContext(StatusContext);
-
-  const onGet = useCallback(() => {
-    console.log('onGet');
-  }, []);
 
   const _onCopy = useCallback(
     (address: string) => queueAction({
@@ -49,6 +48,17 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
     }),
     [queueAction]
   );
+
+  const handleGetKSMClickByRamp = () => {
+    const RampModal = new RampInstantSDK({
+      hostAppName: 'Maker DAO',
+      hostLogoUrl: 'https://cdn-images-1.medium.com/max/2600/1*nqtMwugX7TtpcS-5c3lRjw.png',
+      swapAsset: 'KSM',
+      variant: 'auto'
+    });
+
+    RampModal.show();
+  };
 
   return (
     <div className='network-wallet'>
@@ -92,7 +102,7 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
                   Send
                 </Button>
                 <Button
-                  onClick={onGet}
+                  onClick={handleGetKSMClickByRamp}
                 >
                   Get
                 </Button>
@@ -144,8 +154,9 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
               >
                 Send
               </Button>
+              {/* TODO add handler to get test UNQ click */}
               <Button
-                onClick={onGet}
+                disabled={true}
               >
                 Get
               </Button>
@@ -164,6 +175,13 @@ function NetworkWallet ({ account, addCollection, collections, openPanel, remove
         <TransferModal
           key='modal-transfer'
           onClose={toggleKusamaTransfer}
+          senderId={account}
+        />
+      )}
+      { isGetModalOpen && (
+        <GetModal
+          key='modal-transfer'
+          onClose={toggleGetModal}
           senderId={account}
         />
       )}

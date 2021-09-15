@@ -3679,6 +3679,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ramp-network/ramp-instant-sdk@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "@ramp-network/ramp-instant-sdk@npm:2.5.0"
+  dependencies:
+    body-scroll-lock: ^2.6.4
+  checksum: 9f3a8bc29744ae475a2d369c3ac8302227d05e62c27115db99747a8223c41b2cbbb2e21b1a63d5b84e90606faa92153c99e864ef5cc54d9071086cb98f890c86
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-alias@npm:^3.1.5":
   version: 3.1.5
   resolution: "@rollup/plugin-alias@npm:3.1.5"
@@ -6540,6 +6549,13 @@ __metadata:
     raw-body: 2.4.0
     type-is: ~1.6.17
   checksum: 490231b4c89bbd43112762f7ba8e5342c174a6c9f64284a3b0fcabf63277e332f8316765596f1e5b15e4f3a6cf0422e005f4bb3149ed3a224bb025b7a36b9ac1
+  languageName: node
+  linkType: hard
+
+"body-scroll-lock@npm:^2.6.4":
+  version: 2.7.1
+  resolution: "body-scroll-lock@npm:2.7.1"
+  checksum: 7a6b57b9315dad3639ac5aa781ed25c2275a53b3aa1527a580eaaf17096ca5c93293c99c2d12ffc92a11388ac7004c8aa943ac9c356717a393727c9216e183e6
   languageName: node
   linkType: hard
 
@@ -20792,11 +20808,11 @@ resolve@^2.0.0-next.3:
 
 "typescript@patch:typescript@npm%3A^4.3.5#~builtin<compat/typescript>":
   version: 4.3.5
-  resolution: "typescript@patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=34ad7d"
+  resolution: "typescript@patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 94acb9409712c7073eaecb328cf9be872e4882c62d991cc3d9b53d59f4844d72afbf75818471e086bfb26c444e3a411667a9517f2be2518f8be95bab9fa50ae9
+  checksum: bc2c4fdf0f1557fdafe4ef74848c72ebd9c8c60829568248f869121aea2bb20e16649a252431d0acb185ec118143be22bed73d08f64379557810d82756afedde
   languageName: node
   linkType: hard
 
@@ -20932,6 +20948,7 @@ resolve@^2.0.0-next.3:
     "@polkadot/api-contract": ^4.17.2-3
     "@polkadot/dev": ^0.62.60
     "@polkadot/ts": ^0.4.4
+    "@ramp-network/ramp-instant-sdk": ^2.5.0
     "@types/bn.js": ^4.11.6
     "@types/chart.js": ^2.9.34
     "@types/file-saver": ^2.0.3

@@ -113,6 +113,7 @@
   },
   "dependencies": {
     "@polkadot/api-contract": "^4.17.2-3",
+    "@ramp-network/ramp-instant-sdk": "^2.5.0",
     "@types/lodash": "^4.14.168",
     "@types/lodash.memoize": "^4.1.6",
     "@types/react-infinite-scroller": "^1.2.1",
