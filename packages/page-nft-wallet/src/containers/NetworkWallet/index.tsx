@@ -9,7 +9,7 @@ import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import React, { useCallback, useContext } from 'react';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 
-import GetModal from '@polkadot/app-nft-wallet/components/GetModal';
+import GetTestUNQModal from '@polkadot/app-nft-wallet/components/GetTestUNQModal';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
 import { ChainImg, CopyIcon } from '@polkadot/react-components';
 import StatusContext from '@polkadot/react-components/Status/Context';
@@ -37,7 +37,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
   const { chain, kusamaChain } = useNetworkInfo();
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isKusamaTransferOpen, toggleKusamaTransfer] = useToggle();
-  const [isGetModalOpen, toggleGetModal] = useToggle();
+  const [isGetTestUNQModalOpen, toggleGetTestUNQModal] = useToggle();
   const { queueAction } = useContext(StatusContext);
   const [major, rest] = formatBalance(fullBalance?.availableBalance);
 
@@ -54,7 +54,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
   const handleGetKSMClickByRamp = () => {
     const RampModal = new RampInstantSDK({
       hostAppName: 'Maker DAO',
-      hostLogoUrl: 'https://cdn-images-1.medium.com/max/2600/1*nqtMwugX7TtpcS-5c3lRjw.png',
+      hostLogoUrl: `${window.location.origin}/logos/logoForRamp.svg`,
       swapAsset: 'KSM',
       variant: 'auto'
     });
@@ -158,9 +158,8 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
               >
                 Send
               </Button>
-              {/* TODO add handler to get test UNQ click */}
               <Button
-                disabled={true}
+                onClick={toggleGetTestUNQModal}
               >
                 Get
               </Button>
@@ -182,11 +181,10 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
           senderId={account}
         />
       )}
-      { isGetModalOpen && (
-        <GetModal
+      { isGetTestUNQModalOpen && (
+        <GetTestUNQModal
           key='modal-transfer'
-          onClose={toggleGetModal}
-          senderId={account}
+          onClose={toggleGetTestUNQModal}
         />
       )}
     </div>
