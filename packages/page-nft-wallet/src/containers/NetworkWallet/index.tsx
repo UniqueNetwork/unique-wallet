@@ -14,7 +14,6 @@ import GetTestUNQModal from '@polkadot/app-nft-wallet/components/GetTestUNQModal
 import { OpenPanelType } from '@polkadot/apps-routing/types';
 import { ChainImg, CopyIcon } from '@polkadot/react-components';
 import StatusContext from '@polkadot/react-components/Status/Context';
-import { useTranslation } from '@polkadot/react-components/translate';
 import { useBalances, useNetworkInfo, useToggle } from '@polkadot/react-hooks';
 import { formatKsmBalance } from '@polkadot/react-hooks/useKusamaApi';
 import { FormatBalance } from '@polkadot/react-query';
@@ -43,20 +42,18 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
   const { queueAction } = useContext(StatusContext);
   const [major, rest] = formatBalance(fullBalance?.availableBalance);
 
-  const { t } = useTranslation();
-
   const copyAddress = useCallback(
     (account: string) => {
       void navigator.clipboard.writeText(account);
 
       return queueAction({
         account,
-        action: t('clipboard'),
-        message: t('address copied'),
+        action: 'clipboard',
+        message: 'address copied',
         status: 'queued'
       });
     },
-    [queueAction, t]
+    [queueAction]
   );
 
   const handleGetKSMClickByRamp = () => {
