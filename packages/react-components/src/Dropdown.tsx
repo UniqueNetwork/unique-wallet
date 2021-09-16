@@ -188,6 +188,19 @@ const Dropdown = React.memo(styled(BaseDropdown)`
         border-color: transparent;
         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
       }
+      .info-panel{
+        background-color: var(--link-light-color);
+        color: var(--link-color) ;
+        padding: 6.25px;
+        margin: 16px;
+        display: flex;
+        border-radius: 4px;
+        align-items: center;
+
+        img{
+          margin: 0 10.25px;
+        }
+      }
     }
 
     > .text > .ui--Dropdown-item {

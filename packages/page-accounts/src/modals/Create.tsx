@@ -396,12 +396,12 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
         <Modal.Actions>
           <div className='btn-container'>
             {step === 1 &&
-          <Button
-            isDisabled={!isFirstStepValid}
-            isFilled={true}
-            label={'Next'}
-            onClick={nextStep}
-          />
+            <Button
+              isDisabled={!isFirstStepValid}
+              isFilled={true}
+              label={'Next'}
+              onClick={nextStep}
+            />
             }
             {step === 2 && (
               <>
