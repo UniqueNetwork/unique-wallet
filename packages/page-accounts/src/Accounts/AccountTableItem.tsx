@@ -7,7 +7,6 @@ import React, { useCallback, useContext } from 'react';
 import { useHistory } from 'react-router';
 
 import { AddressSmall, CopyIcon, StatusContext } from '@polkadot/react-components';
-import { useTranslation } from '@polkadot/react-components/translate';
 
 interface Props {
   account: KeyringAddress;
@@ -16,7 +15,6 @@ interface Props {
 
 function AccountTableItem ({ account, setAccount }: Props): React.ReactElement<Props> | null {
   const history = useHistory();
-  const { t } = useTranslation();
   const { queueAction } = useContext(StatusContext);
 
   const copyAddress = useCallback(
@@ -25,12 +23,12 @@ function AccountTableItem ({ account, setAccount }: Props): React.ReactElement<P
 
       return queueAction({
         account,
-        action: t('clipboard'),
-        message: t('address copied'),
+        action: 'clipboard',
+        message: 'address copied',
         status: 'queued'
       });
     },
-    [queueAction, t]
+    [queueAction]
   );
 
   const viewAllTokens = useCallback(() => {

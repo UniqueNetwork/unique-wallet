@@ -3,21 +3,21 @@
 
 import './styles.scss';
 
-import type { DeriveBalancesAll } from '@polkadot/api-derive/types';
 import type { AccountInfoWithProviders, AccountInfoWithRefCount } from '@polkadot/types/interfaces';
 
 import BN from 'bn.js';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { checkAddress } from '@polkadot/phishing';
-import { InputBalance, MarkWarning, Modal, TxButton } from '@polkadot/react-components';
+import { MarkWarning, Modal, TxButton } from '@polkadot/react-components';
 import closeIcon from '@polkadot/react-components/TransferModal/closeIconBlack.svg';
 import { useSelectedApi } from '@polkadot/react-hooks';
 import { formatKsmBalance } from '@polkadot/react-hooks/useKusamaApi';
+import FormatBalance from '@polkadot/react-query/FormatBalance';
 import { BN_HUNDRED, BN_ZERO, isFunction } from '@polkadot/util';
 
 import InputAddressLight from './InputAddressLight';
-import FormatBalance from '@polkadot/react-query/FormatBalance';
+import InputBalanceWithMax from './InputBalanceWithMax';
 
 interface Props {
   className?: string;
@@ -183,7 +183,7 @@ function TransferModal ({ isKusama, onClose, recipientId: propRecipientId, sende
             key={maxTransfer?.toString()}
             label={'transferrable minus fees'}
           /> */}
-          <InputBalance
+          <InputBalanceWithMax
             autoFocus
             className='isSmall'
             help={'Type the amount you want to transfer. Note that you can select the unit on the right e.g sending 1 milli is equivalent to sending 0.001.'}
