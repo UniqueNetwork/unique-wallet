@@ -100,7 +100,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
               <div className='token-item--actions'>
                 <Button
                   disabled={!+formatKsmBalance(fullKusamaBalance?.availableBalance)}
-                  onClick={toggleTransfer}
+                  onClick={toggleKusamaTransfer}
                 >
                   Send
                 </Button>
@@ -167,15 +167,16 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
           </div>
         </div>
       </div>
-      { isTransferOpen && (
+      { (isTransferOpen && account) && (
         <TransferModal
           key='modal-transfer'
           onClose={toggleTransfer}
           senderId={account}
         />
       )}
-      { isKusamaTransferOpen && (
+      { (isKusamaTransferOpen && account) && (
         <TransferModal
+          isKusama
           key='modal-transfer'
           onClose={toggleKusamaTransfer}
           senderId={account}

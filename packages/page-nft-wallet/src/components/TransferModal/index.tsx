@@ -10,18 +10,21 @@ import BN from 'bn.js';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { checkAddress } from '@polkadot/phishing';
-import { InputAddress, InputBalance, MarkError, MarkWarning, Modal, TxButton } from '@polkadot/react-components';
+import { InputBalance, MarkWarning, Modal, TxButton } from '@polkadot/react-components';
 import closeIcon from '@polkadot/react-components/TransferModal/closeIconBlack.svg';
-import { useCall, useSelectedApi } from '@polkadot/react-hooks';
-import { Available } from '@polkadot/react-query';
+import { useSelectedApi } from '@polkadot/react-hooks';
+import { formatKsmBalance } from '@polkadot/react-hooks/useKusamaApi';
 import { BN_HUNDRED, BN_ZERO, isFunction } from '@polkadot/util';
+
+import InputAddressLight from './InputAddressLight';
+import FormatBalance from '@polkadot/react-query/FormatBalance';
 
 interface Props {
   className?: string;
   isKusama?: boolean;
   onClose: () => void;
   recipientId?: string;
-  senderId?: string;
+  senderId: string;
 }
 
 function isRefcount (accountInfo: AccountInfoWithProviders | AccountInfoWithRefCount): accountInfo is AccountInfoWithRefCount {
@@ -41,33 +44,43 @@ async function checkPhishing (_senderId: string | undefined, recipientId: string
   ];
 }
 
-function TransferModal ({ className = '', isKusama, onClose, recipientId: propRecipientId, senderId: propSenderId }: Props): React.ReactElement<Props> {
-  const { currentApi: api } = useSelectedApi(isKusama);
+function TransferModal ({ isKusama, onClose, recipientId: propRecipientId, senderId: propSenderId }: Props): React.ReactElement<Props> {
+  const [recipientId, setRecipientId] = useState<string>();
+  const { currentAccountInfo: accountInfo, currentApi: api, currentBalanceAll: balances } = useSelectedApi(propSenderId, isKusama);
+  const { currentBalanceAll: recipientBalances } = useSelectedApi(recipientId, isKusama);
   const [amount, setAmount] = useState<BN | undefined>(BN_ZERO);
-  const [hasAvailable] = useState(true);
   const [isProtected] = useState(true);
+  const [hasAvailable, setHasAvailable] = useState(true);
   const [isAll] = useState(false);
   const [[maxTransfer, noFees], setMaxTransfer] = useState<[BN | null, boolean]>([null, false]);
-  const [recipientId, setRecipientId] = useState<string>();
-  const [senderId, setSenderId] = useState<string>();
   const [[, recipientPhish], setPhishing] = useState<[string | null, string | null]>([null, null]);
-  const balances = useCall<DeriveBalancesAll>(api?.derive.balances?.all, [propSenderId || senderId]);
-  const accountInfo = useCall<AccountInfoWithProviders | AccountInfoWithRefCount>(api?.query.system.account, [propSenderId || senderId]);
 
   const onCloseModal = useCallback(() => {
     console.log('onClose');
   }, []);
 
+  /* const checkBalanceEnough = useCallback(async () => {
+    if (api && senderId && recipientId && amount) {
+      const transferFee = await api?.tx.balances.transfer(recipientId, amount).paymentInfo(senderId) as { partialFee: BN };
+
+      if (transferFee && (!balances?.availableBalance || balances?.availableBalance.sub(transferFee.partialFee).lt(api.consts.balances.existentialDeposit))) {
+        setBalanceTooLow(true);
+      } else {
+        setBalanceTooLow(false);
+      }
+    }
+  }, [account, api, balance, collection, decimalPoints, recipient, tokenId, tokenPart]); */
+
+  // set max transfer the sender can make
   useEffect((): void => {
-    const fromId = propSenderId || senderId as string;
     const toId = propRecipientId || recipientId as string;
 
-    if (api && balances && balances.accountId.eq(fromId) && fromId && toId && isFunction(api.rpc.payment?.queryInfo)) {
+    if (api && balances && balances.accountId.eq(propSenderId) && propSenderId && toId && isFunction(api.rpc.payment?.queryInfo)) {
       setTimeout((): void => {
         try {
           api.tx.balances
             .transfer(toId, balances.availableBalance)
-            .paymentInfo(fromId)
+            .paymentInfo(propSenderId)
             .then(({ partialFee }): void => {
               const adjFee = partialFee.muln(110).div(BN_HUNDRED);
               const maxTransfer = balances.availableBalance.sub(adjFee);
@@ -86,20 +99,25 @@ function TransferModal ({ className = '', isKusama, onClose, recipientId: propRe
     } else {
       setMaxTransfer([null, false]);
     }
-  }, [api, balances, propRecipientId, propSenderId, recipientId, senderId]);
+  }, [api, balances, propRecipientId, propSenderId, recipientId]);
 
   useEffect((): void => {
-    checkPhishing(propSenderId || senderId, propRecipientId || recipientId)
+    checkPhishing(propSenderId, propRecipientId || recipientId)
       .then(setPhishing)
       .catch(console.error);
-  }, [propRecipientId, propSenderId, recipientId, senderId]);
+  }, [propRecipientId, propSenderId, recipientId]);
 
   const noReference = accountInfo
     ? isRefcount(accountInfo)
       ? accountInfo.refcount.isZero()
       : accountInfo.consumers.isZero()
     : true;
-  const canToggleAll = !isProtected && balances && balances.accountId.eq(propSenderId || senderId) && maxTransfer && noReference;
+
+  const canToggleAll = balances && balances.accountId.eq(propSenderId) && maxTransfer && noReference;
+
+  console.log('currentApi', isKusama);
+
+  const accountName = 'AccountName';
 
   return (
     <Modal
@@ -117,39 +135,64 @@ function TransferModal ({ className = '', isKusama, onClose, recipientId: propRe
         />
       </Modal.Header>
       <Modal.Content>
-        <div className={className}>
-          <InputAddress
-            defaultValue={propSenderId}
-            help={'The account you will send funds from.'}
-            isDisabled={!!propSenderId}
-            label={'send from account'}
-            labelExtra={
-              <Available
-                label={'transferrable'}
-                params={propSenderId || senderId}
+        <div className='transfer-modal-content'>
+          <div className='transfer-modal-content--row'>
+            <header>From</header>
+            <InputAddressLight
+              defaultValue={propSenderId}
+              isDisabled
+              label={'send from account'}
+              type='account'
+            />
+            { isKusama && (
+              <span>{formatKsmBalance(balances?.availableBalance)} KSM</span>
+            )}
+            { !isKusama && (
+              <FormatBalance
+                label={''}
+                value={balances?.availableBalance}
               />
-            }
-            onChange={setSenderId}
-            type='account'
-          />
-          <InputAddress
-            defaultValue={propRecipientId}
-            help={'Select a contact or paste the address you want to send funds to.'}
-            isDisabled={!!propRecipientId}
-            label={'send to address'}
-            labelExtra={
-              <Available
-                label={'transferrable'}
-                params={propRecipientId || recipientId}
+            )}
+          </div>
+          <div className='transfer-modal-content--row'>
+            <header>To</header>
+            <InputAddressLight
+              defaultValue={propRecipientId}
+              isDisabled={!!propRecipientId}
+              label={'send to address'}
+              onChange={setRecipientId}
+              type='allPlus'
+            />
+            { isKusama && (
+              <span>{formatKsmBalance(recipientBalances?.availableBalance)} KSM</span>
+            )}
+            { !isKusama && (
+              <FormatBalance
+                label={''}
+                value={recipientBalances?.availableBalance}
               />
-            }
-            onChange={setRecipientId}
-            type='allPlus'
+            )}
+          </div>
+          {/* <InputBalance
+            autoFocus
+            className='isSmall'
+            defaultValue={maxTransfer}
+            help={'The full account balance to be transferred, minus the transaction fees'}
+            isError={!hasAvailable}
+            isZeroable
+            key={maxTransfer?.toString()}
+            label={'transferrable minus fees'}
+          /> */}
+          <InputBalance
+            autoFocus
+            className='isSmall'
+            help={'Type the amount you want to transfer. Note that you can select the unit on the right e.g sending 1 milli is equivalent to sending 0.001.'}
+            isError={!hasAvailable}
+            isZeroable
+            label={'amount'}
+            onChange={setAmount}
           />
-          {recipientPhish && (
-            <MarkError content={'The recipient is associated with a known phishing site on {{url}}'.replace('{{url}}', recipientPhish.toString())} />
-          )}
-          {canToggleAll && isAll
+          {/* {canToggleAll && isAll
             ? (
               <InputBalance
                 autoFocus
@@ -172,29 +215,39 @@ function TransferModal ({ className = '', isKusama, onClose, recipientId: propRe
                 onChange={setAmount}
               />
             )
-          }
-          {!isProtected && !noReference && (
+          } */}
+          <MarkWarning content={'There is an existing reference count on the sender account. As such the account cannot be reaped from the state.'} />
+
+          {/* {!isProtected && !noReference && (
             <MarkWarning content={'There is an existing reference count on the sender account. As such the account cannot be reaped from the state.'} />
           )}
+          */}
+          {/* @todo - sponsoring <MarkWarning content={`Next free transaction is possible in ${23} hours ${56} minutes.`} /> */}
+          <MarkWarning content={`Аccount ${accountName} requires more funds to cover the transaction fee.`} />
+          <div className='fees-info'>
+            A fee of ~ 0.000000000000052 testUNQ can be applied to the transaction, unless the transaction is sponsored
+          </div>
           {noFees && (
-            <MarkWarning content={'The transaction, after application of the transfer fees, will drop the available balance below the existential deposit. As such the transfer will fail. The account needs more free funds to cover the transaction fees.'} />
+            <MarkWarning content={`Аccount ${accountName} requires more funds to cover the transaction fee.`} />
           )}
         </div>
       </Modal.Content>
       <Modal.Actions onCancel={onCloseModal}>
-        <TxButton
-          accountId={propSenderId || senderId}
-          icon='paper-plane'
-          isDisabled={!hasAvailable || !(propRecipientId || recipientId) || !amount || !!recipientPhish}
-          label={'Make Transfer'}
-          onStart={onCloseModal}
-          params={
-            canToggleAll && isAll
-              ? [propRecipientId || recipientId, maxTransfer]
-              : [propRecipientId || recipientId, amount]
-          }
-          tx={(isProtected && api?.tx.balances.transferKeepAlive) || api?.tx.balances.transfer}
-        />
+        { propSenderId && (
+          <TxButton
+            accountId={propSenderId}
+            icon='paper-plane'
+            isDisabled={!hasAvailable || !(propRecipientId || recipientId) || !amount || !!recipientPhish}
+            label={'Make Transfer'}
+            onStart={onCloseModal}
+            params={
+              canToggleAll && isAll
+                ? [propRecipientId || recipientId, maxTransfer]
+                : [propRecipientId || recipientId, amount]
+            }
+            tx={(isProtected && api?.tx.balances.transferKeepAlive) || api?.tx.balances.transfer}
+          />
+        )}
       </Modal.Actions>
     </Modal>
   );
