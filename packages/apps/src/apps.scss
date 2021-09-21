@@ -48,6 +48,14 @@
   }
 }
 
+.mark {
+  padding: calc(var(--gap) / 2) var(--gap);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column-gap: var(--gap);
+}
+
 .app-user {
   display: flex;
   align-items: center;

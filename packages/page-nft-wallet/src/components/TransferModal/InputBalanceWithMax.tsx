@@ -1,30 +1,32 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { BitLength } from '@polkadot/react-components/types';
-
 import BN from 'bn.js';
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { BitLengthOption } from '@polkadot/react-components/constants';
-import InputNumber from '@polkadot/react-components/InputNumber';
-import { BN_TEN, formatBalance, isBn } from '@polkadot/util';
+import envConfig from '@polkadot/apps-config/envConfig';
+import { Input } from '@polkadot/react-components';
+import { formatKsmBalance, formatStrBalance } from '@polkadot/react-hooks/useKusamaApi';
+import { formatBalance } from '@polkadot/util';
+
+const { kusamaDecimals } = envConfig;
 
 interface Props {
   autoFocus?: boolean;
   children?: React.ReactNode;
   className?: string;
-  defaultValue?: BN | string;
+  defaultValue?: BN;
   help?: React.ReactNode;
   isDisabled?: boolean;
   isError?: boolean;
   isFull?: boolean;
+  isKusama?: boolean;
   isWarning?: boolean;
   isZeroable?: boolean;
   label?: React.ReactNode;
   labelExtra?: React.ReactNode;
-  maxValue?: BN;
-  onChange?: (value?: BN) => void;
+  maxTransfer: BN | null;
+  onChange: (value?: BN) => void;
   onEnter?: () => void;
   onEscape?: () => void;
   placeholder?: string;
@@ -34,70 +36,88 @@ interface Props {
   withMax?: boolean;
 }
 
-const BN_TEN_THOUSAND = new BN(10_000);
-const DEFAULT_BITLENGTH = BitLengthOption.CHAIN_SPEC as BitLength;
-
-function reformat (value: string | BN, isDisabled?: boolean): string {
-  if (isBn(value)) {
-    // format for 4 decimals (align with util)
-    const valStr = value
-      .mul(BN_TEN_THOUSAND)
-      .div(BN_TEN.pow(new BN(formatBalance.getDefaults().decimals)))
-      .toString()
-      .padStart(5, '0'); // 4 after decimal, 1 before, min 5
-
-    // dive using string format (the value may be too large for 2^53-1)
-    let fmt = `${valStr.substr(0, valStr.length - 4)}.${valStr.slice(-4)}`;
-
-    // remove all trailing 0's until the decimal
-    while (fmt.length !== 1 && ['.', '0'].includes(fmt[fmt.length - 1])) {
-      const isLast = fmt.endsWith('.');
-
-      fmt = fmt.substr(0, fmt.length - 1);
-
-      if (isLast) {
-        break;
-      }
-    }
-
-    return fmt;
+function reformat (value: BN | undefined, isKusama: boolean): string {
+  if (!value) {
+    return '0';
   }
 
-  return formatBalance(value, { forceUnit: '-', withSi: false }).replace(',', isDisabled ? ',' : '');
+  if (isKusama) {
+    return formatKsmBalance(value);
+  }
+
+  return formatStrBalance(formatBalance.getDefaults().decimals, value);
 }
 
-function InputBalanceWithMax ({ autoFocus, children, className = '', defaultValue: inDefault, help, isDisabled, isError, isFull, isWarning, isZeroable, label, labelExtra, maxValue, onChange, onEnter, onEscape, placeholder, value, withEllipsis, withLabel, withMax }: Props): React.ReactElement<Props> {
+function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, isError, isKusama, label, maxTransfer, onChange, onEnter, onEscape, placeholder, value, withLabel }: Props): React.ReactElement<Props> {
+  const [valueLocal, setValueLocal] = useState<string>('0');
+
   const defaultValue = useMemo(
-    () => inDefault ? reformat(inDefault, isDisabled) : undefined,
-    [inDefault, isDisabled]
+    () => inDefault ? reformat(inDefault, !!isKusama) : undefined,
+    [inDefault, isKusama]
   );
 
+  const onValueLocalChange = useCallback((val: string) => {
+    let arr: string[] = [];
+
+    if (val.includes('.')) {
+      arr = val.split('.');
+    } else if (val.includes(',')) {
+      arr = val.split(',');
+    }
+
+    const decimals = isKusama ? kusamaDecimals : formatBalance.getDefaults().decimals;
+
+    if (arr[0]?.length > decimals || arr[1]?.length > decimals) {
+      return;
+    }
+
+    setValueLocal(val);
+  }, [isKusama]);
+
+  const onValueChange = useCallback((val: string) => {
+    const floatBnValue = parseFloat(val || '0') * Math.pow(10, isKusama ? kusamaDecimals : formatBalance.getDefaults().decimals);
+
+    if (floatBnValue < 1) {
+      return;
+    }
+
+    onChange(new BN(floatBnValue.toString()));
+  }, [isKusama, onChange]);
+
+  const onSetMax = useCallback(() => {
+    if (maxTransfer) {
+      setValueLocal(reformat(maxTransfer, !!isKusama));
+    }
+  }, [isKusama, maxTransfer]);
+
+  useEffect(() => {
+    onValueChange(valueLocal);
+  }, [onValueChange, valueLocal]);
+
   return (
-    <InputNumber
-      autoFocus={autoFocus}
-      bitLength={DEFAULT_BITLENGTH}
-      className={`ui--InputBalance ${className}`}
-      defaultValue={defaultValue}
-      help={help}
-      isDisabled={isDisabled}
-      isError={isError}
-      isFull={isFull}
-      isWarning={isWarning}
-      isZeroable={isZeroable}
-      label={label}
-      labelExtra={labelExtra}
-      maxValue={maxValue}
-      onChange={onChange}
-      onEnter={onEnter}
-      onEscape={onEscape}
-      placeholder={placeholder}
-      value={value}
-      withEllipsis={withEllipsis}
-      withLabel={withLabel}
-      withMax={withMax}
-    >
-      {children}
-    </InputNumber>
+    <div className='input-balance-with-max'>
+      <Input
+        autoFocus={autoFocus}
+        className='isSmall'
+        defaultValue={defaultValue}
+        isDisabled={isDisabled}
+        isError={isError}
+        label={label}
+        onChange={onValueLocalChange}
+        onEnter={onEnter}
+        onEscape={onEscape}
+        placeholder={placeholder}
+        type='number'
+        value={valueLocal}
+        withLabel={withLabel}
+      />
+      <a
+        className='set-max-amount'
+        onClick={onSetMax}
+      >
+        Max
+      </a>
+    </div>
   );
 }
 

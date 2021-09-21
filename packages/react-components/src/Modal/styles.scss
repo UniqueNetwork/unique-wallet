@@ -68,13 +68,13 @@
     flex-direction: column;
     align-items: flex-start !important;
 
-  .actions{
-    width: 100%;
-
-    .ui--Button-Group{
+    .actions {
       width: 100%;
+
+      .ui--Button-Group{
+        width: 100%;
+      }
     }
-  }
     .btn-container{
       margin-top: 24px;
       width: 100%;

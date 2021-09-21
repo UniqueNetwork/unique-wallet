@@ -2,15 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { AccountInfoWithProviders, AccountInfoWithRefCount } from '@polkadot/types/interfaces';
+import type { DeriveAccountInfo } from '@polkadot/api-derive/types';
 
 import { useCallback, useEffect, useState } from 'react';
 
 import { ApiPromise } from '@polkadot/api/promise';
 import { DeriveBalancesAll } from '@polkadot/api-derive/types';
 import { useApi, useCall, useKusamaApi } from '@polkadot/react-hooks';
+import { getAddressName } from "@polkadot/react-components/util";
 
 interface UseSelectedApiInterface {
-  currentAccountInfo: AccountInfoWithProviders | AccountInfoWithRefCount | undefined;
   currentApi: ApiPromise | undefined;
   currentBalanceAll: DeriveBalancesAll | undefined;
 }
@@ -20,9 +21,7 @@ export const useSelectedApi = (account?: string, isKusama?: boolean): UseSelecte
   const { api } = useApi();
   const [currentApi, setCurrentApi] = useState<ApiPromise>();
   const [currentBalanceAll, setCurrentBalanceAll] = useState<DeriveBalancesAll>();
-  const [currentAccountInfo, setCurrentAccountInfo] = useState<AccountInfoWithProviders | AccountInfoWithRefCount>();
   const balanceAll = useCall<DeriveBalancesAll>(currentApi?.derive.balances?.all, [account]);
-  const accountInfo = useCall<AccountInfoWithProviders | AccountInfoWithRefCount>(api?.query.system.account, [account]);
 
   const selectApiByProps = useCallback(() => {
     if (isKusama && kusamaApi) {
@@ -31,6 +30,28 @@ export const useSelectedApi = (account?: string, isKusama?: boolean): UseSelecte
       setCurrentApi(api);
     }
   }, [api, isKusama, kusamaApi]);
+
+  // set the actual nickname, local name, accountIndex, accountId
+  /* useEffect((): void => {
+    const { accountId, accountIndex, identity, nickname } = accountInfo || {};
+    const cacheAddr = (accountId || value || '').toString();
+
+    if (identity?.parent) {
+      parentCache.set(cacheAddr, identity.parent.toString());
+    }
+
+    if (isFunction(api.query.identity?.identityOf)) {
+      setName(() =>
+        identity?.display
+          ? extractIdentity(cacheAddr, identity)
+          : extractName(cacheAddr, accountIndex)
+      );
+    } else if (nickname) {
+      setName(nickname);
+    } else {
+      setName(defaultOrAddr(defaultName, cacheAddr, accountIndex));
+    }
+  }, [api, defaultName, info, toggle, value]); */
 
   useEffect(() => {
     selectApiByProps();
@@ -42,18 +63,9 @@ export const useSelectedApi = (account?: string, isKusama?: boolean): UseSelecte
     }
   }, [balanceAll]);
 
-  const setAccountInfo = useCallback(() => {
-    if (accountInfo) {
-      setCurrentAccountInfo(accountInfo);
-    }
-  }, [accountInfo]);
-
   useEffect(setBalanceValue, [setBalanceValue]);
 
-  useEffect(setAccountInfo, [setAccountInfo]);
-
   return {
-    currentAccountInfo,
     currentApi,
     currentBalanceAll
   };

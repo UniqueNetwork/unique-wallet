@@ -1,0 +1,6 @@
+.mark {
+  &.warning {
+    background: var(--link-light-color);
+    color: var(--link-color);
+  }
+}

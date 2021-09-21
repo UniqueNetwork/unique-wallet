@@ -11,7 +11,6 @@ import store from 'store';
 
 import { withMulti, withObservable } from '@polkadot/react-api/hoc';
 import { Dropdown } from '@polkadot/react-components';
-import infoBlue from '@polkadot/react-components/images/infoBlue.svg';
 import CreateHeader from '@polkadot/react-components/InputAddress/CreateHeader';
 import createItem from '@polkadot/react-components/InputAddress/createItem';
 import { getAddressName } from '@polkadot/react-components/util';
@@ -298,22 +297,8 @@ const ExportedComponent = withMulti(
       Object.entries(optionsAll).reduce((result: Record<string, (Option | React.ReactNode)[]>, [type, options]): Record<string, (Option | React.ReactNode)[]> => {
         result[type] = options.map((option): Option | React.ReactNode =>
           option.value === null
-            ? <CreateHeader key={option.key || option.name}
-              option={option}/>
+            ? <div />
             : createItem(option)
-        );
-
-        result[type].push(
-          <div className='accounts-footer'
-            key='footer-text'>
-            <div className='info-panel'>
-              <img
-                alt='info'
-                src={infoBlue as string}
-              />
-              Click on image to copy the address
-            </div>
-          </div>
         );
 
         return result;

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { SubmittableExtrinsic } from '@polkadot/api/types';
-import type { TxButtonProps as Props } from './types';
+import type { TxButtonProps as Props } from '../types';
 
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 
@@ -10,8 +10,9 @@ import { SubmittableResult } from '@polkadot/api';
 import { useIsMountedRef } from '@polkadot/react-hooks';
 import { assert, isFunction } from '@polkadot/util';
 
-import Button from './Button';
-import { StatusContext } from './Status';
+import Button from '../Button';
+import { StatusContext } from '../Status';
+import './styles.scss';
 
 function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon, isBasic, isBusy, isDisabled, isIcon, isToplevel, isUnsigned, label, onClick, onFailed, onSendRef, onStart, onSuccess, onUpdate, params, tooltip, tx, withSpinner, withoutLink }: Props): React.ReactElement<Props> {
   const mountedRef = useIsMountedRef();
@@ -94,15 +95,15 @@ function TxButton ({ accountId, className = '', extrinsic: propsExtrinsic, icon,
   return (
     <Button
       className={className}
-      icon={icon || 'check'}
+      icon={icon}
       isBasic={isBasic}
       isBusy={isBusy}
       isDisabled={isSending || isDisabled || (!isUnsigned && !accountId) || (
         tx
           ? false
           : Array.isArray(propsExtrinsic)
-            ? propsExtrinsic.length === 0
-            : !propsExtrinsic
+          ? propsExtrinsic.length === 0
+          : !propsExtrinsic
       )}
       isIcon={isIcon}
       isToplevel={isToplevel}
