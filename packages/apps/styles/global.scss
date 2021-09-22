@@ -400,8 +400,7 @@ form {
   padding: 1rem var(--gap);
 }
 
-button.ui.button,
-.button-link {
+button.ui.button, .button-link, .ui--Button {
   display: flex;
   justify-content: center;
   align-items: center;

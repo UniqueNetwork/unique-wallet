@@ -1,8 +1,9 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import './styles.scss';
+
 import React from 'react';
-import styled from 'styled-components';
 
 import InfoIcon from './info-icon.svg';
 import InfoIconBlue from './info-icon-blue.svg';
@@ -29,23 +30,4 @@ function Index ({ children, className = '', content, step }: Props): React.React
   );
 }
 
-export default React.memo(styled(Index)`
-  display: flex;
-  margin-top:40px;
-  background-color: #fef6da;
-  color:#E7AA0F;
-  font-size: 14px;
-  font-family: var(--font-roboto);
-  line-height: 22px;
-  border-radius: 4px;
-  padding: 8px;
-
-  img{
-    margin-right: 8px;
-  }
-
-  .ui--Icon {
-    color: rgba(255, 196, 12, 1);
-    margin-right: 0.5rem;
-  }
-`);
+export default React.memo(Index);

@@ -1,10 +1,11 @@
-// Copyright 2017-2021 @polkadot/react-components authors & contributors
+// Copyright 2017-2021 @polkadot/react-components and UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React from 'react';
-import styled from 'styled-components';
+import './styles.scss';
 
-import Icon from './Icon';
+import React from 'react';
+
+import errorIcon from './error-icon.svg';
 
 interface Props {
   children?: React.ReactNode;
@@ -15,14 +16,13 @@ interface Props {
 function MarkError ({ children, className = '', content }: Props): React.ReactElement<Props> {
   return (
     <article className={`mark error ${className}`}>
-      <Icon icon='exclamation-triangle' />{content}{children}
+      <img
+        alt='info'
+        src={errorIcon as string}
+      />
+      {content}{children}
     </article>
   );
 }
 
-export default React.memo(styled(MarkError)`
-  .ui--Icon {
-    color: rgba(255, 12, 12, 1);
-    margin-right: 0.5rem;
-  }
-`);
+export default React.memo(MarkError);

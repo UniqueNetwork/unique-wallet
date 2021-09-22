@@ -1,5 +1,27 @@
 .network-wallet {
 
+  .ui.loader {
+
+    &:after {
+      border-color: var(--link-color) transparent transparent;
+      left: inherit;
+    }
+    &:before {
+      border-color: var(--text-color) transparent transparent;
+    }
+
+    &.active {
+      display: flex !important;
+      justify-content: flex-start;
+      width: 100%;
+      margin: 4px 0;
+
+      &:after, &:before {
+        left: 8px;
+      }
+    }
+  }
+
   .network-wallet--block {
     background: var(--card-background);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -100,10 +122,6 @@
             color: #C7CBD4 !important;
           }
         }
-      }
-
-      .loader{
-        margin-top: 24px;
       }
     }
   }

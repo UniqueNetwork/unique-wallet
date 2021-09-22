@@ -74,11 +74,110 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
           Network tokens
         </div>
         <div className='network-wallet--block--body'>
-          {kusamaChain
-            ? (<>
-              <div className='token-item'>
-                <div className='token-item--account'>
-                  <span>
+          <div className='token-item'>
+            <div className='token-item--account'>
+              <span>
+                { !!chain && (
+                  <>
+                    <ChainImg
+                      className='endpointIcon'
+                      isInline
+                      withoutHl
+                    />
+                    {chain}
+                  </>
+                )}
+                { !chain && (
+                  <Loader
+                    active
+                    inline='centered'
+                    key={'nft-wallet'}
+                    size='tiny'
+                  />
+                )}
+              </span>
+              <span>
+                {account}
+                <a onClick={account ? copyAddress.bind(null, account) : () => null }>
+                  <CopyIcon color={'var(--input-placeholder-search-color)'} />
+                </a>
+              </span>
+            </div>
+            <div className='token-item--balances'>
+              <span className='token-item--balances--row'>
+                { !fullBalance && (
+                  <Loader
+                    active
+                    inline='centered'
+                    key={'nft-wallet'}
+                    size='tiny'
+                  />
+                )}
+                { fullBalance && (
+                  <FormatBalance
+                    className='result'
+                    value={fullBalance?.freeBalance}
+                  />
+                )}
+              </span>
+              <span className='token-item--balances--row'>
+                <span>
+                  { !fullBalance && (
+                    <Loader
+                      active
+                      inline='centered'
+                      key={'nft-wallet'}
+                      size='tiny'
+                    />
+                  )}
+                  { fullBalance && (
+                    <>
+                      <FormatBalance
+                        className='result'
+                        value={fullBalance?.availableBalance}
+                      /> transferable
+                    </>
+                  )}
+                </span>
+                <span>
+                  { !fullBalance && (
+                    <Loader
+                      active
+                      inline='centered'
+                      key={'nft-wallet'}
+                      size='tiny'
+                    />
+                  )}
+                  { fullBalance && (
+                    <>
+                      <FormatBalance
+                        className='result'
+                        value={fullBalance?.lockedBalance}
+                      /> locked
+                    </>
+                  )}
+                </span>
+              </span>
+            </div>
+            <div className='token-item--actions'>
+              <Button
+                disabled={!+major && !+rest}
+                onClick={toggleTransfer}
+              >
+                  Send
+              </Button>
+              <Button
+                onClick={toggleGetTestUNQModal}
+              >
+                  Get
+              </Button>
+            </div>
+          </div>
+          <div className='token-item'>
+            <div className='token-item--account'>
+              <span>
+                { !!kusamaChain && (
+                  <>
                     <ChainImg
                       className='endpointIcon'
                       isInline
@@ -86,108 +185,99 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
                       withoutHl
                     />
                     {kusamaChain}
-                  </span>
-                  <span>
-                    {encodedKusamaAccount}
-                    <a onClick={encodedKusamaAccount ? copyAddress.bind(null, encodedKusamaAccount) : () => null }>
-                      <CopyIcon color={'var(--input-placeholder-search-color)'} />
-                    </a>
-                  </span>
-                </div>
-                <div className='token-item--balances'>
-                  <span className='token-item--balances--row'>
+                  </>
+                )}
+                { !kusamaChain && (
+                  <Loader
+                    active
+                    inline='centered'
+                    key={'nft-wallet'}
+                    size='tiny'
+                  />
+                )}
+              </span>
+              <span>
+                {encodedKusamaAccount}
+                <a onClick={encodedKusamaAccount ? copyAddress.bind(null, encodedKusamaAccount) : () => null }>
+                  <CopyIcon color={'var(--input-placeholder-search-color)'} />
+                </a>
+              </span>
+            </div>
+            <div className='token-item--balances'>
+              <span className='token-item--balances--row'>
+                { !fullKusamaBalance && (
+                  <Loader
+                    active
+                    inline='centered'
+                    key={'nft-wallet'}
+                    size='tiny'
+                  />
+                )}
+                { fullKusamaBalance && (
+                  <>
                     {formatKsmBalance(fullKusamaBalance?.freeBalance)} KSM
-                  </span>
-                  <span className='token-item--balances--row'>
-                    <span>{formatKsmBalance(fullKusamaBalance?.availableBalance)} KSM transferrable</span>
-                    <span>{formatKsmBalance(fullKusamaBalance?.lockedBalance)} KSM locked</span>
-                  </span>
-                </div>
-                <div className='token-item--actions'>
-                  <Button
-                    disabled={!+formatKsmBalance(fullKusamaBalance?.availableBalance)}
-                    onClick={toggleTransfer}
-                  >
-                    Send
-                  </Button>
-                  <Button
-                    onClick={handleGetKSMClickByRamp}
-                  >
-                     Get
-                  </Button>
-                </div>
-              </div>
-              <div className='token-item'>
-                <div className='token-item--account'>
-                  <span>
-                    <ChainImg
-                      className='endpointIcon'
-                      isInline
-                      withoutHl
+                  </>
+                )}
+              </span>
+              <span className='token-item--balances--row'>
+                <span>
+                  { !fullKusamaBalance && (
+                    <Loader
+                      active
+                      inline='centered'
+                      key={'nft-wallet'}
+                      size='tiny'
                     />
-                    {chain}
-                  </span>
-                  <span>
-                    {account}
-                    <a onClick={account ? copyAddress.bind(null, account) : () => null }>
-                      <CopyIcon color={'var(--input-placeholder-search-color)'} />
-                    </a>
-                  </span>
-                </div>
-                <div className='token-item--balances'>
-                  <span className='token-item--balances--row'>
-                    <FormatBalance
-                      className='result'
-                      value={fullBalance?.freeBalance}
+                  )}
+                  { fullKusamaBalance && (
+                    <>
+                      {formatKsmBalance(fullKusamaBalance?.availableBalance)} KSM transferrable
+                    </>
+                  )}
+                </span>
+                <span>
+                  { !fullKusamaBalance && (
+                    <Loader
+                      active
+                      inline='centered'
+                      key={'nft-wallet'}
+                      size='tiny'
                     />
-                  </span>
-                  <span className='token-item--balances--row'>
-                    <span>
-                      <FormatBalance
-                        className='result'
-                        value={fullBalance?.availableBalance}
-                      /> transferable
-                    </span>
-                    <span>
-                      <FormatBalance
-                        className='result'
-                        value={fullBalance?.lockedBalance}
-                      /> locked
-                    </span>
-                  </span>
-                </div>
-                <div className='token-item--actions'>
-                  <Button
-                    disabled={!+major && !+rest}
-                    onClick={toggleTransfer}
-                  >
-                  Send
-                  </Button>
-                  <Button
-                    onClick={toggleGetTestUNQModal}
-                  >
-                  Get
-                  </Button>
-                </div>
-              </div>
-            </>)
-            : <Loader
-              active
-              inline='centered'
-              key={'nft-wallet'}
-              size='large'
-            />}
+                  )}
+                  { fullKusamaBalance && (
+                    <>
+                      {formatKsmBalance(fullKusamaBalance?.lockedBalance)} KSM locked
+                    </>
+                  )}
+                </span>
+              </span>
+            </div>
+            <div className='token-item--actions'>
+              <Button
+                disabled={!+formatKsmBalance(fullKusamaBalance?.availableBalance)}
+                onClick={toggleKusamaTransfer}
+              >
+                Send
+              </Button>
+              <Button
+                onClick={handleGetKSMClickByRamp}
+              >
+                Get
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
-      { isTransferOpen && (
+      { (isTransferOpen && account) && (
         <TransferModal
           key='modal-transfer'
           onClose={toggleTransfer}
           senderId={account}
         />
       )}
-      { isKusamaTransferOpen && (
+      { (isKusamaTransferOpen && account) && (
         <TransferModal
+          isKusama
           key='modal-transfer'
           onClose={toggleKusamaTransfer}
           senderId={account}

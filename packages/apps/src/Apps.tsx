@@ -18,7 +18,6 @@ import Status from '@polkadot/apps/Status';
 import { useTranslation } from '@polkadot/apps/translate';
 import Welcome from '@polkadot/apps/Welcome';
 import { getSystemChainColor } from '@polkadot/apps-config';
-import envConfig from '@polkadot/apps-config/envConfig';
 import createRoutes from '@polkadot/apps-routing';
 import { AccountSelector, ErrorBoundary, StatusContext } from '@polkadot/react-components';
 import GlobalStyle from '@polkadot/react-components/styles';
@@ -35,8 +34,6 @@ import ScrollToTop from './ScrollToTop';
 import WarmUp from './WarmUp';
 
 export const PORTAL_ID = 'portals';
-
-const { walletMode } = envConfig;
 
 const NOT_FOUND: Route = {
   Component: NotFound,
@@ -131,22 +128,20 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                                   to='/'
                                 />
                               )}
-                              { !walletMode && (
-                                <>
-                                  <Menu.Item
-                                    active={location.pathname === '/myStuff'}
-                                    as={NavLink}
-                                    name='myStuff'
-                                    to='/myStuff'
-                                  />
-                                  <Menu.Item
-                                    active={location.pathname === '/faq'}
-                                    as={NavLink}
-                                    name='FAQ'
-                                    to='/faq'
-                                  />
-                                </>
-                              )}
+                              <>
+                                <Menu.Item
+                                  active={location.pathname === '/myStuff'}
+                                  as={NavLink}
+                                  name='myStuff'
+                                  to='/myStuff'
+                                />
+                                <Menu.Item
+                                  active={location.pathname === '/faq'}
+                                  as={NavLink}
+                                  name='FAQ'
+                                  to='/faq'
+                                />
+                              </>
                             </Menu>
                             { (isApiReady) && (
                               <div className={`app-user${account ? '' : ' hidden'}`}>
