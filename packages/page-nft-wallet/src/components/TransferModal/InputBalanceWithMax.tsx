@@ -36,6 +36,10 @@ interface Props {
   withMax?: boolean;
 }
 
+interface CustomSyntheticEvent extends React.SyntheticEvent{
+  key: string;
+}
+
 function reformat (value: BN | undefined, isKusama: boolean): string {
   if (!value) {
     return '0';
@@ -48,7 +52,7 @@ function reformat (value: BN | undefined, isKusama: boolean): string {
   return formatStrBalance(formatBalance.getDefaults().decimals, value);
 }
 
-function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, isError, isKusama, label, maxTransfer, onChange, onEnter, onEscape, placeholder, value, withLabel }: Props): React.ReactElement<Props> {
+function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, isError, isKusama, label, maxTransfer, onChange, onEnter, onEscape, placeholder, withLabel }: Props): React.ReactElement<Props> {
   const [valueLocal, setValueLocal] = useState<string>('0');
 
   const defaultValue = useMemo(
@@ -90,6 +94,11 @@ function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, 
     }
   }, [isKusama, maxTransfer]);
 
+  const onKeyDown = (event: CustomSyntheticEvent) => {
+    ((event.key === ',' || event.key === '.') && !valueLocal?.length) && event.preventDefault();
+    ['e', 'E', '+', '-'].includes(event.key) && event.preventDefault();
+  };
+
   useEffect(() => {
     onValueChange(valueLocal);
   }, [onValueChange, valueLocal]);
@@ -106,6 +115,7 @@ function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, 
         onChange={onValueLocalChange}
         onEnter={onEnter}
         onEscape={onEscape}
+        onKeyDown={onKeyDown}
         placeholder={placeholder}
         type='number'
         value={valueLocal}
