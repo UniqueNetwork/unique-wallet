@@ -11,7 +11,7 @@ import Image from 'semantic-ui-react/dist/commonjs/elements/Image';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import { Breadcrumbs, SocialShareModal, TransferModal } from '@polkadot/react-components';
-import { useDecoder, useMarketplaceStages, useSchema, useToggle } from '@polkadot/react-hooks';
+import { useDecoder, useSchema, useToggle } from '@polkadot/react-hooks';
 
 import AccordionArrow from './AccordionArrow';
 // import burnTokenIcon from './burnTokenIcon.svg';
@@ -28,18 +28,12 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
   const [showTransferForm, setShowTransferForm] = useState<boolean>(false);
   const [showSocialShareModal, setShowSocialShareModal] = useState<boolean>(false);
   const { hex2a } = useDecoder();
-  const { attributes, collectionInfo, reFungibleBalance, tokenUrl } = useSchema(account, collectionId, tokenId);
-  const { tokenInfo } = useMarketplaceStages(account, collectionInfo, tokenId);
+  const { attributes, collectionInfo, reFungibleBalance, tokenDetails, tokenUrl } = useSchema(account, collectionId, tokenId);
   const { collectionName16Decoder } = useDecoder();
   const [isCollectionCollapsed, toggleCollectionCollapsed] = useToggle(true);
   const [isAttributesCollapsed, toggleAttributesCollapsed] = useToggle(true);
 
-  const uOwnIt = tokenInfo?.Owner?.toString() === account;
-
-  /* const goBack = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    history.back();
-  }, []); */
+  const uOwnIt = tokenDetails?.Owner?.toString() === account;
 
   const onTransferSuccess = useCallback(() => {
     setShowTransferForm(false);
@@ -47,27 +41,6 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
 
   return (
     <div className='token-details'>
-      {/* <a
-        className='go-back'
-        href='/'
-        onClick={goBack}
-      >
-        <svg fill='none'
-          height='16'
-          viewBox='0 0 16 16'
-          width='16'
-          xmlns='http://www.w3.org/2000/svg'>
-          <path d='M13.5 8H2.5'
-            stroke='var(--card-link-color)'
-            strokeLinecap='round'
-            strokeLinejoin='round'/>
-          <path d='M7 3.5L2.5 8L7 12.5'
-            stroke='var(--card-link-color)'
-            strokeLinecap='round'
-            strokeLinejoin='round'/>
-        </svg>
-        back
-      </a> */}
       <Breadcrumbs
         collectionInfo={collectionInfo}
         tokenId={tokenId}
@@ -106,8 +79,8 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
                   Share link
                 </a>
               </div>
-              { (!uOwnIt && tokenInfo?.Owner) && (
-                <div className='info-row'><strong>Owner:</strong> <p>{tokenInfo?.Owner?.toString()}</p></div>
+              { (!uOwnIt && tokenDetails?.Owner) && (
+                <div className='info-row'><strong>Owner:</strong> <p>{tokenDetails?.Owner?.toString()}</p></div>
               )}
               { uOwnIt && (
                 <div className='action-block'>
@@ -148,10 +121,9 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
                     <div className='accordion-left--body'>
                       <p>
                         <strong>Name: </strong>
-                        {/* <a onClick={() => console.log('click')}>
+                        <a onClick={() => console.log('click')}>
                           {collectionName16Decoder(collectionInfo.Name)}
-                        </a> */}
-                        <p className='collection-name'> {collectionName16Decoder(collectionInfo.Name)}</p>
+                        </a>
                       </p>
                       <p>
                         <strong>Collection ID: </strong>

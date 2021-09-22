@@ -31,7 +31,6 @@ export { useIsMountedRef } from './useIsMountedRef';
 export { useKusamaApi } from './useKusamaApi';
 export { useLedger } from './useLedger';
 export { useLoadingDelay } from './useLoadingDelay';
-export { useMarketplaceStages } from './useMarketplaceStages';
 export { useMembers } from './useMembers';
 export { useMetadata } from './useMetadata';
 export { useMintApi } from './useMintApi';
