@@ -97,14 +97,7 @@ export function convertEnumToString (value: string, key: string, NFTMeta: Type, 
 export function deserializeNft (onChainSchema: ProtobufAttributeType, buffer: Uint8Array, locale: string): { [key: string]: any } {
   try {
     const root = defineMessage(onChainSchema);
-    let NFTMeta: Type;
-
-    // Obtain the message type
-    if (root?.nested?.onChainMetaData) {
-      NFTMeta = root.lookupType('onChainMetaData.NFTMeta');
-    } else if (root?.nested?.onchainmetadata) {
-      NFTMeta = root.lookupType('onchainmetadata.NFTMeta');
-    }
+    const NFTMeta = root.lookupType('onChainMetaData.NFTMeta');
 
     // Decode a Uint8Array (browser) or Buffer (node) to a message
     const message = NFTMeta.decode(buffer);
@@ -125,9 +118,11 @@ export function deserializeNft (onChainSchema: ProtobufAttributeType, buffer: Ui
         if (Array.isArray(objectItem[key])) {
           const item = objectItem[key] as string[];
 
-          item.forEach((value: string, index) => {
-            (newObjectItem[key] as string[])[index] = convertEnumToString(value, key, NFTMeta, locale);
-          });
+          if (item.length !== 0) {
+            item.forEach((value: string, index) => {
+              (newObjectItem[key] as string[])[index] = convertEnumToString(value, key, NFTMeta, locale);
+            });
+          } else delete newObjectItem[key];
         } else {
           newObjectItem[key] = convertEnumToString(objectItem[key], key, NFTMeta, locale);
         }

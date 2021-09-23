@@ -39,6 +39,10 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
     setShowTransferForm(false);
   }, []);
 
+  const getVideoUrl = useCallback(() => {
+    return tokenUrl.replace('image.jpg', 'video.mp4');
+  }, [tokenUrl]);
+
   return (
     <div className='token-details'>
       <Breadcrumbs
@@ -60,6 +64,11 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
                 className='token-image-big'
                 src={tokenUrl}
               />
+            )}
+            {attributes && attributes.profile === 'Black profiles' && (
+              <a href={getVideoUrl()}
+                rel='noreferrer'
+                target='_blank'>Watch the video</a>
             )}
           </div>
           <div className='token-info--row--attributes'>
