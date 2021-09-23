@@ -5,6 +5,7 @@ import './styles.scss';
 
 import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 
+import { ApolloClient, ApolloProvider, gql, InMemoryCache } from '@apollo/client';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import equal from 'deep-equal';
@@ -35,6 +36,32 @@ interface NftWalletProps {
   setCollections: (collections: (prevCollections: NftCollectionInterface[]) => (NftCollectionInterface[])) => void;
 }
 
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  headers: {
+    'content-type': 'application/json',
+    'x-hasura-admin-secret': 'qwerty123'
+  },
+  uri: 'https://dev-api-explorer.unique.network/v1/graphql'
+});
+
+console.log('ApolloClient', client);
+
+void client
+  .query({
+    query: gql`
+      query getEraSlash {
+        nominator_era_slash {
+          amount
+          era_index
+          stash_id
+          timestamp
+        }
+      }
+    `
+  })
+  .then((result) => console.log('ApolloClient graphQl result', result));
+
 const defaultFilters = {
   collectionIds: [],
   sort: 'desc(creationDate)'
@@ -58,7 +85,7 @@ function NftWallet ({ account, addCollection, collections, openPanel, setCollect
     setFilters(defaultFilters);
     sessionStorage.removeItem('filters');
     setOpenPanel && setOpenPanel('tokens');
-  }, []);
+  }, [setOpenPanel]);
 
   const onCollectionCheck = useCallback((id: string) => {
     let newIds: string[] = [];
@@ -103,8 +130,9 @@ function NftWallet ({ account, addCollection, collections, openPanel, setCollect
   }, []);
 
   return (
-    <div className={`nft-wallet ${openPanel || ''}`}>
-      {/* {(collections.length === 0) && (
+    <ApolloProvider client={client}>
+      <div className={`nft-wallet ${openPanel || ''}`}>
+        {/* {(collections.length === 0) && (
           <div className='market-pallet empty'>
             <img
               alt='no tokens'
@@ -113,85 +141,86 @@ function NftWallet ({ account, addCollection, collections, openPanel, setCollect
             <p className='no-tokens-text'>You have no tokens</p>
           </div>
         )} */}
-      <div className='nft-wallet--row'>
-        <CollectionFilter
-          clearCheckedValues={clearCheckedValues}
-          collections={collections}
-          filterCurrent={onCollectionCheck}
-          isShowCollection={showCollectionsFilter}
-          selectedCollections={selectedCollections}
-          setIsShowCollection={toggleCollectionsFilter}
-        />
-        <div className='collection-list'>
-          <div className='unique-card'>
-            <TokensSearch
-              account={account}
-              addCollection={addCollection}
-              collections={collections}
-            />
-          </div>
-          <div className='unique-card tokens-list'>
-            { collections?.length > 0 && collections.map((collection: NftCollectionInterface) => (
-              <NftTokenCard
+        <div className='nft-wallet--row'>
+          <CollectionFilter
+            clearCheckedValues={clearCheckedValues}
+            collections={collections}
+            filterCurrent={onCollectionCheck}
+            isShowCollection={showCollectionsFilter}
+            selectedCollections={selectedCollections}
+            setIsShowCollection={toggleCollectionsFilter}
+          />
+          <div className='collection-list'>
+            <div className='unique-card'>
+              <TokensSearch
                 account={account}
-                collectionId={collection.id}
-                key={collection.id}
-                openDetailedInformationModal={openDetailedInformationModal}
-                token={{ tokenId: '1' }}
+                addCollection={addCollection}
+                collections={collections}
               />
-            ))}
+            </div>
+            <div className='unique-card tokens-list'>
+              { collections?.length > 0 && collections.map((collection: NftCollectionInterface) => (
+                <NftTokenCard
+                  account={account}
+                  collectionId={collection.id}
+                  key={collection.id}
+                  openDetailedInformationModal={openDetailedInformationModal}
+                  token={{ tokenId: '1' }}
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      { openPanel === 'filters' && (
-        <WalletFilters
-          clearCheckedValues={clearCheckedValues}
-          collections={collections}
-          filterCurrent={onCollectionCheck}
-          isShowCollection={showCollectionsFilter}
-          selectedCollections={selectedCollections}
-          setIsShowCollection={toggleCollectionsFilter}
-        />
-      )}
-      { openPanel === 'sort' && (
-        <WalletSort
-          filters={filters}
-          setFilters={setFilters}
-        />
-      )}
-      <div className='nft-wallet--footer'>
-        { openPanel === 'tokens' && (
-          <>
+        { openPanel === 'filters' && (
+          <WalletFilters
+            clearCheckedValues={clearCheckedValues}
+            collections={collections}
+            filterCurrent={onCollectionCheck}
+            isShowCollection={showCollectionsFilter}
+            selectedCollections={selectedCollections}
+            setIsShowCollection={toggleCollectionsFilter}
+          />
+        )}
+        { openPanel === 'sort' && (
+          <WalletSort
+            filters={filters}
+            setFilters={setFilters}
+          />
+        )}
+        <div className='nft-wallet--footer'>
+          { openPanel === 'tokens' && (
+            <>
+              <Button
+                className='footer-button'
+                fluid
+                onClick={setOpenPanel && setOpenPanel.bind(null, 'filters')}
+                primary
+              >
+                Filters and sort
+              </Button>
+            </>
+          )}
+          { (openPanel === 'filters' || openPanel === 'sort') && (
             <Button
               className='footer-button'
               fluid
-              onClick={setOpenPanel && setOpenPanel.bind(null, 'filters')}
-              primary
+              onClick={setOpenPanel && setOpenPanel.bind(null, 'tokens')}
             >
-              Filters and sort
+              SHOW
             </Button>
-          </>
-        )}
-        { (openPanel === 'filters' || openPanel === 'sort') && (
-          <Button
-            className='footer-button'
-            fluid
-            onClick={setOpenPanel && setOpenPanel.bind(null, 'tokens')}
-          >
-            SHOW
-          </Button>
-        )}
-        { openPanel === 'filters' && (
-          <Button
-            className='footer-button clear'
-            fluid
-            onClick={clearAllFilters}
-          >
-            Clear all
-          </Button>
-        )}
+          )}
+          { openPanel === 'filters' && (
+            <Button
+              className='footer-button clear'
+              fluid
+              onClick={clearAllFilters}
+            >
+              Clear all
+            </Button>
+          )}
+        </div>
       </div>
-    </div>
+    </ApolloProvider>
   );
 }
 
