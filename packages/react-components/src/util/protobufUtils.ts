@@ -101,6 +101,7 @@ export function deserializeNft (onChainSchema: ProtobufAttributeType, buffer: Ui
 
     // Obtain the message type
     if (root?.nested?.onChainMetaData) {
+      NFTMeta = root.lookupType('onChainMetaData.NFTMeta');
     } else if (root?.nested?.onchainmetadata) {
       NFTMeta = root.lookupType('onchainmetadata.NFTMeta');
     }
