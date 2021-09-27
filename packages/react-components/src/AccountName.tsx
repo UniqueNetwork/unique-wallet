@@ -177,7 +177,6 @@ export default React.memo(styled(AccountName)`
 
   &.withSidebar:hover {
     border-bottom-color: #333;
-    cursor: help !important;
   }
 
   .via-identity {

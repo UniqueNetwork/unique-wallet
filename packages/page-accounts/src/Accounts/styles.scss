@@ -16,8 +16,6 @@
       }
     }
 
-
-
     .accounts-table {
 
       &--header {
@@ -39,6 +37,12 @@
         span {
           color: var(--input-placeholder-search-color);
           font-family: var(--font-roboto);
+
+          &:first-child {
+            img{
+              cursor: pointer;
+            }
+          }
 
           &:last-child {
             margin-right: 37px;
@@ -103,6 +107,14 @@
   }
 }
 
+.ui.center.popup{
+  span{
+    .close-btn{
+      display: none;
+    }
+  }
+}
+
 @media (max-width: 1023px) {
 
   .page-accounts--card--header {
@@ -133,7 +145,6 @@
 }
 
 @media (max-width: 767px) {
-
   .account-header {
      margin: 16px 24px;
   }
@@ -146,6 +157,37 @@
     .accounts-filter {
       margin-left: 0;
       margin-top: 32px;
+    }
+  }
+  .accounts-table--header{
+    background: transparent !important;
+
+    span {
+      &:last-child {
+        display: none;
+      }
+    }
+  }
+
+  .ui.center.popup{
+    width: 85%;
+    background-color: var(--white-color) !important;
+    color: var(--title-color);
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%,-50%) !important;
+
+    span{
+     .close-btn{
+       display: flex;
+       justify-content: flex-end;
+       width: 100%;
+       cursor: pointer;
+     }
+    }
+
+    &:before{
+      display: none;
     }
   }
 }

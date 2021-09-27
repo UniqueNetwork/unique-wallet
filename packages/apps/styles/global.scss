@@ -24,6 +24,12 @@ body {
 .ui.popup {
   background: var(--bg-page) !important;
 
+  a{
+    color: unset;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
   &:before,
   &:after {
     background: var(--bg-page) !important;
