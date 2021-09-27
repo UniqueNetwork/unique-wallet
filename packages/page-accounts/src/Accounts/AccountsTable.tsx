@@ -4,14 +4,13 @@
 import type { KeyringAddress } from '@polkadot/ui-keyring/types';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 
 import { Modal } from '@polkadot/react-components';
+import HelpTooltip from '@polkadot/react-components/HelpTooltip';
 import { useToggle } from '@polkadot/react-hooks';
 
 import { SortedAccount } from '../types';
 import AccountTableItem from './AccountTableItem';
-import question from './question.svg';
 
 interface Props {
   accounts: SortedAccount[] | undefined;
@@ -51,17 +50,10 @@ function AccountTable ({ accounts, setAccount }: Props): React.ReactElement<Prop
       <div className='accounts-table--header'>
         <span className='with-tooltip'>
           Accounts
-          <Popup
-            className='help'
+          <HelpTooltip
+            className={'help'}
             content={content()}
-            on={'click'}
-            position={'right center'}
-            trigger={<img
-              alt='question'
-              onClick={setIsModalOpen}
-              src={question as string}
-              title='help'
-            />}
+            onClick={setIsModalOpen}
           />
         </span>
         <span>
