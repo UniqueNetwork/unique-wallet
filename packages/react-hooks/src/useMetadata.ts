@@ -55,7 +55,7 @@ export const useMetadata = (): UseMetadataInterface => {
       return urlString.replace('{id}', tokenId);
     }
 
-    return '';
+    return urlString;
   }, []);
 
   // uses for token image path

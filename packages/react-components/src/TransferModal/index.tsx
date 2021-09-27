@@ -20,7 +20,7 @@ import closeIcon from './closeIconBlack.svg';
 interface Props {
   account?: string;
   collection: NftCollectionInterface;
-  closeModal: () => void;
+  closeModal: (isOpen: null) => void;
   reFungibleBalance: number;
   tokenId: string;
   updateTokens: (collectionId: string) => void;
@@ -37,15 +37,19 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
   const [isError, setIsError] = useState<boolean>(false);
   const decimalPoints = collection?.DecimalPoints instanceof BN ? collection?.DecimalPoints.toNumber() : 1;
 
+  const onCloseModal = useCallback(() => {
+    closeModal(null);
+  }, [closeModal]);
+
   const transferToken = useCallback(() => {
     queueExtrinsic({
       accountId: account && account.toString(),
       extrinsic: api.tx.nft.transfer(recipient, collection.id, tokenId, (tokenPart * Math.pow(10, decimalPoints))),
       isUnsigned: false,
-      txStartCb: () => { closeModal(); },
+      txStartCb: () => onCloseModal,
       txSuccessCb: () => { updateTokens(collection.id); }
     });
-  }, [account, api, closeModal, collection, decimalPoints, recipient, tokenId, tokenPart, updateTokens, queueExtrinsic]);
+  }, [account, api, onCloseModal, collection, decimalPoints, recipient, tokenId, tokenPart, updateTokens, queueExtrinsic]);
 
   const setRecipientAddress = useCallback((value: string) => {
     try {
@@ -93,7 +97,7 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
   return (
     <Modal
       className='unique-modal'
-      onClose={closeModal}
+      onClose={onCloseModal}
       open
       size='tiny'
     >
@@ -101,7 +105,7 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
         <h2>Transfer NFT Token</h2>
         <img
           alt='Close modal'
-          onClick={closeModal}
+          onClick={onCloseModal}
           src={closeIcon as string}
         />
       </Modal.Header>

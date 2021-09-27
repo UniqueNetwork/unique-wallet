@@ -5,7 +5,7 @@ import './styles.scss';
 
 import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useHistory } from 'react-router';
 import Item from 'semantic-ui-react/dist/commonjs/views/Item';
 
@@ -14,7 +14,6 @@ import pencil from '@polkadot/react-components/ManageCollection/pencil.svg';
 import transfer from '@polkadot/react-components/ManageCollection/transfer.svg';
 import Tooltip from '@polkadot/react-components/Tooltip';
 import { useSchema } from '@polkadot/react-hooks';
-import { HoldType } from '@polkadot/react-hooks/useCollections';
 
 const { canEditToken } = envConfig;
 
@@ -22,15 +21,13 @@ interface Props {
   account: string;
   canTransferTokens: boolean;
   collection: NftCollectionInterface;
-  onHold: HoldType[];
   openTransferModal: (collection: NftCollectionInterface, tokenId: string, balance: number) => void;
   token: string;
-  tokensSelling: string[];
 }
 
-function NftTokenCard ({ account, canTransferTokens, collection, onHold, openTransferModal, token, tokensSelling }: Props): React.ReactElement<Props> {
+function NftTokenCard ({ account, canTransferTokens, collection, openTransferModal, token }: Props): React.ReactElement<Props> {
   const { attributes, reFungibleBalance, tokenUrl } = useSchema(account, collection.id, token);
-  const [tokenState, setTokenState] = useState<'none' | 'selling' | 'onHold'>('none');
+  const [tokenState] = useState<'none'>('none');
   const history = useHistory();
 
   const openDetailedInformationModal = useCallback((collectionId: string | number, tokenId: string) => {
@@ -58,22 +55,6 @@ function NftTokenCard ({ account, canTransferTokens, collection, onHold, openTra
 
     return '';
   }, [attributes]);
-
-  const updateTokenState = useCallback(() => {
-    let tState: 'none' | 'selling' | 'onHold' = 'none';
-
-    if (tokensSelling.indexOf(token) !== -1) {
-      tState = 'selling';
-    } else if (onHold.find((item) => item.tokenId === token)) {
-      tState = 'onHold';
-    }
-
-    setTokenState(tState);
-  }, [onHold, token, tokensSelling]);
-
-  useEffect(() => {
-    updateTokenState();
-  }, [updateTokenState]);
 
   if (!reFungibleBalance && collection?.Mode?.reFungible) {
     return <></>;
@@ -153,16 +134,6 @@ function NftTokenCard ({ account, canTransferTokens, collection, onHold, openTra
               trigger={'Transfer nft'}
             />
           </>
-        )}
-        { tokenState === 'selling' && (
-          <span className='token-state'>
-            Selling
-          </span>
-        )}
-        { tokenState === 'onHold' && (
-          <span className='token-state'>
-            On hold
-          </span>
         )}
       </div>
     </div>

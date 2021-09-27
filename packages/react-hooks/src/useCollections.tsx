@@ -8,10 +8,16 @@ import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
 import BN from 'bn.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { Filters } from '@polkadot/app-nft-market/containers/NftMarket';
 import envConfig from '@polkadot/apps-config/envConfig';
 import { useApi, useCollection, useFetch } from '@polkadot/react-hooks';
 import { base64Decode, encodeAddress } from '@polkadot/util-crypto';
+
+export interface Filters {
+  collectionIds: string[];
+  sort: string;
+  traitsCount: string[];
+  [key: string]: string | string[] | number;
+}
 
 const { canAddCollections, uniqueApi, uniqueCollectionIds } = envConfig;
 
@@ -74,16 +80,6 @@ export type CollectionWithTokensCount = { info: NftCollectionInterface, tokenCou
 
 export function useCollections () {
   const { api } = useApi();
-  const { fetchData } = useFetch();
-  const [error, setError] = useState<ErrorType>();
-  const [offers, setOffers] = useState<{ [key: string]: OfferType }>({});
-  const [myHold, setMyHold] = useState<{ [key: string]: HoldType[] }>({});
-  const [offersLoading, setOffersLoading] = useState<boolean>(false);
-  const [holdLoading, setHoldLoading] = useState<boolean>(false);
-  const [offersCount, setOffersCount] = useState<number>();
-  const [trades, setTrades] = useState<TradeType[]>();
-  const [tradesLoading, setTradesLoading] = useState<boolean>(false);
-  const [myTrades, setMyTrades] = useState<TradeType[]>();
   const cleanup = useRef<boolean>(false);
   const { getDetailedCollectionInfo } = useCollection();
 
@@ -100,173 +96,6 @@ export function useCollections () {
 
     return [];
   }, [api]);
-
-  /**
-   * Return the list of token sale offers
-   */
-  const getOffers = useCallback((page: number, pageSize: number, filters?: Filters) => {
-    try {
-      let url = `${uniqueApi}/offers?page=${page}&pageSize=${pageSize}`;
-
-      // reset offers before loading first page
-      if (page === 1) {
-        setOffers({});
-      }
-
-      if (filters) {
-        Object.keys(filters).forEach((filterKey: string) => {
-          const currentFilter: string | string[] | number = filters[filterKey];
-
-          if (Array.isArray(currentFilter)) {
-            if (filterKey === 'collectionIds') {
-              if (!currentFilter?.length) {
-                url = `${url}${envConfig.uniqueCollectionIds.map((item: string) => `&collectionId=${item}`).join('')}`;
-              } else {
-                url = `${url}${currentFilter.map((item: string) => `&collectionId=${item}`).join('')}`;
-              }
-            } else if (filterKey === 'traitsCount') {
-              url = `${url}${currentFilter.map((item: string) => `&traitsCount=${item}`).join('')}`;
-            }
-          } else {
-            url += `&${filterKey}=${currentFilter}`;
-          }
-        });
-      }
-
-      fetchData<OffersResponseType>(url).subscribe((result: OffersResponseType | ErrorType) => {
-        if (cleanup.current) {
-          setOffersLoading(false);
-
-          return;
-        }
-
-        if ('error' in result) {
-          setError(result);
-        } else {
-          if (result) {
-            setOffersCount(result.itemsCount);
-
-            if (result.itemsCount === 0) {
-              setOffers({});
-            } else if (result.items.length) {
-              setOffers((prevState: {[key: string]: OfferType}) => {
-                const newState = { ...prevState };
-
-                result.items.forEach((offer: OfferType) => {
-                  if (!newState[`${offer.collectionId}-${offer.tokenId}`]) {
-                    newState[`${offer.collectionId}-${offer.tokenId}`] = { ...offer, seller: encodeAddress(base64Decode(offer.seller)) };
-                  }
-                });
-
-                return newState;
-              });
-            }
-          }
-        }
-
-        setOffersLoading(false);
-      });
-    } catch (e) {
-      console.log('getOffers error', e);
-      setOffersLoading(false);
-    }
-  }, [fetchData]);
-
-  /**
-   * Return the list of token were hold on the escrow
-   */
-  const getHoldByMe = useCallback((account: string, page: number, pageSize: number, collectionIds?: string[]) => {
-    try {
-      let url = `${uniqueApi}/OnHold/${account}?page=${page}&pageSize=${pageSize}`;
-
-      if (!canAddCollections && collectionIds && collectionIds.length) {
-        url = `${url}${collectionIds.map((item: string) => `&collectionId=${item}`).join('')}`;
-      }
-
-      setHoldLoading(true);
-      fetchData<HoldResponseType>(url).subscribe((result: HoldResponseType | ErrorType) => {
-        if (cleanup.current) {
-          setHoldLoading(false);
-
-          return;
-        }
-
-        if ('error' in result) {
-          setError(result);
-          setMyHold({});
-        } else {
-          if (result?.items.length) {
-            const newState: { [key: string]: HoldType[] } = {};
-
-            result.items.forEach((hold: HoldType) => {
-              if (!newState[hold.collectionId]) {
-                newState[hold.collectionId] = [];
-              }
-
-              if (!newState[hold.collectionId].find((holdItem) => holdItem.tokenId === hold.tokenId)) {
-                newState[hold.collectionId].push(hold);
-              }
-            });
-
-            setMyHold(newState);
-          } else {
-            setMyHold({});
-          }
-        }
-
-        setHoldLoading(false);
-      });
-    } catch (e) {
-      console.log('getOffers error', e);
-      setHoldLoading(false);
-    }
-  }, [fetchData]);
-
-  /**
-   * Return the list of token trades
-   */
-  const getTrades = useCallback(({ account,
-    collectionIds,
-    page,
-    pageSize }: { account?: string, collectionIds?: string[], page: number, pageSize: number }) => {
-    try {
-      let url = `${uniqueApi}/trades`;
-
-      if (account && account.length) {
-        url = `${url}/${account}`;
-      }
-
-      url = `${url}?page=${page}&pageSize=${pageSize}`;
-
-      if (!canAddCollections && collectionIds && collectionIds.length) {
-        url = `${url}${collectionIds.map((item: string) => `&collectionId=${item}`).join('')}`;
-      }
-
-      setTradesLoading(true);
-      fetchData<TradesResponseType>(url).subscribe((result: TradesResponseType | ErrorType) => {
-        if (cleanup.current) {
-          setTradesLoading(false);
-
-          return;
-        }
-
-        if ('error' in result) {
-          setError(result);
-        } else {
-          if (!account || !account.length) {
-            setTrades(result.items);
-          } else {
-            setMyTrades(result.items);
-          }
-        }
-
-        setTradesLoading(false);
-      });
-    } catch (e) {
-      console.log('getTrades error', e);
-      setTradesLoading(false);
-    }
-  }, [fetchData]);
 
   const presetTokensCollections = useCallback(async (): Promise<NftCollectionInterface[]> => {
     if (!api) {
@@ -357,22 +186,10 @@ export function useCollections () {
   }, []);
 
   return {
-    error,
     getCollectionWithTokenCount,
     getDetailedCollectionInfo,
-    getHoldByMe,
-    getOffers,
     getTokensOfCollection,
-    getTrades,
-    holdLoading,
-    myHold,
-    myTrades,
-    offers,
-    offersCount,
-    offersLoading,
     presetCollections,
-    presetTokensCollections,
-    trades,
-    tradesLoading
+    presetTokensCollections
   };
 }
