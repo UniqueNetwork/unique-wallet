@@ -19,18 +19,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="useGraphQl hook">
+    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="NFTPAR-794 - token url without token id fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.yarn/install-state.gz" beforeDir="false" afterPath="$PROJECT_DIR$/.yarn/install-state.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/apps/webpack.serve.cjs" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/webpack.serve.cjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftCollectionCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftCollectionCard/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftTokenCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftTokenCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/.env.defaults" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/.env.defaults" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/containers/NftWallet/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/containers/NftWallet/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/react-components/src/NftDetails/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/react-components/src/TransferModal/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/TransferModal/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useCollections.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useCollections.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useMetadata.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useMetadata.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useMyTokens.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useMyTokens.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +33,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="v1.0.1" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -123,7 +116,14 @@
       <option name="project" value="LOCAL" />
       <updated>1630483938814</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="NFTPAR-794 - token url without token id fix">
+      <created>1632743240331</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1632743240331</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,7 +178,8 @@
     <MESSAGE value="yarn plugins" />
     <MESSAGE value="resolve conflicts" />
     <MESSAGE value="remove market actions from token page" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove market actions from token page" />
+    <MESSAGE value="NFTPAR-794 - token url without token id fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="NFTPAR-794 - token url without token id fix" />
   </component>
   <component name="WindowStateProjectService">
     <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1632742582360">
@@ -189,10 +190,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1630483189024" />
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1630484356618">
+    <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1632743241389">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630484356618" />
+    <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1632743241389" />
     <state x="679" y="254" key="VcsDiffUtil.ChangesDialog" timestamp="1630476773165">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -205,9 +206,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630476616213" />
-    <state x="667" y="255" width="585" height="530" key="find.popup" timestamp="1632742823588">
+    <state x="667" y="255" width="585" height="530" key="find.popup" timestamp="1632743461546">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="255" width="585" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1632742823588" />
+    <state x="667" y="255" width="585" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1632743461546" />
   </component>
 </project>

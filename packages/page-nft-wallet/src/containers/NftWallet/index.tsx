@@ -95,16 +95,12 @@ function NftWallet ({ account, addCollection, collections, openPanel, removeColl
           My tokens
         </Header>
       )}
-      { canAddCollections && (
-        <>
-          <CollectionSearch
-            account={account}
-            addCollection={addCollection}
-            collections={collections}
-          />
-          <br />
-        </>
-      )}
+      <CollectionSearch
+        account={account}
+        addCollection={addCollection}
+        collections={collections}
+      />
+      <br />
       <Header as='h3'>
         My collections
       </Header>
