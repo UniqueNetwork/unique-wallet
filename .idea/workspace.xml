@@ -19,9 +19,18 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="remove market actions from token page">
+    <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="useGraphQl hook">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.yarn/install-state.gz" beforeDir="false" afterPath="$PROJECT_DIR$/.yarn/install-state.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/webpack.serve.cjs" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/webpack.serve.cjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftCollectionCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftCollectionCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftTokenCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/components/NftTokenCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/containers/NftWallet/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/containers/NftWallet/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/NftDetails/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/NftDetails/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/TransferModal/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/TransferModal/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useCollections.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useCollections.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useMetadata.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useMetadata.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useMyTokens.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useMyTokens.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,10 +181,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="remove market actions from token page" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1630484482902">
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1632742582360">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630484482902" />
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1632742582360" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630483189024">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -188,13 +197,17 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="679" y="254" key="VcsDiffUtil.ChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630476773165" />
+    <state x="-2" y="67" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1632741989016">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-2" y="67" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1632741989016" />
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1630476616213">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630476616213" />
-    <state x="667" y="255" width="585" height="530" key="find.popup" timestamp="1630480089809">
+    <state x="667" y="255" width="585" height="530" key="find.popup" timestamp="1632742823588">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="255" width="585" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1630480089809" />
+    <state x="667" y="255" width="585" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1632742823588" />
   </component>
 </project>

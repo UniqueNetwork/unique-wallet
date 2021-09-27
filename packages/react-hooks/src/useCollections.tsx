@@ -8,10 +8,16 @@ import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
 import BN from 'bn.js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { Filters } from '@polkadot/app-nft-market/containers/NftMarket';
 import envConfig from '@polkadot/apps-config/envConfig';
 import { useApi, useCollection, useFetch } from '@polkadot/react-hooks';
 import { base64Decode, encodeAddress } from '@polkadot/util-crypto';
+
+export interface Filters {
+  collectionIds: string[];
+  sort: string;
+  traitsCount: string[];
+  [key: string]: string | string[] | number;
+}
 
 const { canAddCollections, uniqueApi, uniqueCollectionIds } = envConfig;
 
@@ -106,7 +112,7 @@ export function useCollections () {
    */
   const getOffers = useCallback((page: number, pageSize: number, filters?: Filters) => {
     try {
-      let url = `${uniqueApi}/offers?page=${page}&pageSize=${pageSize}`;
+      let url = `/offers?page=${page}&pageSize=${pageSize}`;
 
       // reset offers before loading first page
       if (page === 1) {
