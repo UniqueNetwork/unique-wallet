@@ -23,6 +23,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/apps/.env.defaults" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/.env.defaults" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/containers/NftWallet/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/containers/NftWallet/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useCollections.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useCollections.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -49,6 +50,9 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../marketplace" />
+    <property name="node.js.detected.package.stylelint" value="true" />
+    <property name="node.js.path.for.package.stylelint" value="project" />
+    <property name="node.js.selected.package.stylelint" value="C:\Users\kpozd\WebstormProjects\unique-wallet\node_modules\stylelint" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
   </component>
@@ -182,10 +186,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="NFTPAR-794 - token url without token id fix" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1632742582360">
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1632746569122">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1632742582360" />
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1632746569122" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630483189024">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -206,9 +210,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630476616213" />
-    <state x="667" y="255" width="585" height="530" key="find.popup" timestamp="1632743461546">
+    <state x="667" y="255" width="585" height="530" key="find.popup" timestamp="1632746097520">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="255" width="585" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1632743461546" />
+    <state x="667" y="255" width="585" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1632746097520" />
   </component>
 </project>
