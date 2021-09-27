@@ -107,6 +107,14 @@
   }
 }
 
+.ui.center.popup{
+  span{
+    .close-btn{
+      display: none;
+    }
+  }
+}
+
 @media (max-width: 1023px) {
 
   .page-accounts--card--header {
@@ -137,7 +145,6 @@
 }
 
 @media (max-width: 767px) {
-
   .account-header {
      margin: 16px 24px;
   }
@@ -163,38 +170,24 @@
   }
 
   .ui.center.popup{
-    display: none !important;
-  }
-}
-
-.ui.modal.mobile-modal-help-text{
-  top: 30%;
-
-  .header{
-    display: block;
-    text-align: right;
-    line-height: unset !important;
-    padding: 11px 19px 0 !important;
-
-    .close-btn{
-      margin: 0 !important;
-    }
-  }
-
-  .content{
-  padding: 3px 16px 32px !important;
+    width: 85%;
+    background-color: var(--white-color) !important;
+    color: var(--title-color);
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%,-50%) !important;
 
     span{
-      font-family: var(--font-roboto);
+     .close-btn{
+       display: flex;
+       justify-content: flex-end;
+       width: 100%;
+       cursor: pointer;
+     }
+    }
 
-      a{
-        color: var(--title-color);
-        text-decoration: underline;
-      }
+    &:before{
+      display: none;
     }
   }
 }
-
-
-
-

@@ -3,10 +3,10 @@
 
 import type { KeyringAddress } from '@polkadot/ui-keyring/types';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 
-import { Modal } from '@polkadot/react-components';
 import HelpTooltip from '@polkadot/react-components/HelpTooltip';
+import closeIcon from '@polkadot/react-components/TransferModal/closeIconBlack.svg';
 import { useToggle } from '@polkadot/react-hooks';
 
 import { SortedAccount } from '../types';
@@ -18,22 +18,21 @@ interface Props {
 }
 
 function AccountTable ({ accounts, setAccount }: Props): React.ReactElement<Props> | null {
-  const mqList = window.matchMedia('(max-width: 767px)');
-
-  const [isOpenMobileModal, setIsOpenMobileModal] = useState(mqList.matches);
-  const [isModalOpen, setIsModalOpen] = useToggle(false);
-
-  useEffect(() => {
-    const onChange = () => setIsOpenMobileModal(mqList.matches);
-
-    mqList.addEventListener('change', onChange);
-
-    return () => mqList.removeEventListener('change', onChange);
-  }, [mqList]);
+  const [isModalOpen, setIsModalOpen] = useToggle();
+  const popupContentRef = useRef<HTMLElement>(null);
 
   const content = useCallback(() => {
     return (
-      <span>
+      <span ref={popupContentRef}>
+        <div
+          className='close-btn'
+        >
+          <img
+            alt='X'
+            onClick={setIsModalOpen}
+            src={closeIcon as string}
+          />
+        </div>
         Substrate account addresses (Kusama, Quartz Polkadot, Unique, etc.) may look different, but they can be converted between each other because they use the same public key. You can see all transformations of any address on
         <a
           href='https://polkadot.subscan.io/tools/ss58_transform'
@@ -43,18 +42,20 @@ function AccountTable ({ accounts, setAccount }: Props): React.ReactElement<Prop
         </a>
       </span>
     );
-  }, []);
+  }, [setIsModalOpen]);
 
   return (
     <div className='accounts-table'>
       <div className='accounts-table--header'>
         <span className='with-tooltip'>
           Accounts
-          <HelpTooltip
+          {<HelpTooltip
             className={'help'}
             content={content()}
-            onClick={setIsModalOpen}
-          />
+            isModalOpen={isModalOpen}
+            popupContentRef={popupContentRef}
+            setIsModalOpen={setIsModalOpen}
+          />}
         </span>
         <span>
           Balances
@@ -69,18 +70,6 @@ function AccountTable ({ accounts, setAccount }: Props): React.ReactElement<Prop
           />
         ))}
       </div>
-      {isModalOpen && isOpenMobileModal && (
-        <Modal
-          className='mobile-modal-help-text'
-          header=' '
-          onCancel={setIsModalOpen}
-          size='small'
-        >
-          <Modal.Content>
-            {content()}
-          </Modal.Content>
-        </Modal>
-      )}
     </div>
   );
 }
