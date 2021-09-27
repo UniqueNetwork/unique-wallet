@@ -3,6 +3,7 @@
 
 import './styles.scss';
 
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 // external imports
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router';
@@ -17,6 +18,17 @@ import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 
 import NetworkWallet from './containers/NetworkWallet';
 import NftWallet from './containers/NftWallet';
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  headers: {
+    'content-type': 'application/json',
+    'x-hasura-admin-secret': 'qwerty123'
+  },
+  uri: 'https://dev-api-explorer.unique.network/v1/graphql'
+});
+
+console.log('ApolloClient', client);
 
 function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): React.ReactElement<Props> {
   const location = useLocation();
@@ -105,14 +117,16 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
           />
         </Route>
         <Route path={`${basePath}/nft`}>
-          <NftWallet
-            account={account}
-            addCollection={addCollection}
-            collections={collections}
-            openPanel={openPanel}
-            setCollections={setCollections}
-            setOpenPanel={setOpenPanel}
-          />
+          <ApolloProvider client={client}>
+            <NftWallet
+              account={account}
+              addCollection={addCollection}
+              collections={collections}
+              openPanel={openPanel}
+              setCollections={setCollections}
+              setOpenPanel={setOpenPanel}
+            />
+          </ApolloProvider>
         </Route>
         <Route path={`${basePath}/tokens`}>
           <NetworkWallet

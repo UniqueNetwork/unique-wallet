@@ -24,6 +24,7 @@ export { useFormField } from './useFormField';
 export { useDebounce } from './useDebounce';
 export { useEventTrigger } from './useEventTrigger';
 export { useFavorites } from './useFavorites';
+export { useGraphQl } from './useGraphQl';
 export { useIncrement } from './useIncrement';
 export { calcInflation, useInflation } from './useInflation';
 export { useIpfs } from './useIpfs';
