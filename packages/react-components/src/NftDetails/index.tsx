@@ -65,11 +65,6 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
                 src={tokenUrl}
               />
             )}
-            {attributes && attributes.profile === 'Black profiles' && (
-              <a href={getVideoUrl()}
-                rel='noreferrer'
-                target='_blank'>Watch the video</a>
-            )}
           </div>
           <div className='token-info--row--attributes'>
             <div className='token-info--row--attributes--block'>
@@ -168,6 +163,18 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
                           <p key={attrKey}><strong>{attrKey}:</strong> {(attributes[attrKey] as string[]).join(', ')}</p>
                         );
                       })}
+                      {attributes && attributes.profile === 'Black profiles' &&
+                      <p key='VideoUrl'>
+                        <strong>Video Url:</strong>
+                        <a
+                          href={getVideoUrl()}
+                          rel='noreferrer'
+                          target='_blank'
+                        >
+                          {getVideoUrl()}
+                        </a>
+                      </p>
+                      }
                     </div>
                   )}
                 </div>

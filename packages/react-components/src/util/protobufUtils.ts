@@ -113,7 +113,7 @@ export function deserializeNft (onChainSchema: ProtobufAttributeType, buffer: Ui
     });
     const newObjectItem = { ...objectItem };
 
-    for (const key in objectItem) {
+    for (const key in newObjectItem) {
       if (NFTMeta?.fields[key]?.resolvedType?.options && Object.keys(NFTMeta?.fields[key]?.resolvedType?.options as {[key: string]: string}).length > 0) {
         if (Array.isArray(objectItem[key])) {
           const item = objectItem[key] as string[];
@@ -124,7 +124,11 @@ export function deserializeNft (onChainSchema: ProtobufAttributeType, buffer: Ui
             });
           } else delete newObjectItem[key];
         } else {
-          newObjectItem[key] = convertEnumToString(objectItem[key], key, NFTMeta, locale);
+          const currentItem: string[] = (newObjectItem[key] as string).split('_');
+
+          if (currentItem[currentItem.length - 1] !== '0') {
+            newObjectItem[key] = convertEnumToString(newObjectItem[key], key, NFTMeta, locale);
+          } else delete newObjectItem[key];
         }
       }
     }
