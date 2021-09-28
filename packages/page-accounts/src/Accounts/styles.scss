@@ -107,14 +107,6 @@
   }
 }
 
-.ui.center.popup{
-  span{
-    .close-btn{
-      display: none;
-    }
-  }
-}
-
 @media (max-width: 1023px) {
 
   .page-accounts--card--header {
@@ -146,7 +138,7 @@
 
 @media (max-width: 767px) {
   .account-header {
-     margin: 16px 24px;
+    margin: 16px 24px;
   }
 
   .page-accounts--card--header {
@@ -159,7 +151,7 @@
       margin-top: 32px;
     }
   }
-  .accounts-table--header{
+  .accounts-table--header {
     background: transparent !important;
 
     span {
@@ -169,25 +161,7 @@
     }
   }
 
-  .ui.center.popup{
-    width: 85%;
-    background-color: var(--white-color) !important;
-    color: var(--title-color);
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%,-50%) !important;
-
-    span{
-     .close-btn{
-       display: flex;
-       justify-content: flex-end;
-       width: 100%;
-       cursor: pointer;
-     }
-    }
-
-    &:before{
-      display: none;
-    }
+  .ui.bottom.left.popup{
+    margin: 5px 16px 0 0 !important;
   }
 }

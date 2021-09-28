@@ -1,7 +1,7 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 
 import question from '@polkadot/app-accounts/Accounts/question.svg';
@@ -9,38 +9,47 @@ import question from '@polkadot/app-accounts/Accounts/question.svg';
 interface Props {
   className?: string;
   content?: JSX.Element;
-  popupContentRef?: React.RefObject<HTMLElement> ;
-  setIsModalOpen?: () => void;
-  isModalOpen?: boolean;
+  defaultPosition?:
+  | 'top left'
+  | 'top right'
+  | 'bottom right'
+  | 'bottom left'
+  | 'right center'
+  | 'left center'
+  | 'top center'
+  | 'bottom center';
+  mobilePosition?:
+  | 'top left'
+  | 'top right'
+  | 'bottom right'
+  | 'bottom left'
+  | 'right center'
+  | 'left center'
+  | 'top center'
+  | 'bottom center'
 }
 
-function HelpTooltip ({ className = '', content, isModalOpen, popupContentRef, setIsModalOpen }: Props): React.ReactElement<Props> {
+function HelpTooltip ({ className = '', content, defaultPosition = 'right center', mobilePosition = 'bottom left' }: Props): React.ReactElement<Props> {
   const popupQuestionRef = useRef<HTMLImageElement>(null);
-
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if ((popupQuestionRef.current && !popupQuestionRef.current.contains(event.target as HTMLImageElement)) && (popupContentRef?.current && !popupContentRef?.current.contains(event.target as HTMLElement))) {
-      setIsModalOpen && setIsModalOpen();
-    }
-  }, [popupContentRef, setIsModalOpen]);
+  const mqList = window.matchMedia('(max-width: 767px)');
+  const [isMobile, setIsMobile] = useState<boolean>(mqList.matches);
 
   useEffect(() => {
-    document.addEventListener('click', handleClickOutside);
+    const onChange = () => setIsMobile(mqList.matches);
 
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [handleClickOutside, isModalOpen]);
+    mqList.addEventListener('change', onChange);
+
+    return () => mqList.removeEventListener('change', onChange);
+  }, [mqList]);
 
   return (
     <Popup
       className={className}
       content={content}
       on={'click'}
-      open={isModalOpen}
-      position={'right center'}
+      position={isMobile ? mobilePosition : defaultPosition }
       trigger={<img
         alt='question'
-        onClick={setIsModalOpen}
         ref={popupQuestionRef}
         src={question as string}
         title='Help'

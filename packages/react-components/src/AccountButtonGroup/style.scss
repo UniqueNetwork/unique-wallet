@@ -90,6 +90,18 @@
     }
 }
 
+.mark.warning{
+  color: var(--modal-warning-text-color);
+  background-color: var(--modal-warning-background-color);
+  font-family: var(--font-roboto);
+  line-height: 22px;
+  font-weight: 500;
+  padding: 8px 11px;
+  margin-top: 32px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
 @media (max-width: 767px) {
 
   .btn-container {

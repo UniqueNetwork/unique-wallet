@@ -589,6 +589,11 @@
       font-size: 28px;
     }
   }
+
+  .ui.popup.help {
+    opacity: 0.8;
+    max-width: 255px !important;
+  }
 }
 
 .manage-accounts {
@@ -670,7 +675,6 @@
 }
 
 .ui.popup.help {
-  width: 355px;
   background-color: var(--text-color) !important;
   color: var(--header-background);
   max-width: 355px;
@@ -678,6 +682,10 @@
   &:before {
     background-color: var(--text-color) !important;
   }
+}
+
+.ui.top.popup.help{
+  top: 10px !important;
 }
 
 .ui.popup.mobile.withdraw-popup {

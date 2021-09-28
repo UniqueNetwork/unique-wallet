@@ -6,8 +6,7 @@ import type { KeypairType } from '@polkadot/util-crypto/types';
 import React from 'react';
 
 import { AddressRow, MarkWarning, Modal, Static } from '@polkadot/react-components';
-
-import QuestionIcon from './images/question-icon.svg';
+import HelpTooltip from '@polkadot/react-components/HelpTooltip';
 
 interface Props {
   address?: string;
@@ -38,8 +37,10 @@ function CreateConfirmation ({ address, derivePath, name, pairType, seed }: Prop
           />}
           <div className='step-3-titles'>
             <p>Partial seed</p>
-            <img alt='?'
-              src={QuestionIcon as string}/>
+            <HelpTooltip
+              className='help'
+              content={<span>The seed is your key to the account. Knowing the seed allows you, or anyone else who knows the seed, to re-generate and control this account.</span>}
+            />
           </div>
           {seed && (
             <Static
@@ -49,8 +50,10 @@ function CreateConfirmation ({ address, derivePath, name, pairType, seed }: Prop
           )}
           <div className='step-3-titles'>
             <p>Derivation path</p>
-            <img alt='?'
-              src={QuestionIcon as string}/>
+            <HelpTooltip
+              className='help'
+              content={<span>Substrate supports a number of different crypto mechanisms. As such the keyring allows for the creation and management of different types of crypto.</span>}
+            />
           </div>
           <Static
             label={'keypair type'}
@@ -58,8 +61,10 @@ function CreateConfirmation ({ address, derivePath, name, pairType, seed }: Prop
           />
           <div className='step-3-titles'>
             <p>Derivation path</p>
-            <img alt='?'
-              src={QuestionIcon as string}/>
+            <HelpTooltip
+              className='help'
+              content={<span>If you would like to create and manage several accounts on the network using the same seed, you can use derivation paths.</span>}
+            />
           </div>
           <Static
             label={'derivation path'}
@@ -68,8 +73,10 @@ function CreateConfirmation ({ address, derivePath, name, pairType, seed }: Prop
         </Modal.Column>
       </Modal.Columns>
       <div className='step-3-warning'>
-        <MarkWarning content={<>{'We will provide you with a generated backup file after your account is created. Please make sure to save this file in a secure location as it is required, together with your password, to restore your account.'}</>}
-          step={3} />
+        <MarkWarning
+          content={<>{'We will provide you with a generated backup file after your account is created. Please make sure to save this file in a secure location as it is required, together with your password, to restore your account.'}</>}
+          step={3}
+        />
       </div>
     </>
   );
