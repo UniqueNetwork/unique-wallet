@@ -12,12 +12,12 @@ import styled from 'styled-components';
 import { DEV_PHRASE } from '@polkadot/keyring/defaults';
 import { getEnvironment } from '@polkadot/react-api/util';
 import { AddressRow, Button, Checkbox, CopyButton, Dropdown, Input, InputAddress, Modal, TextArea } from '@polkadot/react-components';
+import HelpTooltip from '@polkadot/react-components/HelpTooltip';
 import { useApi, useStepper } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 import { isHex, u8aToHex } from '@polkadot/util';
 import { hdLedger, hdValidatePath, keyExtractSuri, mnemonicGenerate, mnemonicValidate, randomAsU8a } from '@polkadot/util-crypto';
 
-import QuestionIcon from './images/question-icon.svg';
 import CreateConfirmation from './CreateConfirmation';
 import ExternalWarning from './ExternalWarning';
 import PasswordInput from './PasswordInput';
@@ -226,6 +226,17 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
       ? { text: 'Private Key', value: 'raw' }
       : { text: 'Raw seed', value: 'raw' }
   ));
+  const content = useCallback(() => {
+    return (
+      <span>Find out more on <a
+        href='https://wiki.polkadot.network/'
+        rel='noreferrer'
+        target='_blank'
+      >Polkadot Wiki
+      </a>
+      </span>
+    );
+  }, []);
 
   const _onChangeSeed = useCallback(
     (newSeed: string) => {
@@ -311,8 +322,12 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
                   onChange={_selectSeedType}
                   options={seedOpt.current}
                 />
-                <img alt='?'
-                  src={QuestionIcon as string}/>
+                <HelpTooltip
+                  className={'help'}
+                  content={content()}
+                  defaultPosition='top right'
+                  mobilePosition='top right'
+                />
               </div>) }
           <div className='seed-row'>
             <TextArea
@@ -476,6 +491,7 @@ export default React.memo(styled(Create)`
 
     img {
       margin-left: 16px;
+      cursor: pointer;
     }
   }
 
@@ -551,7 +567,7 @@ export default React.memo(styled(Create)`
     font-family: var(--font-roboto);
     font-size: 16px;
     color: var(--title-color);
-
+    margin-top: 32px;
 
     .ui--Checkbox {
       margin: 0.8rem 0 0 0;
@@ -589,6 +605,7 @@ export default React.memo(styled(Create)`
     }
     img{
       margin-bottom: 14.25px;
+      cursor: pointer;
     }
   }
   .step-3-texts{
@@ -601,9 +618,9 @@ export default React.memo(styled(Create)`
   }
   .step-3-warning{
     article{
-      background-color:var(--link-light-color) ;
-      margin: 0px ;
-      color: var(--link-color);
+      background-color:var(--link-light-color) !important; ;
+      margin: 0 !important; ;
+      color: var(--link-color)!important;
     }
   }
 `);

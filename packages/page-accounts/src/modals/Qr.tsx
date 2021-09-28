@@ -156,8 +156,10 @@ function QrModal ({ className = '', onClose, onStatusChange }: Props): React.Rea
           )
         }
       </Modal.Content>
-      <Modal.Actions className='footer'
-        onCancel={onClose}>
+      <Modal.Actions
+        className='footer'
+        onCancel={onClose}
+      >
         <div className='btn-container'>
           <Button
             isDisabled={!scanned || !isValid || (!isAddress && isIpfs)}
@@ -183,4 +185,10 @@ export default React.memo(styled(QrModal)`
     font-family: var(--font-roboto);
     color: var(--tabs-color);
   }
+  .btn-container{
+    margin: 0 !important;
+  }
+    .footer{
+      padding-top: 12px !important;
+    }
 `);

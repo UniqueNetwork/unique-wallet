@@ -99,14 +99,16 @@ function InputFile ({ accept, className = '', clearContent, help, isDisabled, is
       ref={dropRef}
     >
       {({ getInputProps, getRootProps }): JSX.Element => (
-        <div {...getRootProps({ className: `ui--InputFile${isError ? ' error' : ''} ${className}` })} >
+        <div {...getRootProps({ className: `ui--InputFile${isError ? ' error' : ''} ${className}` })}>
           <input {...getInputProps()} />
-          <em className='label' >
+          <em className='label'>
             {
               !file || clearContent
                 ? placeholder || <div className='selectInput'>
-                  <img alt='file'
-                    src={FileIcon as string}/><p>Click to select or drag and drop the file here</p></div>
+                  <img
+                    alt='file'
+                    src={FileIcon as string}
+                  /><p>Click to select or drag and drop the file here</p></div>
                 : placeholder || '{{name}} ({{size}} bytes)'.replace('{{name}}', file.name).replace('{{size}}', formatNumber(file.size))
             }
           </em>
@@ -138,6 +140,7 @@ export default React.memo(styled(InputFile)`
   border: 1px dashed var(--link-color);
   border-radius: 8px;
   padding: 24px 27px;
+  overflow-wrap: break-word;
 
   &.error {
     background: var(--bg-input-error);

@@ -3,11 +3,9 @@
 
 import type { KeyringAddress } from '@polkadot/ui-keyring/types';
 
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 
 import HelpTooltip from '@polkadot/react-components/HelpTooltip';
-import closeIcon from '@polkadot/react-components/TransferModal/closeIconBlack.svg';
-import { useToggle } from '@polkadot/react-hooks';
 
 import { SortedAccount } from '../types';
 import AccountTableItem from './AccountTableItem';
@@ -18,31 +16,20 @@ interface Props {
 }
 
 function AccountTable ({ accounts, setAccount }: Props): React.ReactElement<Props> | null {
-  const [isModalOpen, setIsModalOpen] = useToggle();
-  const popupContentRef = useRef<HTMLElement>(null);
-
   const content = useCallback(() => {
     return (
-      <span ref={popupContentRef}>
-        <div
-          className='close-btn'
-        >
-          <img
-            alt='X'
-            onClick={setIsModalOpen}
-            src={closeIcon as string}
-          />
-        </div>
-        Substrate account addresses (Kusama, Quartz Polkadot, Unique, etc.) may look different, but they can be converted between each other because they use the same public key. You can see all transformations of any address on
+      <span>
+        Substrate account addresses (Kusama, Quartz Polkadot, Unique, etc.) may look different, but they can be converted between each other because they use the same public key. You can see all transformations of any address on&nbsp;
         <a
           href='https://polkadot.subscan.io/tools/ss58_transform'
           rel='noreferrer'
           target='_blank'
-        > Subscan
+        >
+          Subscan
         </a>
       </span>
     );
-  }, [setIsModalOpen]);
+  }, []);
 
   return (
     <div className='accounts-table'>
@@ -52,9 +39,6 @@ function AccountTable ({ accounts, setAccount }: Props): React.ReactElement<Prop
           {<HelpTooltip
             className={'help'}
             content={content()}
-            isModalOpen={isModalOpen}
-            popupContentRef={popupContentRef}
-            setIsModalOpen={setIsModalOpen}
           />}
         </span>
         <span>
