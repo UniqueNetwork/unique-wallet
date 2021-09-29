@@ -11,7 +11,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import envConfig from '@polkadot/apps-config/envConfig';
 import { useApi, useCollection /*, useFetch */ } from '@polkadot/react-hooks';
 
-const { canAddCollections, uniqueCollectionIds } = envConfig;
+const { uniqueCollectionIds } = envConfig;
 
 export type MetadataType = {
   metadata?: string;
@@ -38,7 +38,7 @@ export function useCollections () {
     }
 
     try {
-      return await api.query.nft.addressTokens(collectionId, ownerId);
+      return (await api.query.nft.addressTokens(collectionId, ownerId)).toJSON();
     } catch (e) {
       console.log('getTokensOfCollection error', e);
     }
@@ -94,7 +94,7 @@ export function useCollections () {
     try {
       console.log('presetCollections');
 
-      const collections: Array<NftCollectionInterface> = canAddCollections ? JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[] : [];
+      const collections: Array<NftCollectionInterface> = JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
 
       if (uniqueCollectionIds && uniqueCollectionIds.length) {
         for (let i = 0; i < uniqueCollectionIds.length; i++) {

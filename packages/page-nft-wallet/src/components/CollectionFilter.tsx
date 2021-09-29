@@ -3,8 +3,10 @@
 
 import React, { memo, useCallback, useEffect, useState } from 'react';
 
-import { useDecoder, useMetadata } from '@polkadot/react-hooks';
+import { useMetadata } from '@polkadot/react-hooks';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+
+import CollectionFilterItem from './CollectionFilterItem';
 
 interface Props {
   clearCheckedValues: () => void;
@@ -17,7 +19,6 @@ interface Props {
 
 function CollectionFilter (props: Props): React.ReactElement<Props> {
   const { clearCheckedValues, collections, filterCurrent, isShowCollection, selectedCollections, setIsShowCollection } = props;
-  const { collectionName16Decoder } = useDecoder();
   const { getTokenImageUrl } = useMetadata();
   const [images, setImages] = useState<string[]>([]);
 
@@ -31,6 +32,10 @@ function CollectionFilter (props: Props): React.ReactElement<Props> {
         });
     });
   }, [collections, getTokenImageUrl]);
+
+  const onShowCollectionsClick = useCallback(() => {
+    setIsShowCollection(!isShowCollection);
+  }, [isShowCollection, setIsShowCollection]);
 
   useEffect(() => {
     void updateImageUrl();
@@ -49,38 +54,25 @@ function CollectionFilter (props: Props): React.ReactElement<Props> {
           </div>
           <div
             className={`filter-arrow-icon ${isShowCollection ? 'rotate-icon' : ''}`}
-            onClick={setIsShowCollection.bind(null, !isShowCollection)}
+            onClick={onShowCollectionsClick}
           />
         </div>
       </div>
       { isShowCollection && (
         <div className='collection-filter--body'>
           <div className='collection-list'>
-            {collections.map((collection, index) => {
-              return (
-                <div
-                  className={`collections-main ${selectedCollections.includes(String(collection.id)) ? 'collections-main-background' : ''}`}
-                  key={collection.id}
-                  onClick={filterCurrent.bind(null, collection.id)}
-                >
-                  <div className='custom-checkbox'>
-                    <div className='checkbox-input'>
-                      <input
-                        checked={selectedCollections.includes(String(collection.id))}
-                        data-current={collection.id}
-                        onChange={() => null}
-                        type='checkbox'
-                      />
-                    </div>
-                    <div className='checkbox-title'>{collectionName16Decoder(collection.Name)}</div>
-                  </div>
-                  { images.length === collections.length && images[index] !== '' && (
-                    <div className='collection-img'
-                      style={ { backgroundImage: `url(${images.length === collections.length ? images[index] : ''})` }} />
-                  )}
-                </div>
-              );
-            })}
+            {collections.map((collection, index) => (
+              <CollectionFilterItem
+                collectionId={collection.id}
+                collectionName={collection.Name}
+                collections={collections}
+                filterCurrent={filterCurrent}
+                images={images}
+                index={index}
+                key={collection.id}
+                selectedCollections={selectedCollections}
+              />
+            ))}
           </div>
         </div>
       )}

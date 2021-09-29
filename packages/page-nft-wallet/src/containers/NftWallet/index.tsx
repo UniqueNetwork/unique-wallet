@@ -8,16 +8,17 @@ import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import equal from 'deep-equal';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
+import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import NftTokenCard from '@polkadot/app-nft-wallet/components/NftTokenCard';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
-import { useCollections, useGraphQl } from '@polkadot/react-hooks';
+import { useCollections, useIsMountedRef } from '@polkadot/react-hooks';
 
 import CollectionFilter from '../../components/CollectionFilter';
-import TokensSearch from '../../components/TokensSearch';
+// import TokensSearch from '../../components/TokensSearch';
 import WalletFilters from '../../components/WalletFilters';
 import WalletSort from '../../components/WalletSort';
 
@@ -32,7 +33,7 @@ interface NftWalletProps {
   collections: NftCollectionInterface[];
   openPanel?: OpenPanelType;
   setOpenPanel?: (openPanel: OpenPanelType) => void;
-  setCollections: (collections: (prevCollections: NftCollectionInterface[]) => (NftCollectionInterface[])) => void;
+  setCollections: (collections: NftCollectionInterface[]) => void;
 }
 
 const defaultFilters = {
@@ -40,29 +41,33 @@ const defaultFilters = {
   sort: 'desc(creationDate)'
 };
 
-function NftWallet ({ account, addCollection, collections, openPanel, setCollections, setOpenPanel }: NftWalletProps): React.ReactElement {
+type MyTokensType = { collectionId: string, tokenId: string };
+
+function NftWallet ({ account, collections, openPanel, setCollections, setOpenPanel }: NftWalletProps): React.ReactElement {
   const storageFilters = JSON.parse(sessionStorage.getItem('filters') as string) as Filters;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const initialFilters = storageFilters && !equal(storageFilters, defaultFilters) ? storageFilters : defaultFilters;
   const [showCollectionsFilter, toggleCollectionsFilter] = useState<boolean>(true);
   const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
   const [filters, setFilters] = useState<Filters>(initialFilters);
-  const { presetCollections } = useCollections();
-  const cleanup = useRef<boolean>(false);
+  const [myTokens, setMyTokens] = useState<MyTokensType[]>([]);
+  const [tokensLoading, setTokensLoading] = useState<boolean>(true);
+  const [myFilteredTokens, setMyFilteredTokens] = useState<MyTokensType[]>([]);
+  const { getTokensOfCollection, presetCollections } = useCollections();
+  const mountedRef = useIsMountedRef();
   const history = useHistory();
-  const { userCollections } = useGraphQl(account);
-
-  console.log('userCollections', userCollections);
 
   const clearCheckedValues = useCallback(() => {
-    setSelectedCollections([]);
-  }, []);
+    mountedRef && setSelectedCollections([]);
+  }, [mountedRef]);
 
   const clearAllFilters = useCallback(() => {
-    setFilters(defaultFilters);
-    sessionStorage.removeItem('filters');
-    setOpenPanel && setOpenPanel('tokens');
-  }, [setOpenPanel]);
+    if (mountedRef) {
+      setFilters(defaultFilters);
+      sessionStorage.removeItem('filters');
+      setOpenPanel && setOpenPanel('tokens');
+    }
+  }, [mountedRef, setOpenPanel]);
 
   const onCollectionCheck = useCallback((id: string) => {
     let newIds: string[] = [];
@@ -73,38 +78,62 @@ function NftWallet ({ account, addCollection, collections, openPanel, setCollect
       newIds = [...selectedCollections, id];
     }
 
-    setSelectedCollections(newIds);
-  }, [selectedCollections]);
+    mountedRef && setSelectedCollections(newIds);
+  }, [mountedRef, selectedCollections]);
 
-  const addMintCollectionToList = useCallback(async () => {
+  const initializeCollections = useCallback(async () => {
     const firstCollections: NftCollectionInterface[] = await presetCollections();
 
-    if (cleanup.current) {
-      return;
-    }
+    if (firstCollections?.length) {
+      mountedRef.current && setCollections(firstCollections);
 
-    setCollections((prevCollections: NftCollectionInterface[]) => {
-      if (JSON.stringify(firstCollections) !== JSON.stringify(prevCollections)) {
-        return [...firstCollections];
-      } else {
-        return prevCollections;
+      if (account) {
+        const myTokensList: MyTokensType[] = [];
+
+        mountedRef && setTokensLoading(true);
+
+        for (let i = 0; i < firstCollections.length; i++) {
+          const tokens: number[] = (await getTokensOfCollection(firstCollections[i].id, account)) as unknown as number[];
+
+          if (tokens?.length) {
+            for (let j = 0; j < tokens.length; j++) {
+              myTokensList.push({
+                collectionId: firstCollections[i].id,
+                tokenId: tokens[j].toString()
+              });
+            }
+          }
+        }
+
+        mountedRef && setTokensLoading(false);
+        mountedRef && setMyTokens(myTokensList);
       }
-    });
-  }, [setCollections, presetCollections]);
+    }
+  }, [account, getTokensOfCollection, mountedRef, setCollections, presetCollections]);
 
   const openDetailedInformationModal = useCallback((collectionId: string, tokenId: string) => {
     history.push(`/myStuff/token-details?collectionId=${collectionId}&tokenId=${tokenId}`);
   }, [history]);
 
-  useEffect(() => {
-    void addMintCollectionToList();
-  }, [addMintCollectionToList]);
+  const setFilteredTokens = useCallback(() => {
+    if (myTokens?.length && mountedRef) {
+      if (selectedCollections.length) {
+        setMyFilteredTokens(myTokens.filter((item: MyTokensType) => selectedCollections.includes(item.collectionId)));
+      } else {
+        setMyFilteredTokens(myTokens);
+      }
+    }
+  }, [mountedRef, myTokens, selectedCollections]);
 
   useEffect(() => {
-    return () => {
-      cleanup.current = true;
-    };
-  }, []);
+    setFilteredTokens();
+  }, [setFilteredTokens]);
+
+  useEffect(() => {
+    void initializeCollections();
+  }, [initializeCollections]);
+
+  console.log('selectedCollections', selectedCollections, 'storageFilters', storageFilters, 'myTokens', myTokens, 'myFilteredTokens', myFilteredTokens);
 
   return (
     <div className={`nft-wallet ${openPanel || ''}`}>
@@ -127,23 +156,32 @@ function NftWallet ({ account, addCollection, collections, openPanel, setCollect
           setIsShowCollection={toggleCollectionsFilter}
         />
         <div className='collection-list'>
-          <div className='unique-card'>
+          {/* <div className='unique-card'>
             <TokensSearch
               account={account}
               addCollection={addCollection}
               collections={collections}
             />
-          </div>
-          <div className='unique-card tokens-list'>
-            { collections?.length > 0 && collections.map((collection: NftCollectionInterface) => (
-              <NftTokenCard
-                account={account}
-                collectionId={collection.id}
-                key={collection.id}
-                openDetailedInformationModal={openDetailedInformationModal}
-                token={{ tokenId: '1' }}
+          </div> */}
+          <div className='unique-card'>
+            { tokensLoading && (
+              <Loader
+                active
+                className='load-info'
+                inline='centered'
               />
-            ))}
+            )}
+            <div className='tokens-list'>
+              { myFilteredTokens.map(({ collectionId, tokenId }: MyTokensType) => (
+                <NftTokenCard
+                  account={account}
+                  collectionId={collectionId}
+                  key={`${collectionId}-${tokenId}`}
+                  openDetailedInformationModal={openDetailedInformationModal}
+                  tokenId={tokenId}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
