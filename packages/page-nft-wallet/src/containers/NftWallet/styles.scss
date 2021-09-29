@@ -42,6 +42,12 @@
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-column-gap: calc((var(--gap) / 2) * 3);
+
+        .ui.loader.load-info {
+          &:after, &:before {
+            left: 0;
+          }
+        }
       }
     }
   }
