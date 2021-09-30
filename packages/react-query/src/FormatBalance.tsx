@@ -120,7 +120,6 @@ export default React.memo(styled(FormatBalance)`
     text-align: right;
 
     > .ui--FormatBalance-postfix {
-      font-weight: 500;
       vertical-align: baseline;
     }
   }
