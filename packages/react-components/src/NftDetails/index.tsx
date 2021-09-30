@@ -19,9 +19,10 @@ import shareIcon from './shareIcon.svg';
 
 interface NftDetailsProps {
   account: string;
+  setCollectionId: (id: string) => void;
 }
 
-function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetailsProps> {
+function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.ReactElement<NftDetailsProps> {
   const query = new URLSearchParams(useLocation().search);
   const tokenId = query.get('tokenId') || '';
   const collectionId = query.get('collectionId') || '';
@@ -43,6 +44,7 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
     <div className='token-details'>
       <Breadcrumbs
         collectionInfo={collectionInfo}
+        setCollectionId={setCollectionId}
         tokenId={tokenId}
       />
       <div className='token-info'>

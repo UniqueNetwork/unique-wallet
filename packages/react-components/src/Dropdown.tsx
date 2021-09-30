@@ -183,6 +183,7 @@ const Dropdown = React.memo(styled(BaseDropdown)`
       background-color: var(--white-color);
       border-color: transparent;
       box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+      max-height: 405px;
 
       &:hover {
         border-color: transparent;

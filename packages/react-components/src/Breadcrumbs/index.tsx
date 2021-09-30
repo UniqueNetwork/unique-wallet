@@ -3,7 +3,7 @@
 
 import './styles.scss';
 
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { useDecoder } from '@polkadot/react-hooks';
@@ -14,10 +14,15 @@ import breadcrumbArrow from './breadcrumbArrow.svg';
 interface Props {
   collectionInfo?: NftCollectionInterface;
   tokenId?: string;
+  setCollectionId: (id: string) => void;
 }
 
-function Breadcrumbs ({ collectionInfo, tokenId }: Props): React.ReactElement<Props> {
+function Breadcrumbs ({ collectionInfo, setCollectionId, tokenId }: Props): React.ReactElement<Props> {
   const { collectionName16Decoder, hex2a } = useDecoder();
+
+  const handleCollectionNameClick = useCallback(() => {
+    collectionInfo && collectionInfo.id && setCollectionId(collectionInfo.id);
+  }, [collectionInfo, setCollectionId]);
 
   return (
     <div
@@ -43,7 +48,10 @@ function Breadcrumbs ({ collectionInfo, tokenId }: Props): React.ReactElement<Pr
       </div>
       { collectionInfo && (
         <>
-          <div className='unique-breadcrumbs--path'>
+          <div
+            className='unique-breadcrumbs--path'
+            onClick={handleCollectionNameClick}
+          >
             <NavLink
               to={'/myStuff/nft'}
             >

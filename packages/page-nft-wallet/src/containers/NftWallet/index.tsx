@@ -18,7 +18,6 @@ import { OpenPanelType } from '@polkadot/apps-routing/types';
 import { useCollections, useIsMountedRef } from '@polkadot/react-hooks';
 
 import CollectionFilter from '../../components/CollectionFilter';
-// import TokensSearch from '../../components/TokensSearch';
 import WalletFilters from '../../components/WalletFilters';
 import WalletSort from '../../components/WalletSort';
 
@@ -32,6 +31,7 @@ interface NftWalletProps {
   addCollection: (collection: NftCollectionInterface) => void;
   collections: NftCollectionInterface[];
   openPanel?: OpenPanelType;
+  collectionId?: string;
   setOpenPanel?: (openPanel: OpenPanelType) => void;
   setCollections: (collections: NftCollectionInterface[]) => void;
 }
@@ -43,12 +43,12 @@ const defaultFilters = {
 
 type MyTokensType = { collectionId: string, tokenId: string };
 
-function NftWallet ({ account, collections, openPanel, setCollections, setOpenPanel }: NftWalletProps): React.ReactElement {
+function NftWallet ({ account, collectionId, collections, openPanel, setCollections, setOpenPanel }: NftWalletProps): React.ReactElement {
   const storageFilters = JSON.parse(sessionStorage.getItem('filters') as string) as Filters;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const initialFilters = storageFilters && !equal(storageFilters, defaultFilters) ? storageFilters : defaultFilters;
   const [showCollectionsFilter, toggleCollectionsFilter] = useState<boolean>(true);
-  const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
+  const [selectedCollections, setSelectedCollections] = useState<string[]>(collectionId ? [collectionId] : []);
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [myTokens, setMyTokens] = useState<MyTokensType[]>([]);
   const [tokensLoading, setTokensLoading] = useState<boolean>(true);
@@ -132,8 +132,6 @@ function NftWallet ({ account, collections, openPanel, setCollections, setOpenPa
   useEffect(() => {
     void initializeCollections();
   }, [initializeCollections]);
-
-  console.log('selectedCollections', selectedCollections, 'storageFilters', storageFilters, 'myTokens', myTokens, 'myFilteredTokens', myFilteredTokens);
 
   return (
     <div className={`nft-wallet ${openPanel || ''}`}>

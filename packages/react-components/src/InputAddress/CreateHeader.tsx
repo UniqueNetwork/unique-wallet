@@ -20,12 +20,13 @@ export const CreateHeader: React.FC<createHeaderProps> = ({ option }) => {
   }, [history]);
 
   return (<>
-    <a
-      className='manage-accounts--link'
-      onClick={onAccounts}
-    >
+    <div className='manage-accounts--link'>
+      <a
+        onClick={onAccounts}
+      >
         Manage accounts
-    </a>
+      </a>
+    </div>
     <Dropdown.Header
       content='Choose the account'
     />
