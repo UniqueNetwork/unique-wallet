@@ -67,6 +67,7 @@
               display: flex;
               align-items: center;
               grid-column-gap: calc(var(--gap) / 4);
+              margin-bottom: 33px;
             }
           }
 
@@ -112,8 +113,8 @@
               padding-top: calc((var(--gap) / 2) * 3);
 
               a {
-                color: var(--link-color);
-                cursor: pointer;
+                color: var(--title-color);
+                cursor: default;
               }
 
               p {
@@ -223,7 +224,6 @@
 
       p{
         overflow-wrap: break-word;
-        color: var(--link-color);
       }
     }
   }

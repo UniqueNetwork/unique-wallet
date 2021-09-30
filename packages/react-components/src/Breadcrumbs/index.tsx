@@ -44,15 +44,15 @@ function Breadcrumbs ({ collectionInfo, tokenId }: Props): React.ReactElement<Pr
       { collectionInfo && (
         <>
           <div className='unique-breadcrumbs--path'>
-            <a
-              onClick={() => console.log('filter by collection')}
+            <NavLink
+              to={'/myStuff/nft'}
             >
               Collection: {collectionName16Decoder(collectionInfo.Name)}
-            </a>
-            <img
-              alt='breadcrumbArrow'
-              src={breadcrumbArrow as string}
-            />
+              <img
+                alt='breadcrumbArrow'
+                src={breadcrumbArrow as string}
+              />
+            </NavLink>
           </div>
           { tokenId && (
             <div className='unique-breadcrumbs--path'>

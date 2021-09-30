@@ -42,6 +42,9 @@
 
         &.disabled {
           cursor: not-allowed;
+          color: var(--button-background-disabled) !important;
+          border-color: var(--button-background-disabled);
+          border-right-color: var(--link-color);
         }
       }
     }

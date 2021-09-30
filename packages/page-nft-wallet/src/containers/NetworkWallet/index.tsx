@@ -260,6 +260,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
                 Send
               </Button>
               <Button
+                disabled={true}
                 onClick={handleGetKSMClickByRamp}
               >
                 Get

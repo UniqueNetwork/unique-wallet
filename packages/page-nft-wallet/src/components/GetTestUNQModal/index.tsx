@@ -30,14 +30,15 @@ function GetTestUNQModal ({ onClose }: Props): React.ReactElement<Props> {
       </Modal.Header>
       <Modal.Content>
         <div className='modal-text'>
-          <p>You can get testUNQ for free from the faucet bot on Telegram: <span>@unique2faucetbot</span></p>
-          <p>Copy your account address from Polkadot&#123;.js&#125; extension or ‘Accounts’ page and send it to the faucet bot. The limit is 200 testUNQ per 120 hours.</p>
+          <p>You can get testUNQ for free from the faucet bot on Telegram via @unique2faucetbot</p>
         </div>
       </Modal.Content>
       <div className='modal-btn'>
-        <a href={'https://web.telegram.org/'}
+        <a
+          href={'https://web.telegram.org/'}
           rel='noreferrer'
-          target='_blank'>Go to telegram</a>
+          target='_blank'
+        >Go to telegram</a>
       </div>
     </Modal>
   );
