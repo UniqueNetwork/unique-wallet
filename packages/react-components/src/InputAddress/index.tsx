@@ -299,14 +299,18 @@ const ExportedComponent = withMulti(
       Object.entries(optionsAll).reduce((result: Record<string, (Option | React.ReactNode)[]>, [type, options]): Record<string, (Option | React.ReactNode)[]> => {
         result[type] = options.map((option): Option | React.ReactNode =>
           option.value === null
-            ? <CreateHeader key={option.key || option.name}
-              option={option}/>
+            ? <CreateHeader
+              key={option.key || option.name}
+              option={option}
+            />
             : createItem(option)
         );
 
         result[type].push(
-          <div className='accounts-footer'
-            key='footer-text'>
+          <div
+            className='accounts-footer'
+            key='footer-text'
+          >
             <div className='info-panel'>
               <img
                 alt='info'

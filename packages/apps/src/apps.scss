@@ -604,12 +604,21 @@
     font-size: 16px;
     font-weight: 500;
     font-family: var(--font-roboto);
-    display: block;
-    width: 100%;
-    padding: 16px 0;
-    margin: 0 16px;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--button-color);
+    padding: 16px 16px 0;
+    margin: 0;
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: var(--white-color);
+    z-index: 999;
+
+    a{
+      border-bottom: 1px solid var(--border-color);
+      display: block;
+      width: 100%;
+      padding-bottom: 16px;
+      color: var(--button-color);
+    }
 
     &:hover {
       color: var(--button-color);

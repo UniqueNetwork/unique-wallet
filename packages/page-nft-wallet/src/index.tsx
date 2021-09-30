@@ -36,6 +36,8 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
   const [shouldUpdateTokens, setShouldUpdateTokens] = useState<string>();
   const collectionsStorage: NftCollectionInterface[] = JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
   const [collections, setCollections] = useState<NftCollectionInterface[]>(collectionsStorage);
+  // To get collection id in token page
+  const [collectionId, setCollectionId] = useState<string>();
 
   const addCollection = useCallback((collection: NftCollectionInterface) => {
     setCollections((prevCollections: NftCollectionInterface[]) => {
@@ -114,6 +116,7 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
         <Route path={`${basePath}/token-details`}>
           <NftDetails
             account={account || ''}
+            setCollectionId={setCollectionId}
           />
         </Route>
         <Route path={`${basePath}/nft`}>
@@ -121,6 +124,7 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
             <NftWallet
               account={account}
               addCollection={addCollection}
+              collectionId={collectionId}
               collections={collections}
               openPanel={openPanel}
               setCollections={setCollections}
