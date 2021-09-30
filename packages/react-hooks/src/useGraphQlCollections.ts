@@ -14,20 +14,23 @@ export type UseGraphQlInterface = {
 };
 
 const USER_COLLECTIONS = gql`
-  query Dog($breed: String!) {
-    dog(breed: $breed) {
-      id
-      displayImage
+  query Collections {
+    collection {
+      collection_id
+      description
+      name
+      offchain_schema
+      owner
+      token_limit
     }
   }
 `;
 
-export const useGraphQl = (account: string | undefined): UseGraphQlInterface => {
+export const useGraphQlCollections = (): UseGraphQlInterface => {
   // can be useLazyQuery
   const { data: userCollections, error: userCollectionsError, loading: userCollectionsLoading } = useQuery(USER_COLLECTIONS, {
     fetchPolicy: 'network-only', // Used for first execution
-    nextFetchPolicy: 'cache-first',
-    variables: { account }
+    nextFetchPolicy: 'cache-first'
   }) as unknown as { data: UserCollection[], error: string, loading: boolean };
 
   return {
@@ -37,4 +40,4 @@ export const useGraphQl = (account: string | undefined): UseGraphQlInterface => 
   };
 };
 
-export default useGraphQl;
+export default useGraphQlCollections;

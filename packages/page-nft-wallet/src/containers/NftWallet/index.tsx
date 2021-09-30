@@ -15,7 +15,7 @@ import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import NftTokenCard from '@polkadot/app-nft-wallet/components/NftTokenCard';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
-import { useCollections, useIsMountedRef } from '@polkadot/react-hooks';
+import { useCollections, useGraphQlTokens, useIsMountedRef } from '@polkadot/react-hooks';
 
 import CollectionFilter from '../../components/CollectionFilter';
 // import TokensSearch from '../../components/TokensSearch';
@@ -56,6 +56,9 @@ function NftWallet ({ account, collections, openPanel, setCollections, setOpenPa
   const { getTokensOfCollection, presetCollections } = useCollections();
   const mountedRef = useIsMountedRef();
   const history = useHistory();
+  const { userTokens } = useGraphQlTokens(account);
+
+  console.log('userTokens', userTokens);
 
   const clearCheckedValues = useCallback(() => {
     mountedRef && setSelectedCollections([]);
