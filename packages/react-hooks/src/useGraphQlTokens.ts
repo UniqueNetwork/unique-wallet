@@ -14,8 +14,14 @@ export type UseGraphQlInterface = {
 };
 
 const USER_TOKENS = gql`
-  query Tokens($collectionId: Int!, $owner: String!) {
-     tokens(limit: 5, where: {collection_id: {_eq: $collectionId} }, order_by: {owner: desc}, offset: 10) {
+  query Tokens($collectionIds: [Int!], $owner: String!) {
+     tokens(limit: 100, where: {
+        _and: [
+          { owner: { _eq: $owner } }
+          { collection_id: {_in: $collectionIds }}
+        ]
+      },
+      order_by: {owner: desc}, offset: 0) {
       collection_id
       owner
       token_id
@@ -28,12 +34,12 @@ const USER_TOKENS = gql`
   }
 `;
 
-export const useGraphQlTokens = (account: string | undefined): UseGraphQlInterface => {
+export const useGraphQlTokens = (collectionIds: string[], account: string | undefined): UseGraphQlInterface => {
   // can be useLazyQuery
   const { data: userTokens, error: userTokensError, loading: userTokensLoading } = useQuery(USER_TOKENS, {
     fetchPolicy: 'network-only', // Used for first execution
     nextFetchPolicy: 'cache-first',
-    variables: { collectionId: 18, owner: account }
+    variables: { collectionIds, owner: account }
   }) as unknown as { data: UserToken[], error: string, loading: boolean };
 
   return {
