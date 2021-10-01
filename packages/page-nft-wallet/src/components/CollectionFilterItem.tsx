@@ -3,8 +3,11 @@
 
 import React, { memo, useCallback } from 'react';
 
+import { CollectionImagesType } from '@polkadot/app-nft-wallet/components/CollectionFilter';
 import { useDecoder } from '@polkadot/react-hooks';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+
+import collectionIcon from '../images/collectionIcon.svg';
 
 interface Props {
   collectionId: string;
@@ -12,12 +15,12 @@ interface Props {
   collections: NftCollectionInterface[];
   filterCurrent: (id: string) => void;
   index: number;
-  images: string[];
+  images: CollectionImagesType;
   selectedCollections: string[];
 }
 
 function CollectionFilterItem (props: Props): React.ReactElement<Props> {
-  const { collectionId, collectionName, collections, filterCurrent, images, index, selectedCollections } = props;
+  const { collectionId, collectionName, filterCurrent, images, selectedCollections } = props;
   const { collectionName16Decoder } = useDecoder();
 
   const onFilterCurrent = useCallback(() => {
@@ -40,12 +43,10 @@ function CollectionFilterItem (props: Props): React.ReactElement<Props> {
         </div>
         <div className='checkbox-title'>{collectionName16Decoder(collectionName)}</div>
       </div>
-      { images.length === collections.length && images[index] !== '' && (
-        <div
-          className='collection-img'
-          style={ { backgroundImage: `url(${images.length === collections.length ? images[index] : ''})` }}
-        />
-      )}
+      <div
+        className='collection-img'
+        style={ { backgroundImage: `url(${images[collectionId] || collectionIcon as string})` }}
+      />
     </div>
   );
 }

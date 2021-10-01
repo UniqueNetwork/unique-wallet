@@ -42,13 +42,13 @@ function BalancesHeader (props: Props): React.ReactElement<{ account?: string }>
   return (
     <div
       className='app-balances'
+      onClick={onClick}
       ref = {headerRef}
     >
-      <div className='app-balances-items'
-        onClick={onClick}>
+      <div className='app-balances-items'>
         <div className='app-balances-items-item'>
           <div className='item-icon'>
-            <WalletIconSvg/>
+            <WalletIconSvg />
           </div>
           <FormatBalance
             className='result'

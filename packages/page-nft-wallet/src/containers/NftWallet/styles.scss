@@ -49,6 +49,17 @@
           }
         }
       }
+      .no-tokens{
+        text-align: center;
+
+        p{
+          color: var(--tabs-color);
+          font-family: var(--font-roboto);
+          margin-top: 24px;
+          font-size: 18px;
+          line-height: 26px
+        }
+      }
     }
   }
 
@@ -84,6 +95,15 @@
           &:last-child {
             margin-bottom: 0;
           }
+        }
+
+        .collection-img{
+          width: 24px;
+          height: 24px;
+          border: 1px solid var(--card-border-color);
+          border-radius: 50%;
+          background-repeat: no-repeat;
+          background-size: 100% 100%
         }
       }
     }
