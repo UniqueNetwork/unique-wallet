@@ -6,6 +6,7 @@ import './styles.scss';
 import React, { useCallback } from 'react';
 import { FacebookShareButton, RedditShareButton, TelegramShareButton, TwitterShareButton } from 'react-share';
 import Modal from 'semantic-ui-react/dist/commonjs/modules/Modal/Modal';
+import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 
 import closeIcon from './closeIconBlack.svg';
 import copyIcon from './copyIcon.svg';
@@ -67,11 +68,20 @@ function SocialShareModal ({ closeModal }: Props): React.ReactElement<Props> {
           className='copy-link'
           onClick={copyUrl}
         >
-          <img
-            alt='copyIcon'
-            src={copyIcon as string}
+          <Popup
+            className={'help copy-btn'}
+            content={'Copied'}
+            on={'click'}
+            position={'right center'}
+            trigger={<div className='copy-icon 12'>
+              <img
+                alt='question'
+                src={copyIcon as string}
+                title='Help'
+              />
+              <p>Copy link</p>
+            </div>}
           />
-          Copy
         </div>
         <FacebookShareButton url={window.location.href}>
           <img

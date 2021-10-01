@@ -19,10 +19,10 @@
 
   .content {
     padding: calc(var(--gap) / 2) calc((var(--gap) / 2) * 3) calc((var(--gap) / 2) * 3) calc((var(--gap) / 2) * 3) !important;
-
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-row-gap: var(--gap);
+    font-family: var(--font-roboto);
 
     button, .copy-link {
       cursor: pointer;
@@ -35,6 +35,15 @@
 
       &:hover {
         color: var(--link-color) !important;
+      }
+
+      .copy-icon{
+        display: flex;
+
+        p{
+          margin: auto;
+          padding-left: 9px;
+        }
       }
     }
   }

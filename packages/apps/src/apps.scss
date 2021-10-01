@@ -80,6 +80,7 @@
 
         .item-icon {
           padding-right: 10.25px;
+          margin-bottom: 4px;
           display: flex;
           align-items: center;
         }
@@ -690,6 +691,14 @@
 
   &:before {
     background-color: var(--text-color) !important;
+  }
+
+  &.copy-btn{
+    top:7px !important;
+
+    &:before {
+      top:35%;
+    }
   }
 }
 

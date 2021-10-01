@@ -1,7 +1,7 @@
 // Copyright 2017-2021 @polkadot/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Popup from 'semantic-ui-react/dist/commonjs/modules/Popup';
 
 import question from '@polkadot/app-accounts/Accounts/question.svg';
@@ -30,7 +30,6 @@ interface Props {
 }
 
 function HelpTooltip ({ className = '', content, defaultPosition = 'right center', mobilePosition = 'bottom left' }: Props): React.ReactElement<Props> {
-  const popupQuestionRef = useRef<HTMLImageElement>(null);
   const mqList = window.matchMedia('(max-width: 767px)');
   const [isMobile, setIsMobile] = useState<boolean>(mqList.matches);
 
@@ -50,7 +49,6 @@ function HelpTooltip ({ className = '', content, defaultPosition = 'right center
       position={isMobile ? mobilePosition : defaultPosition }
       trigger={<img
         alt='question'
-        ref={popupQuestionRef}
         src={question as string}
         title='Help'
       />}
