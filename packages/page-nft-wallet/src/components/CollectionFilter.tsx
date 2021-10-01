@@ -3,10 +3,13 @@
 
 import React, { memo, useCallback, useEffect, useState } from 'react';
 
+import { MyTokensType } from '@polkadot/app-nft-wallet/containers/NftWallet';
 import { useMetadata } from '@polkadot/react-hooks';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 
 import CollectionFilterItem from './CollectionFilterItem';
+
+export type CollectionImagesType = { [key: string]: string; };
 
 interface Props {
   clearCheckedValues: () => void;
@@ -15,23 +18,29 @@ interface Props {
   filterCurrent: (id: string) => void;
   isShowCollection: boolean;
   setIsShowCollection: (isShowCollection: boolean) => void;
+  myTokens: MyTokensType[]
 }
 
 function CollectionFilter (props: Props): React.ReactElement<Props> {
-  const { clearCheckedValues, collections, filterCurrent, isShowCollection, selectedCollections, setIsShowCollection } = props;
+  const { clearCheckedValues, collections, filterCurrent, isShowCollection, myTokens, selectedCollections, setIsShowCollection } = props;
   const { getTokenImageUrl } = useMetadata();
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState <CollectionImagesType>({});
 
   const updateImageUrl = useCallback(() => {
     collections.forEach((element: NftCollectionInterface) => {
-      void getTokenImageUrl(element, '1')
-        .then((res) => {
-          if (res) {
-            setImages((prev) => [...prev, res]);
-          } else setImages((prev) => ['', ...prev]);
-        });
+      for (let i = 0; i < myTokens.length; i++) {
+        if (myTokens[i].collectionId === element.id) {
+          void getTokenImageUrl(element, myTokens[i].tokenId)
+            .then((res) => {
+              if (res) {
+                setImages((prev) => ({ ...prev, [myTokens[i].collectionId]: res }));
+              }
+            });
+          break;
+        }
+      }
     });
-  }, [collections, getTokenImageUrl]);
+  }, [collections, getTokenImageUrl, myTokens]);
 
   const onShowCollectionsClick = useCallback(() => {
     setIsShowCollection(!isShowCollection);

@@ -20,6 +20,7 @@ import { useCollections, useIsMountedRef } from '@polkadot/react-hooks';
 import CollectionFilter from '../../components/CollectionFilter';
 import WalletFilters from '../../components/WalletFilters';
 import WalletSort from '../../components/WalletSort';
+import noMyTokensIcon from './noMyTokensIcon.svg';
 
 export type Filters = {
   collectionIds: string[];
@@ -41,7 +42,7 @@ const defaultFilters = {
   sort: 'desc(creationDate)'
 };
 
-type MyTokensType = { collectionId: string, tokenId: string };
+export type MyTokensType = { collectionId: string, tokenId: string };
 
 function NftWallet ({ account, collectionId, collections, openPanel, setCollections, setOpenPanel }: NftWalletProps): React.ReactElement {
   const storageFilters = JSON.parse(sessionStorage.getItem('filters') as string) as Filters;
@@ -135,21 +136,13 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
 
   return (
     <div className={`nft-wallet ${openPanel || ''}`}>
-      {/* {(collections.length === 0) && (
-          <div className='market-pallet empty'>
-            <img
-              alt='no tokens'
-              src={noMyTokensIcon as string}
-            />
-            <p className='no-tokens-text'>You have no tokens</p>
-          </div>
-        )} */}
       <div className='nft-wallet--row'>
         <CollectionFilter
           clearCheckedValues={clearCheckedValues}
           collections={collections}
           filterCurrent={onCollectionCheck}
           isShowCollection={showCollectionsFilter}
+          myTokens={myTokens}
           selectedCollections={selectedCollections}
           setIsShowCollection={toggleCollectionsFilter}
         />
@@ -161,7 +154,9 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
               collections={collections}
             />
           </div> */}
-          <div className='unique-card'>
+          <div
+            className={`unique-card ${myFilteredTokens.length ? '' : 'empty'}`}
+          >
             { tokensLoading && (
               <Loader
                 active
@@ -169,17 +164,31 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
                 inline='centered'
               />
             )}
-            <div className='tokens-list'>
-              { myFilteredTokens.map(({ collectionId, tokenId }: MyTokensType) => (
-                <NftTokenCard
-                  account={account}
-                  collectionId={collectionId}
-                  key={`${collectionId}-${tokenId}`}
-                  openDetailedInformationModal={openDetailedInformationModal}
-                  tokenId={tokenId}
-                />
-              ))}
-            </div>
+            { myFilteredTokens.length
+              ? (
+                <div className='tokens-list'>                    {
+                  myFilteredTokens.map(({ collectionId, tokenId }: MyTokensType) => (
+                    <NftTokenCard
+                      account={account}
+                      collectionId={collectionId}
+                      key={`${collectionId}-${tokenId}`}
+                      openDetailedInformationModal={openDetailedInformationModal}
+                      tokenId={tokenId}
+                    />
+                  ))
+                }
+                </div>
+              )
+              : !tokensLoading && (
+                <div className='no-tokens'>
+                  <img
+                    alt='no tokens'
+                    src={noMyTokensIcon as string}
+                  />
+                  <p className='no-tokens-text'>You have no tokens</p>
+                </div>
+              )
+            }
           </div>
         </div>
       </div>
@@ -189,6 +198,7 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
           collections={collections}
           filterCurrent={onCollectionCheck}
           isShowCollection={showCollectionsFilter}
+          myTokens={myTokens}
           selectedCollections={selectedCollections}
           setIsShowCollection={toggleCollectionsFilter}
         />
