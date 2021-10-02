@@ -94,7 +94,6 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
   return (
     <Modal
       className='unique-modal'
-      onClose={closeModal}
       open
       size='tiny'
     >

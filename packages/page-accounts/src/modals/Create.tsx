@@ -294,7 +294,6 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
     <Modal
       className={className}
       header={restoreFromSeed ? 'Restore an account from seed phrase' : 'Add an account via seed phrase'}
-      onCancel={onClose}
       size='small'
     >
       <Modal.Content>
@@ -408,7 +407,7 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
         <div className='step'>
           {`Step ${'{{step}}/{{STEPS_COUNT}}'.replace('{{STEPS_COUNT}}', STEPS_COUNT.toString()).replace('{{step}}', step.toString())}`}
         </div>
-        <Modal.Actions>
+        <Modal.Actions onCancel={onClose}>
           <div className='btn-container'>
             {step === 1 &&
             <Button

@@ -76,6 +76,10 @@
             display: flex;
             justify-content: space-between;
 
+            button{
+              width: 160px;
+            }
+
             .ui.button.warning-action {
               background-color: transparent !important;
               color: var(--error-color) !important;

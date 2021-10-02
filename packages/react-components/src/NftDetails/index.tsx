@@ -26,19 +26,20 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
   const query = new URLSearchParams(useLocation().search);
   const tokenId = query.get('tokenId') || '';
   const collectionId = query.get('collectionId') || '';
-  const [showTransferForm, setShowTransferForm] = useState<boolean>(false);
-  const [showSocialShareModal, setShowSocialShareModal] = useState<boolean>(false);
+  const [showTransferForm, setShowTransferForm] = useToggle(false);
+  const [showSocialShareModal, setShowSocialShareModal] = useToggle(false);
+  const [shouldUpdateOwner, setShouldUpdateOwner] = useState<boolean>(false);
   const { hex2a } = useDecoder();
-  const { attributes, collectionInfo, reFungibleBalance, tokenDetails, tokenUrl } = useSchema(account, collectionId, tokenId);
+  const { attributes, collectionInfo, reFungibleBalance, tokenDetails, tokenUrl } = useSchema(account, collectionId, tokenId, shouldUpdateOwner);
   const { collectionName16Decoder } = useDecoder();
   const [isCollectionCollapsed, toggleCollectionCollapsed] = useToggle(true);
   const [isAttributesCollapsed, toggleAttributesCollapsed] = useToggle(true);
-
   const uOwnIt = tokenDetails?.Owner?.toString() === account;
 
   const onTransferSuccess = useCallback(() => {
-    setShowTransferForm(false);
-  }, []);
+    setShowTransferForm();
+    setShouldUpdateOwner(true);
+  }, [setShowTransferForm]);
 
   return (
     <div className='token-details'>
@@ -72,7 +73,7 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
               <div className='share'>
                 <a
                   className='share-link'
-                  onClick={setShowSocialShareModal.bind(null, true)}
+                  onClick={setShowSocialShareModal}
                 >
                   <img
                     alt='share-icon'
@@ -88,7 +89,7 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
                 <div className='action-block'>
                   <Button
                     content='Send'
-                    onClick={setShowTransferForm.bind(null, !showTransferForm)}
+                    onClick={setShowTransferForm}
                   />
                   {/* <Button
                     className='warning-action'
@@ -123,9 +124,7 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
                     <div className='accordion-left--body'>
                       <p>
                         <strong>Name: </strong>
-                        <a onClick={() => console.log('click')}>
-                          {collectionName16Decoder(collectionInfo.Name)}
-                        </a>
+                        <a>{collectionName16Decoder(collectionInfo.Name)}</a>
                       </p>
                       <p>
                         <strong>Collection ID: </strong>
@@ -168,13 +167,13 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
             )}
             { showSocialShareModal && (
               <SocialShareModal
-                closeModal={setShowSocialShareModal.bind(null, false)}
+                closeModal={setShowSocialShareModal}
               />
             )}
             { (showTransferForm && collectionInfo) && (
               <TransferModal
                 account={account}
-                closeModal={setShowTransferForm.bind(null, false)}
+                closeModal={setShowTransferForm}
                 collection={collectionInfo}
                 reFungibleBalance={reFungibleBalance}
                 tokenId={tokenId}

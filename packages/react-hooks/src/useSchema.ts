@@ -25,9 +25,10 @@ interface UseSchemaInterface {
   tokenDetails?: TokenDetailsInterface;
   tokenName: { name: string, value: string } | null;
   tokenUrl: string;
+  shouldUpdateOwner?: boolean;
 }
 
-export function useSchema (account: string | undefined, collectionId: string, tokenId: string | number): UseSchemaInterface {
+export function useSchema (account: string | undefined, collectionId: string, tokenId: string | number, shouldUpdateOwner?: boolean): UseSchemaInterface {
   const [collectionInfo, setCollectionInfo] = useState<NftCollectionInterface>();
   const [reFungibleBalance, setReFungibleBalance] = useState<number>(0);
   const [tokenUrl, setTokenUrl] = useState<string>('');
@@ -133,6 +134,10 @@ export function useSchema (account: string | undefined, collectionId: string, to
   useEffect(() => {
     void getCollectionInfo();
   }, [getCollectionInfo]);
+
+  useEffect(() => {
+    void getTokenDetails();
+  }, [getTokenDetails, shouldUpdateOwner]);
 
   useEffect(() => {
     if (collectionInfo && tokenDetails) {
