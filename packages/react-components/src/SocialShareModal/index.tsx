@@ -3,10 +3,11 @@
 
 import './styles.scss';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { FacebookShareButton, RedditShareButton, TelegramShareButton, TwitterShareButton } from 'react-share';
 import Modal from 'semantic-ui-react/dist/commonjs/modules/Modal/Modal';
 
+import StatusContext from '../Status/Context';
 import closeIcon from './closeIconBlack.svg';
 import copyIcon from './copyIcon.svg';
 import facebookIcon from './facebookIcon.svg';
@@ -19,12 +20,17 @@ interface Props {
 }
 
 function SocialShareModal ({ closeModal }: Props): React.ReactElement<Props> {
+  const { queueAction } = useContext(StatusContext);
+
   const copyUrl = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    navigator.clipboard.writeText(window.location.href);
-    /* Alert the copied text */
-    // alert(`Copied the text: ${window.location.href}`);
-  }, []);
+    void navigator.clipboard.writeText(window.location.href);
+
+    return queueAction({
+      action: 'clipboard',
+      message: 'address copied',
+      status: 'queued'
+    });
+  }, [queueAction]);
 
   return (
     <Modal

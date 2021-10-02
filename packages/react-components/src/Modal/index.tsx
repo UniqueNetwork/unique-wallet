@@ -10,7 +10,6 @@ import React, { useContext } from 'react';
 import { Modal as SUIModal } from 'semantic-ui-react';
 import { ThemeContext } from 'styled-components';
 
-import CloseIcon from './images/close-icon.svg';
 import Actions from './Actions';
 import Column from './Column';
 import Columns from './Columns';
@@ -26,7 +25,7 @@ type ModalType = React.FC<ModalProps> & {
 
 function ModalBase (props: ModalProps): React.ReactElement<ModalProps> {
   const { theme } = useContext<ThemeDef>(ThemeContext);
-  const { children, className = '', header, onCancel, open = true } = props;
+  const { children, className = '', header, open = true } = props;
 
   return (
     <SUIModal
@@ -36,14 +35,7 @@ function ModalBase (props: ModalProps): React.ReactElement<ModalProps> {
       open={open}
     >
       {header && (
-        <SUIModal.Header>{header}
-          <div className='close-btn'
-            onClick={onCancel}>
-            <img alt='close'
-              src={CloseIcon as string}
-            />
-          </div>
-        </SUIModal.Header>
+        <SUIModal.Header>{header}</SUIModal.Header>
       )}
       {children}
     </SUIModal>

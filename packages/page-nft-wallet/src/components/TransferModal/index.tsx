@@ -10,7 +10,6 @@ import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import { checkAddress } from '@polkadot/phishing';
 import { MarkError, Modal, TxButton } from '@polkadot/react-components';
-import closeIcon from '@polkadot/react-components/TransferModal/closeIconBlack.svg';
 import { getAddressName } from '@polkadot/react-components/util';
 import { useSelectedApi } from '@polkadot/react-hooks';
 import { formatKsmBalance } from '@polkadot/react-hooks/useKusamaApi';
@@ -130,7 +129,6 @@ function TransferModal ({ isKusama, onClose, senderId }: Props): React.ReactElem
   return (
     <Modal
       className='unique-modal transfer-token'
-      onClose={onClose}
       open
       size='tiny'
     >
@@ -141,11 +139,6 @@ function TransferModal ({ isKusama, onClose, senderId }: Props): React.ReactElem
         { noFees && (
           <h2>Transaction is not possible</h2>
         )}
-        <img
-          alt='Close modal'
-          onClick={onClose}
-          src={closeIcon as string}
-        />
       </Modal.Header>
       <Modal.Content>
         { !noFees && (
