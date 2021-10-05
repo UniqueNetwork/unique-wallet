@@ -529,6 +529,10 @@
     .app-container {
       padding: 0;
     }
+
+    &.page-no-found{
+      background-color: var(--bg-page);
+    }
   }
 
   .deposit-flex .ksm-text {
