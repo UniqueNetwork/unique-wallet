@@ -251,6 +251,14 @@
     overflow-x: hidden;
     overflow-y: auto;
 
+    &--row {
+      .collection-list {
+        .tokens-list {
+          grid-template-columns: 1fr 1fr 1fr;
+        }
+      }
+    }
+
     &.filters {
       .nft-wallet--row {
         display: none;
@@ -385,5 +393,25 @@
 }
 
 @media (max-width: 768px) {
+  .nft-wallet {
+    &--row {
+      .collection-list {
+        .tokens-list {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    }
+  }
+}
 
+@media (max-width: 320px) {
+  .nft-wallet {
+    &--row {
+      .collection-list {
+        .tokens-list {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
 }

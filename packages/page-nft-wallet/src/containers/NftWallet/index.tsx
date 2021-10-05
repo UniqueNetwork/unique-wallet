@@ -65,6 +65,7 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
   const clearAllFilters = useCallback(() => {
     if (mountedRef) {
       setFilters(defaultFilters);
+      setSelectedCollections([]);
       sessionStorage.removeItem('filters');
       setOpenPanel && setOpenPanel('tokens');
     }
