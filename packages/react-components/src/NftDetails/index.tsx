@@ -3,7 +3,7 @@
 
 import './styles.scss';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header';
@@ -36,10 +36,13 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
   const [isAttributesCollapsed, toggleAttributesCollapsed] = useToggle(true);
   const uOwnIt = tokenDetails?.Owner?.toString() === account;
 
+  useEffect(() => {
+    setShouldUpdateOwner(false);
+  }, [account]);
+
   const onTransferSuccess = useCallback(() => {
-    setShowTransferForm();
     setShouldUpdateOwner(true);
-  }, [setShowTransferForm]);
+  }, []);
 
   return (
     <div className='token-details'>

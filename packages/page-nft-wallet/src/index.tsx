@@ -28,8 +28,6 @@ const client = new ApolloClient({
   uri: 'https://dev-api-explorer.unique.network/v1/graphql'
 });
 
-console.log('ApolloClient', client);
-
 function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): React.ReactElement<Props> {
   const location = useLocation();
   const history = useHistory();
