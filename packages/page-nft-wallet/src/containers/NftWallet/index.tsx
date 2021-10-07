@@ -237,8 +237,7 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
             className='footer-button clear'
             fluid
             onClick={clearAllFilters}
-          >
-              Clear all
+          >Clear all
           </Button>
         )}
       </div>
