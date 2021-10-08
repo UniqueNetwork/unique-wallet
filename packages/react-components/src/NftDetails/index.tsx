@@ -44,6 +44,10 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
     setShouldUpdateOwner(true);
   }, []);
 
+  const getVideoUrl = useCallback(() => {
+    return tokenUrl.replace('image.jpg', 'video.mp4');
+  }, [tokenUrl]);
+
   return (
     <div className='token-details'>
       <Breadcrumbs
@@ -163,6 +167,18 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
                           <p key={attrKey}><strong>{attrKey}:</strong> {(attributes[attrKey] as string[]).join(', ')}</p>
                         );
                       })}
+                      {attributes && attributes.profile === 'Black profiles' &&
+                      <p key='VideoUrl'>
+                        <strong>Video Url:</strong>
+                        <a
+                          href={getVideoUrl()}
+                          rel='noreferrer'
+                          target='_blank'
+                        >
+                          {getVideoUrl()}
+                        </a>
+                      </p>
+                      }
                     </div>
                   )}
                 </div>
