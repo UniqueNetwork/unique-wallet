@@ -14,13 +14,16 @@ import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import NftTokenCard from '@polkadot/app-nft-wallet/components/NftTokenCard';
+import envConfig from '@polkadot/apps-config/envConfig';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
-import { useCollections, useIsMountedRef } from '@polkadot/react-hooks';
+import { useCollections, useGraphQlTokens, useIsMountedRef } from '@polkadot/react-hooks';
 
 import CollectionFilter from '../../components/CollectionFilter';
 import WalletFilters from '../../components/WalletFilters';
 import WalletSort from '../../components/WalletSort';
 import noMyTokensIcon from './noMyTokensIcon.svg';
+
+const { uniqueCollectionIds } = envConfig;
 
 export type Filters = {
   collectionIds: string[];
@@ -57,6 +60,10 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
   const { getTokensOfCollection, presetCollections } = useCollections();
   const mountedRef = useIsMountedRef();
   const history = useHistory();
+  const { userTokens } = useGraphQlTokens(uniqueCollectionIds, account);
+
+  // @todo - use this tokens, add params for page and offset for scrollOnLoad pagination like in the marketplace
+  console.log('userTokens', userTokens);
 
   const clearCheckedValues = useCallback(() => {
     mountedRef && setSelectedCollections([]);

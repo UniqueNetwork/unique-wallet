@@ -23,9 +23,9 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   headers: {
     'content-type': 'application/json',
-    'x-hasura-admin-secret': 'qwerty123'
+    'x-hasura-admin-secret': 'tPRzYEcOvNkBZasYn7Vf8Jx5GJAZx'
   },
-  uri: 'https://dev-api-explorer.unique.network/v1/graphql'
+  uri: 'http://18.206.170.50:8082/v1/graphql'
 });
 
 function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): React.ReactElement<Props> {
