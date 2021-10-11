@@ -1,15 +1,11 @@
 // Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AccountInfoWithProviders, AccountInfoWithRefCount } from '@polkadot/types/interfaces';
-import type { DeriveAccountInfo } from '@polkadot/api-derive/types';
-
 import { useCallback, useEffect, useState } from 'react';
 
 import { ApiPromise } from '@polkadot/api/promise';
 import { DeriveBalancesAll } from '@polkadot/api-derive/types';
 import { useApi, useCall, useKusamaApi } from '@polkadot/react-hooks';
-import { getAddressName } from "@polkadot/react-components/util";
 
 interface UseSelectedApiInterface {
   currentApi: ApiPromise | undefined;

@@ -11,7 +11,6 @@ import store from 'store';
 
 import { withMulti, withObservable } from '@polkadot/react-api/hoc';
 import { Dropdown } from '@polkadot/react-components';
-import CreateHeader from '@polkadot/react-components/InputAddress/CreateHeader';
 import createItem from '@polkadot/react-components/InputAddress/createItem';
 import { getAddressName } from '@polkadot/react-components/util';
 import addressToAddress from '@polkadot/react-components/util/toAddress';

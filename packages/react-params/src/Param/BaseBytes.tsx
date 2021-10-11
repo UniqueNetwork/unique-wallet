@@ -118,7 +118,7 @@ function BaseBytes ({ asHex, children, className = '', defaultValue: { value }, 
       >
         {children}
         {withCopy && (
-          <CopyButton value={defaultValue} />
+          <CopyButton value={defaultValue || ''} />
         )}
       </Input>
     </Bare>

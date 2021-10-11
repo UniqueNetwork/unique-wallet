@@ -4,6 +4,8 @@
 export type EnvConfigType = {
   environment: string;
   faviconPath: string;
+  kusamaApiUrl: string;
+  kusamaBackupApiUrl: string;
   kusamaDecimals: number; // 12
   maxGas: number; // 1000000000000
   midTedCollection: number;
@@ -20,6 +22,8 @@ export type EnvConfigType = {
 const envConfig: EnvConfigType = {
   environment: (process.env.ENVIRONMENT as string),
   faviconPath: (process.env.FAVICON_PATH as string),
+  kusamaApiUrl: (process.env.KUSAMA_API as string),
+  kusamaBackupApiUrl: (process.env.KUSAMA_BACKUP_API as string),
   kusamaDecimals: +(process.env.KUSAMA_DECIMALS as string),
   maxGas: +(process.env.MAX_GAS as string),
   midTedCollection: +(process.env.MIN_TED_COLLECTION as string),
