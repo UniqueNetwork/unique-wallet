@@ -4,6 +4,8 @@
 export type EnvConfigType = {
   environment: string;
   faviconPath: string;
+  graphQlAdminSecret: string;
+  graphQlApi: string;
   kusamaApiUrl: string;
   kusamaBackupApiUrl: string;
   kusamaDecimals: number; // 12
@@ -22,6 +24,8 @@ export type EnvConfigType = {
 const envConfig: EnvConfigType = {
   environment: (process.env.ENVIRONMENT as string),
   faviconPath: (process.env.FAVICON_PATH as string),
+  graphQlAdminSecret: (process.env.GRAPH_QL_ADMIN_SECRET as string),
+  graphQlApi: (process.env.GRAPH_QL_API as string),
   kusamaApiUrl: (process.env.KUSAMA_API as string),
   kusamaBackupApiUrl: (process.env.KUSAMA_BACKUP_API as string),
   kusamaDecimals: +(process.env.KUSAMA_DECIMALS as string),

@@ -25,6 +25,7 @@ export { useDebounce } from './useDebounce';
 export { useEventTrigger } from './useEventTrigger';
 export { useFavorites } from './useFavorites';
 export { useGraphQlCollections } from './useGraphQlCollections';
+export { useGraphQlCollectionsTokens } from './useGraphQlCollectionsTokens';
 export { useGraphQlTokens } from './useGraphQlTokens';
 export { useIncrement } from './useIncrement';
 export { calcInflation, useInflation } from './useInflation';

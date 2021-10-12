@@ -23,7 +23,6 @@ import TransferModal from '../../components/TransferModal';
 
 interface NftWalletProps {
   account?: string;
-  addCollection: (collection: NftCollectionInterface) => void;
   collections: NftCollectionInterface[];
   openPanel?: OpenPanelType;
   removeCollectionFromList: (collectionToRemove: string) => void;

@@ -11,6 +11,7 @@ import { useLocation } from 'react-router-dom';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header/Header';
 
+import envConfig from '@polkadot/apps-config/envConfig';
 import { NftDetails, Tabs } from '@polkadot/react-components';
 // local imports and components
 import { AppProps as Props } from '@polkadot/react-components/types';
@@ -19,26 +20,30 @@ import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 import NetworkWallet from './containers/NetworkWallet';
 import NftWallet from './containers/NftWallet';
 
+const { graphQlAdminSecret, graphQlApi } = envConfig;
+
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   headers: {
     'content-type': 'application/json',
-    'x-hasura-admin-secret': 'tPRzYEcOvNkBZasYn7Vf8Jx5GJAZx'
+    'x-hasura-admin-secret': graphQlAdminSecret
   },
-  uri: 'http://18.206.170.50:8082/v1/graphql'
+  uri: graphQlApi
 });
+
+console.log('graphQlAdminSecret', graphQlAdminSecret, 'graphQlApi', graphQlApi);
 
 function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): React.ReactElement<Props> {
   const location = useLocation();
   const history = useHistory();
   const [shouldUpdateTokens, setShouldUpdateTokens] = useState<string>();
-  const collectionsStorage: NftCollectionInterface[] = JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
-  const [collections, setCollections] = useState<NftCollectionInterface[]>(collectionsStorage);
+  const [collections, setCollections] = useState<NftCollectionInterface[]>([]);
   // To get collection id in token page
   const [collectionId, setCollectionId] = useState<string>();
 
   const addCollection = useCallback((collection: NftCollectionInterface) => {
-    setCollections((prevCollections: NftCollectionInterface[]) => {
+    console.log('addCollection', collection);
+    /* setCollections((prevCollections: NftCollectionInterface[]) => {
       let newCollections = [...prevCollections];
 
       if (!prevCollections.find((prevCollection) => prevCollection.id === collection.id)) {
@@ -48,7 +53,7 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
       localStorage.setItem('tokenCollections', JSON.stringify(newCollections));
 
       return newCollections;
-    });
+    }); */
   }, []);
 
   const removeCollectionFromList = useCallback((collectionToRemove: string) => {
@@ -133,7 +138,6 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
         <Route path={`${basePath}/tokens`}>
           <NetworkWallet
             account={account}
-            addCollection={addCollection}
             collections={collections}
             openPanel={openPanel}
             removeCollectionFromList={removeCollectionFromList}

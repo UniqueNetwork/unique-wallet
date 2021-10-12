@@ -27,6 +27,10 @@ function CollectionFilterItem (props: Props): React.ReactElement<Props> {
     filterCurrent(collectionId);
   }, [collectionId, filterCurrent]);
 
+  const onChange = useCallback(() => {
+    console.log('onCollectionFilterChange');
+  }, []);
+
   return (
     <div
       className={`collections-main ${selectedCollections.includes(String(collectionId)) ? 'collections-main-background' : ''}`}
@@ -38,6 +42,7 @@ function CollectionFilterItem (props: Props): React.ReactElement<Props> {
           <input
             checked={selectedCollections.includes(String(collectionId))}
             data-current={collectionId}
+            onChange={onChange}
             type='checkbox'
           />
         </div>

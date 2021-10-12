@@ -4,17 +4,18 @@
 import './styles.scss';
 
 import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+import type { UserToken } from '@polkadot/react-hooks/useGraphQlTokens';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import equal from 'deep-equal';
 import React, { useCallback, useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import { useHistory } from 'react-router';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import NftTokenCard from '@polkadot/app-nft-wallet/components/NftTokenCard';
-import envConfig from '@polkadot/apps-config/envConfig';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
 import { useCollections, useGraphQlTokens, useIsMountedRef } from '@polkadot/react-hooks';
 
@@ -22,8 +23,6 @@ import CollectionFilter from '../../components/CollectionFilter';
 import WalletFilters from '../../components/WalletFilters';
 import WalletSort from '../../components/WalletSort';
 import noMyTokensIcon from './noMyTokensIcon.svg';
-
-const { uniqueCollectionIds } = envConfig;
 
 export type Filters = {
   collectionIds: string[];
@@ -47,6 +46,8 @@ const defaultFilters = {
 
 export type MyTokensType = { collectionId: string, tokenId: string };
 
+const limit = 20;
+
 function NftWallet ({ account, collectionId, collections, openPanel, setCollections, setOpenPanel }: NftWalletProps): React.ReactElement {
   const storageFilters = JSON.parse(sessionStorage.getItem('filters') as string) as Filters;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -55,15 +56,16 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
   const [selectedCollections, setSelectedCollections] = useState<string[]>(collectionId ? [collectionId] : []);
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [myTokens, setMyTokens] = useState<MyTokensType[]>([]);
-  const [tokensLoading, setTokensLoading] = useState<boolean>(true);
   const [myFilteredTokens, setMyFilteredTokens] = useState<MyTokensType[]>([]);
   const { getTokensOfCollection, presetCollections } = useCollections();
   const mountedRef = useIsMountedRef();
   const history = useHistory();
-  const { userTokens } = useGraphQlTokens(uniqueCollectionIds, account);
+  const [page, setPage] = useState<number>(1);
+  const { userTokens, userTokensLoading } = useGraphQlTokens(limit, (page - 1) * limit, 'desc', selectedCollections?.length ? selectedCollections : collections.map((item) => item.id), account);
+  const tokensCount = userTokens?.tokens_aggregate?.aggregate?.count || 0;
+  const hasMore = !!(tokensCount && myTokens.length < tokensCount);
 
-  // @todo - use this tokens, add params for page and offset for scrollOnLoad pagination like in the marketplace
-  console.log('userTokens', userTokens);
+  console.log('userTokens', userTokens, 'userTokensLoading', userTokensLoading, 'tokensCount', tokensCount, 'hasMore', hasMore, 'page', page);
 
   const clearCheckedValues = useCallback(() => {
     mountedRef && setSelectedCollections([]);
@@ -91,15 +93,16 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
   }, [mountedRef, selectedCollections]);
 
   const initializeCollections = useCallback(async () => {
-    const firstCollections: NftCollectionInterface[] = await presetCollections();
+    if (account && userTokens && userTokens.tokens) {
+      const firstCollectionIds: number[] = [...new Set(userTokens.tokens.map((item: UserToken) => item.collection_id))];
+      const myTokensList: MyTokensType[] = [];
 
-    if (firstCollections?.length) {
-      mountedRef.current && setCollections(firstCollections);
+      console.log('firstCollectionIds', firstCollectionIds);
 
-      if (account) {
-        const myTokensList: MyTokensType[] = [];
+      const firstCollections: NftCollectionInterface[] = await presetCollections(firstCollectionIds);
 
-        mountedRef && setTokensLoading(true);
+      if (firstCollections?.length) {
+        mountedRef.current && setCollections(firstCollections);
 
         for (let i = 0; i < firstCollections.length; i++) {
           const tokens: number[] = (await getTokensOfCollection(firstCollections[i].id, account)) as unknown as number[];
@@ -114,11 +117,17 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
           }
         }
 
-        mountedRef && setTokensLoading(false);
         mountedRef && setMyTokens(myTokensList);
       }
+
+      console.log('firstCollections', firstCollections);
     }
-  }, [account, getTokensOfCollection, mountedRef, setCollections, presetCollections]);
+  }, [account, getTokensOfCollection, mountedRef, presetCollections, setCollections, userTokens]);
+
+  const fetchScrolledData = useCallback(() => {
+    console.log('fetchScrolledData');
+    setPage((prevPage: number) => prevPage + 1);
+  }, []);
 
   const openDetailedInformationModal = useCallback((collectionId: string, tokenId: string) => {
     history.push(`/myStuff/token-details?collectionId=${collectionId}&tokenId=${tokenId}`);
@@ -165,7 +174,7 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
           <div
             className={`unique-card ${myFilteredTokens.length ? '' : 'empty'}`}
           >
-            { tokensLoading && (
+            { userTokensLoading && (
               <Loader
                 active
                 className='load-info'
@@ -174,20 +183,36 @@ function NftWallet ({ account, collectionId, collections, openPanel, setCollecti
             )}
             { myFilteredTokens.length
               ? (
-                <div className='tokens-list'>                    {
-                  myFilteredTokens.map(({ collectionId, tokenId }: MyTokensType) => (
-                    <NftTokenCard
-                      account={account}
-                      collectionId={collectionId}
-                      key={`${collectionId}-${tokenId}`}
-                      openDetailedInformationModal={openDetailedInformationModal}
-                      tokenId={tokenId}
+                <InfiniteScroll
+                  hasMore={hasMore}
+                  initialLoad={false}
+                  loadMore={fetchScrolledData}
+                  loader={
+                    <Loader
+                      active
+                      className='load-more'
+                      inline='centered'
+                      key={'nft-wallet'}
                     />
-                  ))
-                }
-                </div>
+                  }
+                  pageStart={1}
+                  threshold={200}
+                  useWindow={true}
+                >
+                  <div className='tokens-list'>
+                    { myFilteredTokens.map(({ collectionId, tokenId }: MyTokensType) => (
+                      <NftTokenCard
+                        account={account}
+                        collectionId={collectionId}
+                        key={`${collectionId}-${tokenId}`}
+                        openDetailedInformationModal={openDetailedInformationModal}
+                        tokenId={tokenId}
+                      />
+                    ))}
+                  </div>
+                </InfiniteScroll>
               )
-              : !tokensLoading && (
+              : !userTokensLoading && (
                 <div className='no-tokens'>
                   <img
                     alt='no tokens'

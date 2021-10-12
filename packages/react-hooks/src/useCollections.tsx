@@ -90,27 +90,27 @@ export function useCollections () {
     };
   }, [api.query.nft, getDetailedCollectionInfo]);
 
-  const presetCollections = useCallback(async (): Promise<NftCollectionInterface[]> => {
+  const presetCollections = useCallback(async (collectionIds: number[]): Promise<NftCollectionInterface[]> => {
     try {
       console.log('presetCollections');
 
-      const collections: Array<NftCollectionInterface> = JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
+      const collections: Array<NftCollectionInterface> = []; // JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
 
-      if (uniqueCollectionIds && uniqueCollectionIds.length) {
-        for (let i = 0; i < uniqueCollectionIds.length; i++) {
-          const mintCollectionInfo = await getDetailedCollectionInfo(uniqueCollectionIds[i]) as unknown as NftCollectionInterface;
+      const collectionIdsList = (collectionIds?.length ? collectionIds.map((item) => item.toString()) : uniqueCollectionIds);
 
-          if (cleanup.current) {
-            return [];
-          }
+      for (let i = 0; i < collectionIdsList.length; i++) {
+        const mintCollectionInfo = await getDetailedCollectionInfo(collectionIdsList[i]) as unknown as NftCollectionInterface;
 
-          if (mintCollectionInfo && mintCollectionInfo.Owner && mintCollectionInfo.Owner.toString() !== '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM' && !collections.find((collection) => collection.id === uniqueCollectionIds[i])) {
-            collections.push({ ...mintCollectionInfo, id: uniqueCollectionIds[i] });
-          }
+        if (cleanup.current) {
+          return [];
         }
 
-        localStorage.setItem('tokenCollections', JSON.stringify(collections));
+        if (mintCollectionInfo && mintCollectionInfo.Owner && mintCollectionInfo.Owner.toString() !== '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM' && !collections.find((collection) => collection.id === collectionIdsList[i])) {
+          collections.push({ ...mintCollectionInfo, id: collectionIdsList[i] });
+        }
       }
+
+      localStorage.setItem('tokenCollections', JSON.stringify(collections));
 
       return collections;
     } catch (e) {
