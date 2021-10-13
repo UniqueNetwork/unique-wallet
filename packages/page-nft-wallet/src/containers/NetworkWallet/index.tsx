@@ -3,8 +3,6 @@
 
 import './styles.scss';
 
-import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
-
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import React, { useCallback, useContext } from 'react';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
@@ -23,11 +21,8 @@ import TransferModal from '../../components/TransferModal';
 
 interface NftWalletProps {
   account?: string;
-  collections: NftCollectionInterface[];
   openPanel?: OpenPanelType;
-  removeCollectionFromList: (collectionToRemove: string) => void;
   setOpenPanel?: (openPanel: OpenPanelType) => void;
-  setCollections: (collections: (prevCollections: NftCollectionInterface[]) => (NftCollectionInterface[])) => void;
   setShouldUpdateTokens: (value: string) => void;
   shouldUpdateTokens?: string;
 }
@@ -55,7 +50,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
     [queueAction]
   );
 
-  const handleGetKSMClickByRamp = () => {
+  const handleGetKSMClickByRamp = useCallback(() => {
     const RampModal = new RampInstantSDK({
       hostAppName: 'Maker DAO',
       hostLogoUrl: `${window.location.origin}/logos/logoForRamp.svg`,
@@ -64,7 +59,15 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
     });
 
     RampModal.show();
-  };
+  }, []);
+
+  const onCopyKusamaAccount = useCallback(() => {
+    encodedKusamaAccount && copyAddress(encodedKusamaAccount);
+  }, [copyAddress, encodedKusamaAccount]);
+
+  const onCopyAccount = useCallback(() => {
+    account && copyAddress(account);
+  }, [account, copyAddress]);
 
   return (
     <div className='network-wallet'>
@@ -97,7 +100,9 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
               </span>
               <span>
                 {account}
-                <a onClick={account ? copyAddress.bind(null, account) : () => null }>
+                <a
+                  onClick={onCopyAccount}
+                >
                   <CopyIcon color={'var(--input-placeholder-search-color)'} />
                 </a>
               </span>
@@ -197,7 +202,9 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
               </span>
               <span>
                 {encodedKusamaAccount}
-                <a onClick={encodedKusamaAccount ? copyAddress.bind(null, encodedKusamaAccount) : () => null }>
+                <a
+                  onClick={onCopyKusamaAccount}
+                >
                   <CopyIcon color={'var(--input-placeholder-search-color)'} />
                 </a>
               </span>

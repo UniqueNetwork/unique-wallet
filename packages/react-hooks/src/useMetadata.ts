@@ -5,7 +5,7 @@ import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection
 import type { MetadataType } from '@polkadot/react-hooks/useCollections';
 import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback } from 'react';
 
 import { deserializeNft, ProtobufAttributeType } from '@polkadot/react-components/util/protobufUtils';
 import { useDecoder } from '@polkadot/react-hooks/useDecoder';
@@ -31,7 +31,6 @@ export type MetadataJsonType = {
 
 export const useMetadata = (): UseMetadataInterface => {
   const { hex2a } = useDecoder();
-  const cleanup = useRef<boolean>(false);
   const { getDetailedReFungibleTokenInfo, getDetailedTokenInfo } = useToken();
 
   const decodeStruct = useCallback(({ attr, data }: { attr?: any, data?: string }): AttributesDecoded => {
@@ -67,10 +66,6 @@ export const useMetadata = (): UseMetadataInterface => {
         const dataUrl = tokenImageUrl(collectionMetadata.metadata, tokenId);
         const urlResponse = await fetch(dataUrl);
         const jsonData = await urlResponse.json() as { image: string };
-
-        if (cleanup.current) {
-          return '';
-        }
 
         return jsonData.image;
       }
@@ -138,9 +133,7 @@ export const useMetadata = (): UseMetadataInterface => {
         tokenDetailsData = await getDetailedReFungibleTokenInfo(collectionInfo.id, tokenId.toString());
       }
 
-      if (cleanup.current) {
-        return tokenDetailsData;
-      }
+      return tokenDetailsData;
     }
 
     return tokenDetailsData;
@@ -155,12 +148,6 @@ export const useMetadata = (): UseMetadataInterface => {
       ...decodeStruct({ attr: onChainSchema.attributesVar, data: tokenDetails?.VariableData })
     };
   }, [getOnChainSchema, getTokenDetails, decodeStruct]);
-
-  useEffect(() => {
-    return () => {
-      cleanup.current = true;
-    };
-  }, []);
 
   return {
     decodeStruct,

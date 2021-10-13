@@ -25,19 +25,15 @@ export type UserTokensWrapper = {
 
 export type UseGraphQlInterface = {
   userCollections: NftCollectionInterface[];
+  userCollectionsIds: string[];
 };
 
-const USER_TOKENS = gql`
-  query Tokens($limit: Int!, $offset: Int!, $order: order_by!, $owner: String!) {
-     tokens(limit: $limit, where: { owner: { _eq: $owner } }, order_by: { token_id: $order }, offset: $offset) {
+const USER_COLLECTIONS_TOKENS = gql`
+  query Tokens($owner: String!) {
+     tokens(distinct_on: [collection_id], where: { owner: { _eq: $owner } }, order_by: { collection_id: desc }) {
       collection_id
       owner
       token_id
-    }
-    tokens_aggregate(where: {owner: {_eq: $owner }}) {
-      aggregate {
-        count
-      }
     }
   }
 `;
@@ -45,15 +41,16 @@ const USER_TOKENS = gql`
 /*
   Hook to get all collections user have tokens in
  */
-export const useGraphQlCollectionsTokens = (limit: number, offset: number, order: 'desc' | 'asc', account: string | undefined): UseGraphQlInterface => {
+export const useGraphQlCollectionsTokens = (account: string | undefined): UseGraphQlInterface => {
   const [userCollections, setUserCollections] = useState<NftCollectionInterface[]>([]);
+  const [userCollectionsIds, setUserCollectionsIds] = useState<string[]>([]);
   const mountedRef = useIsMountedRef();
   const { presetCollections } = useCollections();
   // can be useLazyQuery
-  const { data: userTokens } = useQuery(USER_TOKENS, {
+  const { data: userTokens } = useQuery(USER_COLLECTIONS_TOKENS, {
     fetchPolicy: 'network-only', // Used for first execution
     nextFetchPolicy: 'cache-first',
-    variables: { limit, offset, order, owner: account }
+    variables: { owner: account }
   }) as unknown as { data: UserTokensWrapper, error: string, loading: boolean };
 
   const initializeCollections = useCallback(async () => {
@@ -61,8 +58,9 @@ export const useGraphQlCollectionsTokens = (limit: number, offset: number, order
       const firstCollectionIds: number[] = [...new Set(userTokens.tokens.map((item: UserToken) => item.collection_id))];
       const firstCollections: NftCollectionInterface[] = await presetCollections(firstCollectionIds);
 
-      if (firstCollections?.length) {
-        mountedRef.current && setUserCollections(firstCollections);
+      if (firstCollections?.length && mountedRef.current) {
+        setUserCollections(firstCollections);
+        setUserCollectionsIds(firstCollections.map((collection) => collection.id));
       }
     }
   }, [account, mountedRef, presetCollections, userTokens]);
@@ -72,7 +70,8 @@ export const useGraphQlCollectionsTokens = (limit: number, offset: number, order
   }, [initializeCollections]);
 
   return {
-    userCollections
+    userCollections,
+    userCollectionsIds
   };
 };
 
