@@ -76,7 +76,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
   const isLocationAccounts = location.pathname.slice(1) === 'accounts';
   const noAccounts = !account && !isLocationAccounts;
 
-  console.log('isApiReady', isApiReady, 'needsApi', needsApi, 'isApiConnected', isApiConnected);
+  console.log('isApiReady', isApiReady);
 
   return (
     <>
