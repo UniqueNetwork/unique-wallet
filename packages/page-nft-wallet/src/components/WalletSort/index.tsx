@@ -5,9 +5,8 @@ import './styles.scss';
 
 import React, { memo, ReactElement, useCallback, useEffect, useState } from 'react';
 
-import ArrowDown from '../../components/ArrowDown';
-import ArrowUp from '../../components/ArrowUp';
 import { Filters } from '../../containers/NftWallet';
+import SortItem from './SortItem';
 
 interface PropTypes {
   filters: Filters;
@@ -15,58 +14,43 @@ interface PropTypes {
 }
 
 const WalletSort = ({ filters, setFilters }: PropTypes): ReactElement => {
-  const [sortValue, setSortValue] = useState<string>('creationDate-desc');
+  const [sortValue, setSortValue] = useState<string>('tokenId-desc');
 
   const setSort = useCallback((key: string) => {
-    setSortValue(key || 'creationDate-desc');
+    setSortValue(key || 'tokenId-desc');
 
     if (key && filters) {
-      setFilters({ ...filters, sort: `${key.split('-')[1]}(${key.split('-')[0]})` });
+      setFilters({ ...filters, sort: `${key.split('-')[1]}` as 'asc' | 'desc' });
     }
   }, [filters, setFilters]);
-
-  const sortItem = useCallback((active: boolean, order: 'asc' | 'desc', text: string, key: string) => {
-    return (
-      <div
-        className={active ? 'current active' : 'current'}
-        onClick={setSort.bind(null, key)}
-      >
-        {text}
-        {order === 'asc' && (
-          <ArrowUp />
-        )}
-        {order === 'desc' && (
-          <ArrowDown />
-        )}
-      </div>
-    );
-  }, [setSort]);
 
   const setSortByFilter = useCallback(() => {
     const sort = filters.sort;
 
     // desc(creationDate)
-    if (sort.includes('(') && sort.includes(')')) {
-      const sortString = sort.replace(')', '').replace('(', '-');
-      const sortArr = sortString.split('-');
-
-      // 'creationDate-desc'
-      setSortValue(`${sortArr[1]}-${sortArr[0]}`);
-    } else {
-      console.log('something wrong with sort filer');
-    }
+    setSortValue(`tokenId-${sort}`);
   }, [filters]);
 
   useEffect(() => {
     setSortByFilter();
   }, [setSortByFilter]);
 
-  // console.log('filters', filters, 'sortValue', sortValue);
-
   return (
     <div className='sort-main'>
-      {sortItem(sortValue === 'tokenId-desc', 'desc', 'Token ID', 'tokenId-desc')}
-      {sortItem(sortValue === 'tokenId-asc', 'asc', 'Token ID', 'tokenId-asc')}
+      <SortItem
+        active={sortValue === 'tokenId-desc'}
+        order={'desc'}
+        setSort={setSort}
+        sortKey={'tokenId-desc'}
+        text={'Token ID'}
+      />
+      <SortItem
+        active={sortValue === 'tokenId-asc'}
+        order={'asc'}
+        setSort={setSort}
+        sortKey={'tokenId-asc'}
+        text={'Token ID'}
+      />
     </div>
   );
 };

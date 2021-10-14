@@ -9,7 +9,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Form from 'semantic-ui-react/dist/commonjs/collections/Form';
 import Dropdown, { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown';
 
-import { SearchFilter } from '@polkadot/react-components';
+import { Filters } from '@polkadot/app-nft-wallet/containers/NftWallet';
+// import { SearchFilter } from '@polkadot/react-components';
 import { useCollections, useDecoder } from '@polkadot/react-hooks';
 
 import ArrowDown from '../ArrowDown';
@@ -17,15 +18,15 @@ import ArrowUp from '../ArrowUp';
 
 interface Props {
   account: string | null | undefined;
-  addCollection: (item: NftCollectionInterface) => void;
-  collections: NftCollectionInterface[];
+  filters: Filters;
+  setFilters: (filters: Filters) => void;
 }
 
-function TokensSearch ({ account, addCollection, collections }: Props): React.ReactElement<Props> {
+function TokensSearch ({ account, filters, setFilters }: Props): React.ReactElement<Props> {
   const [collectionsAvailable, setCollectionsAvailable] = useState<Array<NftCollectionInterface>>([]);
   const [collectionsMatched, setCollectionsMatched] = useState<Array<NftCollectionInterface>>([]);
   const [searchString, setSearchString] = useState<string>('');
-  const [sortValue, setSortValue] = useState<string>('creationDate-desc');
+  const [sortValue, setSortValue] = useState<string>('tokenId-desc');
   const { presetTokensCollections } = useCollections();
   const currentAccount = useRef<string | null | undefined>();
   const { collectionName16Decoder } = useDecoder();
@@ -45,19 +46,21 @@ function TokensSearch ({ account, addCollection, collections }: Props): React.Re
   }, []);
 
   const sortOptions = useMemo(() => ([
-    { content: (optionNode(false, 'asc', 'Price')), key: 'PriceUp', text: 'Price', value: 'price-asc' },
-    { content: (optionNode(false, 'desc', 'Price')), key: 'PriceDown', text: 'Price', value: 'price-desc' },
     { content: (optionNode(false, 'asc', 'Token ID')), key: 'TokenIDUp', text: 'Token ID', value: 'tokenId-asc' },
-    { content: (optionNode(false, 'desc', 'Token ID')), key: 'TokenIDDown', text: 'Token ID', value: 'tokenId-desc' },
-    { content: (optionNode(false, 'asc', 'Listing date')), key: 'ListingDateUp', text: 'Listing date', value: 'creationDate-asc' },
-    { content: (optionNode(false, 'desc', 'Listing date')), key: 'ListingDateDown', text: 'Listing date', value: 'creationDate-desc' }
+    { content: (optionNode(false, 'desc', 'Token ID')), key: 'TokenIDDown', text: 'Token ID', value: 'tokenId-desc' }
   ]), [optionNode]);
 
   const setSort = useCallback((event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
     const { value } = data;
 
-    setSortValue(value?.toString() || 'creationDate-desc');
-  }, []);
+    const key = value?.toString() || 'tokenId-desc';
+
+    setSortValue(key);
+
+    if (key && filters) {
+      setFilters({ ...filters, sort: `${key.split('-')[1]}` as 'asc' | 'desc' });
+    }
+  }, [filters, setFilters]);
 
   const clearFilters = useCallback(() => {
     // clearAllFilters();
@@ -100,10 +103,10 @@ function TokensSearch ({ account, addCollection, collections }: Props): React.Re
     }
   }, [presetTokensCollections]);
 
-  const clearSearch = useCallback(() => {
+  /* const clearSearch = useCallback(() => {
     setSearchString('');
     setCollectionsMatched([]);
-  }, []);
+  }, []); */
 
   useEffect(() => {
     if (searchString.length >= 3) {
@@ -129,13 +132,13 @@ function TokensSearch ({ account, addCollection, collections }: Props): React.Re
 
   return (
     <Form className='tokens-search'>
-      <Form.Field className='search-field'>
+      {/* <Form.Field className='search-field'>
         <SearchFilter
           clearSearch={clearSearch}
           searchString={searchString}
           setSearchString={setSearchString}
         />
-      </Form.Field>
+      </Form.Field> */}
       <Form.Field className='sort-field'>
         <Dropdown
           onChange={setSort}
