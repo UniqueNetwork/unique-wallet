@@ -168,6 +168,7 @@ class InputAddress extends React.PureComponent<Props, State> {
       isDisabled && actualValue
       ? [createOption(actualValue)]
       : this.getFiltered();
+
     const _defaultValue = (isMultiple || !isUndefined(value))
       ? undefined
       : actualValue;
@@ -217,8 +218,9 @@ class InputAddress extends React.PureComponent<Props, State> {
   private getLastOptionValue (): KeyringSectionOption | undefined {
     const available = this.getFiltered();
 
+    // first value is 'manage accounts', last value is 'footer', so we take penultimate value
     return available.length
-      ? available[available.length - 1]
+      ? available[available.length - 2]
       : undefined;
   }
 

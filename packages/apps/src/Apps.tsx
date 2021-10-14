@@ -76,6 +76,8 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
   const isLocationAccounts = location.pathname.slice(1) === 'accounts';
   const noAccounts = !account && !isLocationAccounts;
 
+  console.log('isApiReady', isApiReady, 'needsApi', needsApi, 'isApiConnected', isApiConnected);
+
   return (
     <>
       <GlobalStyle uiHighlight={uiHighlight} />
@@ -149,35 +151,22 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                                 />
                               </>
                             </Menu>
-                            { (isApiReady) && (
-                              <div className={`app-user${account ? '' : ' hidden'}`}>
-                                <BalancesHeader
+                            <div className='app-user'>
+                              <BalancesHeader
+                                account={account}
+                              />
+                              <div className='account-selector-block'>
+                                <AccountSelector
                                   account={account}
+                                  onChange={setAccount}
                                 />
-                                <div className='account-selector-block'>
-                                  <AccountSelector
-                                    account={account}
-                                    onChange={setAccount}
-                                  />
-                                  <MobileAccountSelector
-                                    address={account}
-                                    openPanel={openPanel}
-                                    setOpenPanel={setOpenPanel}
-                                  />
-                                </div>
+                                <MobileAccountSelector
+                                  address={account}
+                                  openPanel={openPanel}
+                                  setOpenPanel={setOpenPanel}
+                                />
                               </div>
-                            )}
-                            { !account && (
-                              <Menu className='create-account'>
-                                <Menu.Item
-                                  active={location.pathname === '/accounts'}
-                                  as={NavLink}
-                                  className='crateAccountBtn'
-                                  name='Create or connect account'
-                                  to='/accounts'
-                                />
-                              </Menu>
-                            )}
+                            </div>
                           </div>
                         </header>
                         { openPanel === 'menu' && (
