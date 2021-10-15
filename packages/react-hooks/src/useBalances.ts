@@ -19,7 +19,7 @@ interface UseBalancesInterface {
 export const useBalances = (account: string | undefined, getUserDeposit?: () => Promise<BN | null>): UseBalancesInterface => {
   const { api } = useApi();
   const { encodedKusamaAccount, kusamaApi } = useKusamaApi(account || '');
-  const balancesAll = useCall<DeriveBalancesAll>(api.derive.balances?.all, [account]);
+  const balancesAll = useCall<DeriveBalancesAll>(api?.derive.balances?.all, [account]);
   const kusamaBalancesAll = useCall<DeriveBalancesAll>(kusamaApi?.derive.balances?.all, [account]);
   const [freeBalance, setFreeBalance] = useState<BN>();
   const [freeKusamaBalance, setFreeKusamaBalance] = useState<BN>();
