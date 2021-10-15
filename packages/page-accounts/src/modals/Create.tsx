@@ -11,8 +11,7 @@ import styled from 'styled-components';
 
 import { DEV_PHRASE } from '@polkadot/keyring/defaults';
 import { getEnvironment } from '@polkadot/react-api/util';
-import { AddressRow, Button, Checkbox, CopyButton, Dropdown, Input, InputAddress, Modal, TextArea } from '@polkadot/react-components';
-import HelpTooltip from '@polkadot/react-components/HelpTooltip';
+import { AddressRow, Button, Checkbox, CopyButton, Dropdown, HelpTooltip, Input, InputAddress, Modal, TextArea } from '@polkadot/react-components';
 import { useApi, useStepper } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 import { isHex, u8aToHex } from '@polkadot/util';

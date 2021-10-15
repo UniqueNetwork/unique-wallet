@@ -4,9 +4,8 @@
 import { gql, useQuery } from '@apollo/client';
 import { useCallback, useEffect, useState } from 'react';
 
+import { useCollections, useIsMountedRef } from '@polkadot/react-hooks';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
-import { useCollections } from '@polkadot/react-hooks/useCollections';
-import { useIsMountedRef } from '@polkadot/react-hooks/useIsMountedRef';
 
 export type UserToken = {
   'collection_id': number;
