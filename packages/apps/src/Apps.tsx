@@ -132,9 +132,6 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                         <BalancesHeader
                           account={account}
                         />
-                        <BalancesHeader
-                          account={account}
-                        />
                         <div className='account-selector-block'>
                           <AccountSelector
                             account={account}
