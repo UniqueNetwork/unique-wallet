@@ -9,7 +9,6 @@ import type { BareProps as Props, ThemeDef } from '@polkadot/react-components/ty
 import React, { Suspense, useContext, useMemo, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import Menu from 'semantic-ui-react/dist/commonjs/collections/Menu';
-import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 import { ThemeContext } from 'styled-components';
 
 import NotFound from '@polkadot/apps/NotFound';
@@ -24,7 +23,6 @@ import GlobalStyle from '@polkadot/react-components/styles';
 import { useApi } from '@polkadot/react-hooks';
 import Signer from '@polkadot/react-signer';
 
-import ConnectingOverlay from './overlays/Connecting';
 import BalancesHeader from './BalancesHeader';
 import ManageAccounts from './ManageAccounts';
 import MobileAccountSelector from './MobileAccountSelector';
@@ -74,7 +72,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
   const isLocationAccounts = location.pathname.slice(1) === 'accounts';
   const noAccounts = !account && !isLocationAccounts;
 
-  console.log('isApiReady', isApiReady);
+  console.log('isApiReady', isApiReady, 'isApiConnected', isApiConnected);
 
   return (
     <>
@@ -82,130 +80,120 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
       <ScrollToTop />
       <div className={`app-wrapper theme--${theme.theme} ${className}`}>
         <Signer>
-          {(!isApiReady || !isApiConnected)
-            ? (
-              <div className='connecting'>
-                <Loader
-                  active
-                  inline='centered'
-                >
-                  Initializing connection
-                </Loader>
-              </div>
-            )
-            : (
+          <>
+            <ErrorBoundary
+              isPageFound={isPageFound}
+              setIsPageFound={setIsPageFound}
+              trigger={name}
+            >
               <>
-                <ErrorBoundary
-                  isPageFound={isPageFound}
-                  setIsPageFound={setIsPageFound}
-                  trigger={name}
-                >
-                  <>
-                    <header className='app-header'>
-                      <div className='app-container app-container--header'>
-                        <MobileMenuHeader
-                          isMobileMenu={openPanel}
-                          setIsMobileMenu={setOpenPanel}
-                          theme={theme}
+                <header className='app-header'>
+                  <div className='app-container app-container--header'>
+                    <MobileMenuHeader
+                      isMobileMenu={openPanel}
+                      setIsMobileMenu={setOpenPanel}
+                      theme={theme}
+                    />
+                    <Menu
+                      className='header-menu'
+                      tabular
+                    >
+                      { theme.logo && (
+                        <Menu.Item
+                          active={location.pathname === '/'}
+                          as={NavLink}
+                          className='app-logo'
+                          icon={
+                            <img
+                              alt={`logo ${theme.theme}`}
+                              src={theme.logo}
+                            />
+                          }
+                          to='/'
                         />
-                        <Menu
-                          className='header-menu'
-                          tabular
-                        >
-                          { theme.logo && (
-                            <Menu.Item
-                              active={location.pathname === '/'}
-                              as={NavLink}
-                              className='app-logo'
-                              icon={
-                                <img
-                                  alt={`logo ${theme.theme}`}
-                                  src={theme.logo}
-                                />
-                              }
-                              to='/'
-                            />
-                          )}
-                          <>
-                            <Menu.Item
-                              active={location.pathname === '/myStuff'}
-                              as={NavLink}
-                              name='myStuff'
-                              to='/myStuff'
-                            />
-                            <Menu.Item
-                              active={location.pathname === '/faq'}
-                              as={NavLink}
-                              name='FAQ'
-                              to='/faq'
-                            />
-                          </>
-                        </Menu>
-                        <div className='app-user'>
-                          <BalancesHeader
+                      )}
+                      <>
+                        <Menu.Item
+                          active={location.pathname === '/myStuff'}
+                          as={NavLink}
+                          name='myStuff'
+                          to='/myStuff'
+                        />
+                        <Menu.Item
+                          active={location.pathname === '/faq'}
+                          as={NavLink}
+                          name='FAQ'
+                          to='/faq'
+                        />
+                      </>
+                    </Menu>
+                    { (isApiReady && isApiConnected) && (
+                      <div className='app-user'>
+                        <BalancesHeader
+                          account={account}
+                        />
+                        <BalancesHeader
+                          account={account}
+                        />
+                        <div className='account-selector-block'>
+                          <AccountSelector
                             account={account}
+                            onChange={setAccount}
                           />
-                          <div className='account-selector-block'>
-                            <AccountSelector
-                              account={account}
-                              onChange={setAccount}
-                            />
-                            <MobileAccountSelector
-                              address={account}
-                              openPanel={openPanel}
-                              setOpenPanel={setOpenPanel}
-                            />
-                          </div>
+                          <MobileAccountSelector
+                            address={account}
+                            openPanel={openPanel}
+                            setOpenPanel={setOpenPanel}
+                          />
                         </div>
                       </div>
-                    </header>
-                    { openPanel === 'menu' && (
-                      <MobileMenu
-                        account={account}
-                        setOpenPanel={setOpenPanel}
-                        theme={theme}
-                      />
                     )}
-                    { openPanel === 'accounts' && (
-                      <ManageAccounts
-                        account={account}
-                        setAccount={setAccount}
-                        setIsMobileMenu={setOpenPanel}
-                      />
-                    )}
+                  </div>
+                </header>
+                { (isApiReady && isApiConnected) && openPanel === 'menu' && (
+                  <MobileMenu
+                    account={account}
+                    setOpenPanel={setOpenPanel}
+                    theme={theme}
+                  />
+                )}
+                { openPanel === 'accounts' && (
+                  <ManageAccounts
+                    account={account}
+                    setAccount={setAccount}
+                    setIsMobileMenu={setOpenPanel}
+                  />
+                )}
 
-                    { (openPanel !== 'accounts') && (
-                      <Suspense fallback=''>
-                        <main className={`app-main ${openPanel || ''} ${noAccounts ? 'no-accounts' : ''} ${!isPageFound ? 'page-no-found' : ''}`}>
-                          <div className='app-container'>
-                            {
-                              noAccounts
-                                ? <Welcome onStatusChange={queueAction} />
-                                : isPageFound
-                                  ? (
-                                    <Component
-                                      account = {account}
-                                      basePath={`/${name}`}
-                                      location={location}
-                                      onStatusChange={queueAction}
-                                      openPanel={openPanel}
-                                      setAccount={setAccount}
-                                      setOpenPanel={setOpenPanel}
-                                    />)
-                                  : <PageNotFound />
-                            }
-                            <ConnectingOverlay />
-                            <div id={PORTAL_ID} />
-                          </div>
-                        </main>
-                      </Suspense>
-                    )}
-                  </>
-                </ErrorBoundary>
-                <Status />
+                { (openPanel !== 'accounts') && (
+                  <Suspense fallback=''>
+                    <main className={`app-main ${openPanel || ''} ${noAccounts ? 'no-accounts' : ''} ${!isPageFound ? 'page-no-found' : ''}`}>
+                      <div className='app-container'>
+                        {
+                          noAccounts
+                            ? <Welcome onStatusChange={queueAction} />
+                            : isPageFound
+                              ? (
+                                <Component
+                                  account = {account}
+                                  basePath={`/${name}`}
+                                  location={location}
+                                  onStatusChange={queueAction}
+                                  openPanel={openPanel}
+                                  setAccount={setAccount}
+                                  setOpenPanel={setOpenPanel}
+                                />)
+                              : <PageNotFound />
+                        }
+                        <div id={PORTAL_ID} />
+                      </div>
+                    </main>
+                  </Suspense>
+                )}
               </>
-            )
-          }
+            </ErrorBoundary>
+            <Status />
+          </>
         </Signer>
       </div>
       <WarmUp />
