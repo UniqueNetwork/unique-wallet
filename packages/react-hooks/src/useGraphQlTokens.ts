@@ -36,7 +36,12 @@ const USER_TOKENS = gql`
       owner
       token_id
     }
-    tokens_aggregate(where: {owner: {_eq: $owner }}) {
+    tokens_aggregate( where: {
+        _and: [
+          { owner: { _eq: $owner } }
+          { collection_id: {_in: $collectionIds }}
+        ]
+      }) {
       aggregate {
         count
       }

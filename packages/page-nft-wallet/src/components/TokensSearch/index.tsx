@@ -20,9 +20,10 @@ interface Props {
   account: string | null | undefined;
   filters: Filters;
   setFilters: (filters: Filters) => void;
+  tokensCount: number
 }
 
-function TokensSearch ({ account, filters, setFilters }: Props): React.ReactElement<Props> {
+function TokensSearch ({ account, filters, setFilters, tokensCount }: Props): React.ReactElement<Props> {
   const [collectionsAvailable, setCollectionsAvailable] = useState<Array<NftCollectionInterface>>([]);
   const [collectionsMatched, setCollectionsMatched] = useState<Array<NftCollectionInterface>>([]);
   const [searchString, setSearchString] = useState<string>('');
@@ -148,7 +149,7 @@ function TokensSearch ({ account, filters, setFilters }: Props): React.ReactElem
       </Form.Field>
       <Form.Field className='search-results'>
         <span>
-          {collectionsMatched.length} items
+          {tokensCount} items
         </span>
         { areFiltersActive && <a onClick={clearFilters}>Clear all filters</a> }
       </Form.Field>
