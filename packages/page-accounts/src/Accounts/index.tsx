@@ -52,8 +52,10 @@ function Overview ({ className = 'page-accounts', onStatusChange, setAccount }: 
 
   return (
     <div className='page-accounts'>
-      <Header as='h1'
-        className='mobile-header'>Manage accounts</Header>
+      <Header
+        as='h1'
+        className='mobile-header'
+      >Manage accounts</Header>
       <div className='page-accounts--card'>
         <div className='page-accounts--card--header'>
           <AccountButtonsGroup onStatusChange={queueAction} />

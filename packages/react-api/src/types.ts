@@ -27,7 +27,7 @@ export interface ApiState {
 }
 
 export interface ApiProps extends ApiState {
-  api: ApiPromise | null;
+  api: ApiPromise;
   apiError: string | null;
   extensions?: InjectedExtension[];
   isApiConnected: boolean;

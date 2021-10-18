@@ -5,8 +5,7 @@ import type { KeypairType } from '@polkadot/util-crypto/types';
 
 import React from 'react';
 
-import { AddressRow, MarkWarning, Modal, Static } from '@polkadot/react-components';
-import HelpTooltip from '@polkadot/react-components/HelpTooltip';
+import { AddressRow, HelpTooltip, MarkWarning, Modal, Static } from '@polkadot/react-components';
 
 interface Props {
   address?: string;
