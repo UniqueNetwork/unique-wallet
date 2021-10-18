@@ -40,6 +40,10 @@ module.exports = merge(
         [process.env.WHITE_LABEL_URL]: {
           changeOrigin: true,
           target: process.env.WHITE_LABEL_URL
+        },
+        [process.env.GRAPH_QL_API]: {
+          changeOrigin: true,
+          target: process.env.GRAPH_QL_API
         }
       },
       static: path.resolve(__dirname, 'build')

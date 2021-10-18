@@ -3,15 +3,12 @@
 
 import './styles.scss';
 
-import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
-
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Form from 'semantic-ui-react/dist/commonjs/collections/Form';
 import Dropdown, { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown';
 
 import { Filters } from '@polkadot/app-nft-wallet/containers/NftWallet';
 // import { SearchFilter } from '@polkadot/react-components';
-import { useCollections, useDecoder } from '@polkadot/react-hooks';
 
 import ArrowDown from '../ArrowDown';
 import ArrowUp from '../ArrowUp';
@@ -24,13 +21,8 @@ interface Props {
 }
 
 function TokensSearch ({ account, filters, setFilters, tokensCount }: Props): React.ReactElement<Props> {
-  const [collectionsAvailable, setCollectionsAvailable] = useState<Array<NftCollectionInterface>>([]);
-  const [collectionsMatched, setCollectionsMatched] = useState<Array<NftCollectionInterface>>([]);
-  const [searchString, setSearchString] = useState<string>('');
+  // const [searchString, setSearchString] = useState<string>('');
   const [sortValue, setSortValue] = useState<string>('tokenId-desc');
-  const { presetTokensCollections } = useCollections();
-  const currentAccount = useRef<string | null | undefined>();
-  const { collectionName16Decoder } = useDecoder();
 
   const optionNode = useCallback((active: boolean, order: string, text: string) => {
     return (
@@ -63,10 +55,10 @@ function TokensSearch ({ account, filters, setFilters, tokensCount }: Props): Re
     }
   }, [filters, setFilters]);
 
-  const clearFilters = useCallback(() => {
+  /* const clearFilters = useCallback(() => {
     // clearAllFilters();
     setSearchString('');
-  }, []);
+  }, []); */
 
   const currentValue = useMemo(() => {
     if (sortValue) {
@@ -80,7 +72,7 @@ function TokensSearch ({ account, filters, setFilters, tokensCount }: Props): Re
     return optionNode(false, 'none', 'Sort by');
   }, [optionNode, sortOptions, sortValue]);
 
-  const searchCollection = useCallback(() => {
+  /* const searchCollection = useCallback(() => {
     const filteredCollections = collectionsAvailable.filter((collection) => {
       const collectionName = collectionName16Decoder(collection.Name).toLowerCase();
 
@@ -93,43 +85,17 @@ function TokensSearch ({ account, filters, setFilters, tokensCount }: Props): Re
     });
 
     setCollectionsMatched(filteredCollections);
-  }, [collectionName16Decoder, collectionsAvailable, searchString]);
-
-  const getCollections = useCallback(async () => {
-    const collections = await presetTokensCollections();
-
-    if (collections && collections.length) {
-      setCollectionsAvailable(collections);
-      setCollectionsMatched(collections);
-    }
-  }, [presetTokensCollections]);
-
-  /* const clearSearch = useCallback(() => {
-    setSearchString('');
-    setCollectionsMatched([]);
-  }, []); */
-
-  useEffect(() => {
-    if (searchString.length >= 3) {
-      searchCollection();
-    }
-  }, [searchCollection, searchString]);
+  }, [collectionName16Decoder, collectionsAvailable, searchString]); */
 
   // clear search results if account changed
-  useEffect(() => {
+  /* useEffect(() => {
     if (currentAccount.current && currentAccount.current !== account) {
       setCollectionsMatched([]);
       setSearchString('');
     }
 
     currentAccount.current = account;
-  }, [account]);
-
-  useEffect(() => {
-    void getCollections();
-  }, [getCollections]);
-
-  const areFiltersActive = true;
+  }, [account]); */
 
   return (
     <Form className='tokens-search'>
@@ -151,7 +117,7 @@ function TokensSearch ({ account, filters, setFilters, tokensCount }: Props): Re
         <span>
           {tokensCount} items
         </span>
-        { areFiltersActive && <a onClick={clearFilters}>Clear all filters</a> }
+        {/* { areFiltersActive && <a onClick={clearFilters}>Clear all filters</a> } */}
       </Form.Field>
     </Form>
   );
