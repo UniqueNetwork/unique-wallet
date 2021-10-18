@@ -142,6 +142,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
               account={account}
               filters={filters}
               setFilters={setFilters}
+              tokensCount={tokensCount}
             />
           </div>
           <div className={`unique-card ${Object.keys(myTokens).length ? '' : 'empty'}`}>
@@ -181,7 +182,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                 </div>
               </InfiniteScroll>
             )}
-            {(!userTokensLoading && Object.keys(myTokens).length === 0 && !userTokens?.tokens_aggregate?.aggregate?.count) && (
+            {(!userTokensLoading && !tokensCount) && (
               <div className='no-tokens'>
                 <img
                   alt='no tokens'
