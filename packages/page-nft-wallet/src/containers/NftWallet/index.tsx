@@ -63,7 +63,13 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   const currentFilter = useRef<Filters>(defaultFilters);
 
   const clearCheckedValues = useCallback(() => {
-    mountedRef && setFilters((prevState) => ({ ...prevState, collectionIds: [] }));
+    mountedRef && setFilters((prevState) => {
+      const newFilters = { ...prevState, collectionIds: [] };
+
+      sessionStorage.setItem('walletFilters', JSON.stringify(newFilters));
+
+      return newFilters;
+    });
   }, [mountedRef]);
 
   const clearAllFilters = useCallback(() => {
