@@ -47,7 +47,7 @@ export type MyTokensListType = {
 const limit = 10;
 
 function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalletProps): React.ReactElement {
-  const storageFilters = JSON.parse(sessionStorage.getItem('filters') as string) as Filters;
+  const storageFilters = JSON.parse(sessionStorage.getItem('walletFilters') as string) as Filters;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const initialFilters = storageFilters && !equal(storageFilters, defaultFilters) ? storageFilters : defaultFilters;
   const [showCollectionsFilter, toggleCollectionsFilter] = useState<boolean>(true);
@@ -69,7 +69,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   const clearAllFilters = useCallback(() => {
     if (mountedRef) {
       setFilters(defaultFilters);
-      sessionStorage.removeItem('filters');
+      sessionStorage.removeItem('walletFilters');
       setOpenPanel && setOpenPanel('tokens');
     }
   }, [mountedRef, setOpenPanel]);
@@ -83,11 +83,17 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
       newIds = [...filters.collectionIds, id];
     }
 
-    mountedRef && setFilters((prevState) => ({ ...prevState, collectionIds: newIds }));
+    mountedRef && setFilters((prevState) => {
+      const newFilters = { ...prevState, collectionIds: newIds };
+
+      sessionStorage.setItem('walletFilters', JSON.stringify(newFilters));
+
+      return newFilters;
+    });
   }, [mountedRef, filters]);
 
   const initializeTokens = useCallback(() => {
-    if (account && !userTokensLoading) {
+    if (account && !userTokensLoading && userTokens?.tokens) {
       mountedRef.current && setMyTokens((prevState: MyTokensListType) => {
         const myTokensList: MyTokensListType = { ...prevState };
 

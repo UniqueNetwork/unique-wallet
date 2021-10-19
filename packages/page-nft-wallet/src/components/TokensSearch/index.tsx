@@ -51,7 +51,10 @@ function TokensSearch ({ account, filters, setFilters, tokensCount }: Props): Re
     setSortValue(key);
 
     if (key && filters) {
-      setFilters({ ...filters, sort: `${key.split('-')[1]}` as 'asc' | 'desc' });
+      const newFilters = { ...filters, sort: `${key.split('-')[1]}` as 'asc' | 'desc' };
+
+      setFilters(newFilters);
+      sessionStorage.setItem('walletFilters', JSON.stringify(newFilters));
     }
   }, [filters, setFilters]);
 
