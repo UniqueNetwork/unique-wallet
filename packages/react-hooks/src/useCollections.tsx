@@ -88,8 +88,6 @@ export function useCollections () {
 
   const presetCollections = useCallback(async (collectionIds: number[]): Promise<NftCollectionInterface[]> => {
     try {
-      console.log('presetCollections');
-
       const collections: Array<NftCollectionInterface> = []; // JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
 
       const collectionIdsList = (collectionIds?.length ? collectionIds.map((item) => item.toString()) : uniqueCollectionIds);

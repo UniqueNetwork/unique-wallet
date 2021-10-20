@@ -25,6 +25,7 @@ export type UserTokensWrapper = {
 export type UseGraphQlInterface = {
   userCollections: NftCollectionInterface[];
   userCollectionsIds: string[];
+  userCollectionsLoading: boolean;
 };
 
 const USER_COLLECTIONS_TOKENS = gql`
@@ -46,7 +47,7 @@ export const useGraphQlCollectionsTokens = (account: string | undefined): UseGra
   const mountedRef = useIsMountedRef();
   const { presetCollections } = useCollections();
   // can be useLazyQuery
-  const { data: userTokens } = useQuery(USER_COLLECTIONS_TOKENS, {
+  const { data: userTokens, loading: userCollectionsLoading } = useQuery(USER_COLLECTIONS_TOKENS, {
     fetchPolicy: 'network-only', // Used for first execution
     nextFetchPolicy: 'cache-first',
     variables: { owner: account }
@@ -55,11 +56,15 @@ export const useGraphQlCollectionsTokens = (account: string | undefined): UseGra
   const initializeCollections = useCallback(async () => {
     if (account && userTokens && userTokens.tokens) {
       const firstCollectionIds: number[] = [...new Set(userTokens.tokens.map((item: UserToken) => item.collection_id))];
+      // if we have no collections, presetCollections returns [Chelobricks, Substratpunks] as default with empty tokens list
       const firstCollections: NftCollectionInterface[] = await presetCollections(firstCollectionIds);
 
       if (firstCollections?.length && mountedRef.current) {
         setUserCollections(firstCollections);
         setUserCollectionsIds(firstCollections.map((collection) => collection.id));
+      } else {
+        setUserCollections([]);
+        setUserCollectionsIds([]);
       }
     }
   }, [account, mountedRef, presetCollections, userTokens]);
@@ -70,7 +75,8 @@ export const useGraphQlCollectionsTokens = (account: string | undefined): UseGra
 
   return {
     userCollections,
-    userCollectionsIds
+    userCollectionsIds,
+    userCollectionsLoading
   };
 };
 

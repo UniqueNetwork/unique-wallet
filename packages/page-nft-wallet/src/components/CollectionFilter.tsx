@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { memo, useCallback, useEffect, useState } from 'react';
+import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import { useMetadata } from '@polkadot/react-hooks';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
@@ -13,6 +14,7 @@ export type CollectionImagesType = { [key: string]: string; };
 interface Props {
   clearCheckedValues: () => void;
   collections: NftCollectionInterface[];
+  collectionsLoading: boolean;
   selectedCollections: string[];
   filterCurrent: (id: string) => void;
   isShowCollection: boolean;
@@ -20,7 +22,7 @@ interface Props {
 }
 
 function CollectionFilter (props: Props): React.ReactElement<Props> {
-  const { clearCheckedValues, collections, filterCurrent, isShowCollection, selectedCollections, setIsShowCollection } = props;
+  const { clearCheckedValues, collections, collectionsLoading, filterCurrent, isShowCollection, selectedCollections, setIsShowCollection } = props;
   const { getTokenImageUrl } = useMetadata();
   const [images, setImages] = useState <CollectionImagesType>({});
 
@@ -62,7 +64,14 @@ function CollectionFilter (props: Props): React.ReactElement<Props> {
       { isShowCollection && (
         <div className='collection-filter--body'>
           <div className='collection-list'>
-            {collections.map((collection, index) => (
+            { collectionsLoading && (
+              <Loader
+                active
+                className='load-info'
+                inline='centered'
+              />
+            )}
+            { !collectionsLoading && collections.map((collection, index) => (
               <CollectionFilterItem
                 collectionId={collection.id}
                 collectionName={collection.Name}

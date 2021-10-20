@@ -56,11 +56,12 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   const mountedRef = useIsMountedRef();
   const history = useHistory();
   const [page, setPage] = useState<number>(1);
-  const { userCollections, userCollectionsIds } = useGraphQlCollectionsTokens(account);
+  const { userCollections, userCollectionsIds, userCollectionsLoading } = useGraphQlCollectionsTokens(account);
   const { userTokens, userTokensLoading } = useGraphQlTokens(limit, (page - 1) * limit, filters.sort, filters.collectionIds?.length ? filters.collectionIds : userCollectionsIds, account);
   const tokensCount = userTokens?.tokens_aggregate?.aggregate?.count || 0;
   const hasMore = !!(tokensCount && Object.keys(myTokens).length < tokensCount);
   const currentFilter = useRef<Filters>(defaultFilters);
+  const currentAccount = useRef<string>();
 
   const clearCheckedValues = useCallback(() => {
     mountedRef && setFilters((prevState) => {
@@ -124,14 +125,15 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   }, [history]);
 
   const refillTokens = useCallback(() => {
-    if (currentFilter.current !== filters) {
+    if (currentFilter.current !== filters || currentAccount.current !== account) {
       setPage(1);
       setMyTokens({});
       currentFilter.current = filters;
+      currentAccount.current = account;
     }
 
     initializeTokens();
-  }, [currentFilter, filters, initializeTokens]);
+  }, [account, currentFilter, filters, initializeTokens]);
 
   useEffect(() => {
     refillTokens();
@@ -143,6 +145,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
         <CollectionFilter
           clearCheckedValues={clearCheckedValues}
           collections={userCollections}
+          collectionsLoading={userCollectionsLoading}
           filterCurrent={onCollectionCheck}
           isShowCollection={showCollectionsFilter}
           selectedCollections={filters.collectionIds}
@@ -194,7 +197,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                 </div>
               </InfiniteScroll>
             )}
-            {(!userTokensLoading && !tokensCount) && (
+            {(!userTokensLoading && !tokensCount && !userCollectionsLoading) && (
               <div className='no-tokens'>
                 <img
                   alt='no tokens'
