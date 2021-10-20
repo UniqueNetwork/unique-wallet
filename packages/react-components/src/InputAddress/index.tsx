@@ -15,9 +15,10 @@ import { createOptionItem } from '@polkadot/ui-keyring/options/item';
 import { isNull, isUndefined } from '@polkadot/util';
 
 import Dropdown from '../Dropdown';
+import infoBlue from '../images/infoBlue.svg';
 import { getAddressName } from '../util';
 import addressToAddress from '../util/toAddress';
-import createHeader from './createHeader';
+import CreateHeader from './CreateHeader';
 import createItem from './createItem';
 
 interface Props {
@@ -163,11 +164,11 @@ class InputAddress extends React.PureComponent<Props, State> {
           ? lastValue
           : (lastOption && lastOption.value)
     );
-    const actualOptions: Option[] = options
-      ? options.map((o): Option => createItem(o))
-      : isDisabled && actualValue
-        ? [createOption(actualValue)]
-        : this.getFiltered();
+    const actualOptions: Option[] = options &&
+      isDisabled && actualValue
+      ? [createOption(actualValue)]
+      : this.getFiltered();
+
     const _defaultValue = (isMultiple || !isUndefined(value))
       ? undefined
       : actualValue;
@@ -217,8 +218,9 @@ class InputAddress extends React.PureComponent<Props, State> {
   private getLastOptionValue (): KeyringSectionOption | undefined {
     const available = this.getFiltered();
 
+    // first value is 'manage accounts', last value is 'footer', so we take penultimate value
     return available.length
-      ? available[available.length - 1]
+      ? available[available.length - 2]
       : undefined;
   }
 
@@ -299,8 +301,26 @@ const ExportedComponent = withMulti(
       Object.entries(optionsAll).reduce((result: Record<string, (Option | React.ReactNode)[]>, [type, options]): Record<string, (Option | React.ReactNode)[]> => {
         result[type] = options.map((option): Option | React.ReactNode =>
           option.value === null
-            ? createHeader(option)
+            ? <CreateHeader
+              key={option.key || option.name}
+              option={option}
+            />
             : createItem(option)
+        );
+
+        result[type].push(
+          <div
+            className='accounts-footer'
+            key='footer-text'
+          >
+            <div className='info-panel'>
+              <img
+                alt='info'
+                src={infoBlue as string}
+              />
+              Click on image to copy the address
+            </div>
+          </div>
         );
 
         return result;

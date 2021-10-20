@@ -11,7 +11,7 @@ import styled from 'styled-components';
 
 import { DEV_PHRASE } from '@polkadot/keyring/defaults';
 import { getEnvironment } from '@polkadot/react-api/util';
-import { AddressRow, Button, Checkbox, CopyButton, Dropdown, Input, InputAddress, Modal, TextArea } from '@polkadot/react-components';
+import { AddressRow, Button, Checkbox, CopyButton, Dropdown, HelpTooltip, Input, InputAddress, Modal, TextArea } from '@polkadot/react-components';
 import { useApi, useStepper } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 import { isHex, u8aToHex } from '@polkadot/util';
@@ -225,6 +225,17 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
       ? { text: 'Private Key', value: 'raw' }
       : { text: 'Raw seed', value: 'raw' }
   ));
+  const content = useCallback(() => {
+    return (
+      <span>Find out more on <a
+        href='https://wiki.polkadot.network/'
+        rel='noreferrer'
+        target='_blank'
+      >Polkadot Wiki
+      </a>
+      </span>
+    );
+  }, []);
 
   const _onChangeSeed = useCallback(
     (newSeed: string) => {
@@ -255,9 +266,9 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
     []
   );
 
-  const _toggleMnemonicSaved = () => {
+  const _toggleMnemonicSaved = useCallback(() => {
     setIsMnemonicSaved(!isMnemonicSaved);
-  };
+  }, [isMnemonicSaved]);
 
   const _onCommit = useCallback(
     (): void => {
@@ -281,7 +292,7 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
   return (
     <Modal
       className={className}
-      header={`${restoreFromSeed ? 'Restore an account from seed' : 'Add an account via seed'} ${'{{step}}/{{STEPS_COUNT}}'.replace('{{STEPS_COUNT}}', STEPS_COUNT.toString()).replace('{{step}}', step.toString())}` }
+      header={restoreFromSeed ? 'Restore an account from seed phrase' : 'Add an account via seed phrase'}
       size='small'
     >
       <Modal.Content>
@@ -291,13 +302,32 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
               defaultName={name}
               fullLength
               isEditableName={false}
+              label='Account'
               noDefaultNameOpacity
               value={restoreFromSeed ? text === '' ? '' : isSeedValid ? address : '' : isSeedValid ? address : ''}
             />
           </Modal.Column>
         </Modal.Columns>
         {step === 1 && <>
-          <div>
+          <p className='info-text label'>The secret seed value for this account</p>
+          { restoreFromSeed
+            ? null
+            : (
+              <div className='type-row'>
+                <Dropdown
+                  defaultValue={seedType}
+                  isButton
+                  onChange={_selectSeedType}
+                  options={seedOpt.current}
+                />
+                <HelpTooltip
+                  className={'help'}
+                  content={content()}
+                  defaultPosition='top right'
+                  mobilePosition='top right'
+                />
+              </div>) }
+          <div className='seed-row'>
             <TextArea
               className={restoreFromSeed ? 'textRow' : ''}
               help={isEthereum
@@ -317,27 +347,19 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
               onChange={_onChangeSeed}
               seed={restoreFromSeed ? text : seed}
               withLabel
-            >
-              { restoreFromSeed
+            />
+            {
+              restoreFromSeed
                 ? null
                 : (
-                  <>
-                    <CopyButton
-                      className='copyMoved'
-                      type={seedType === 'bip' ? 'mnemonic' : seedType === 'raw' ? isEthereum ? 'private key' : 'seed' : 'raw seed'}
-                      value={seed}
-                    />
-                    <Dropdown
-                      defaultValue={seedType}
-                      isButton
-                      onChange={_selectSeedType}
-                      options={seedOpt.current}
-                    />
-                  </>) }
-
-            </TextArea>
-            <p>{'The secret seed value for this account. Ensure that you keep this in a safe place, with access to the seed you can re-create the account.'}</p>
+                  <CopyButton
+                    className='copyMoved'
+                    type={seedType === 'bip' ? 'mnemonic' : seedType === 'raw' ? isEthereum ? 'private key' : 'seed' : 'raw seed'}
+                    value={seed}
+                  />)
+            }
           </div>
+          <p className='info-text'>{'Ensure that you keep this in a safe place, with access to the seed you can re-create the account.'}</p>
           <ExternalWarning />
           <div className='saveToggle'>
             <Checkbox
@@ -353,16 +375,18 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
             className='isSmall'
             help={'Name given to this account. You can edit it. To use the account to validate or nominate, it is a good practice to append the function of the account in the name, e.g "name_you_want - stash".'}
             isError={!isNameValid}
-            label={'name'}
+            label={'Name'}
             onChange={_onChangeName}
             onEnter={_onCommit}
-            placeholder={'new account name'}
+            placeholder={'Name'}
             value={name}
           />
+          <p className='info-text'>{'The name of this account and how it will appear under your addresses. With the person in the chain, it can be accessed by others.'}</p>
           <PasswordInput
             onChange={_onPasswordChange}
             onEnter={_onCommit}
           />
+          <p className='info-text'>{'Password and password confirmation for this account. This is necessary to authenticate all committed transactions and encrypt the key pair. Ensure you are using a strong password for proper account protection.'}</p>
           <ExternalWarning />
         </>}
         {step === 3 && address && (
@@ -378,46 +402,53 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
           />
         )}
       </Modal.Content>
-      <Modal.Actions onCancel={onClose}>
-        {step === 1 &&
-          <Button
-            icon='step-forward'
-            isDisabled={!isFirstStepValid}
-            label={'Next'}
-            onClick={nextStep}
-          />
-        }
-        {step === 2 && (
-          <>
+      <div className='footer'>
+        <div className='step'>
+          {`Step ${'{{step}}/{{STEPS_COUNT}}'.replace('{{STEPS_COUNT}}', STEPS_COUNT.toString()).replace('{{step}}', step.toString())}`}
+        </div>
+        <Modal.Actions onCancel={onClose}>
+          <div className='btn-container'>
+            {step === 1 &&
             <Button
-              icon='step-backward'
-              label={'Prev'}
-              onClick={prevStep}
-            />
-            <Button
-              icon='step-forward'
-              isDisabled={!isSecondStepValid}
+              isDisabled={!isFirstStepValid}
+              isFilled={true}
               label={'Next'}
               onClick={nextStep}
             />
-          </>
-        )}
-        {step === 3 && (
-          <>
-            <Button
-              icon='step-backward'
-              label={'Prev'}
-              onClick={prevStep}
-            />
-            <Button
-              icon='plus'
-              isBusy={isBusy}
-              label={'Save'}
-              onClick={_onCommit}
-            />
-          </>
-        )}
-      </Modal.Actions>
+            }
+            {step === 2 && (
+              <>
+                <Button
+                  isOutlined={true}
+                  label={'Previous'}
+                  onClick={prevStep}
+                />
+                <Button
+                  isDisabled={!isSecondStepValid}
+                  isFilled={true}
+                  label={'Next'}
+                  onClick={nextStep}
+                />
+              </>
+            )}
+            {step === 3 && (
+              <>
+                <Button
+                  isOutlined={true}
+                  label={'Previous'}
+                  onClick={prevStep}
+                />
+                <Button
+                  isBusy={isBusy}
+                  isFilled={true}
+                  label={'Save'}
+                  onClick={_onCommit}
+                />
+              </>
+            )}
+          </div>
+        </Modal.Actions>
+      </div>
     </Modal>
   );
 }
@@ -428,62 +459,117 @@ export default React.memo(styled(Create)`
     overflow: visible;
   }
 
+  .ui--Modal{
+    background-color: var(--white-color);
+
+    .header{
+      border-bottom: 2px solid red;
+    }
+  }
+
   .ui--CopyButton.copyMoved {
-    position: absolute;
-    right: 9.25rem;
-    top: 1.15rem;
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+
+    .copyContainer .icon-button{
+      display: flex;
+      cursor: pointer;
+    }
 
     .ui--Icon {
       background: var(--text-color);
     }
   }
 
+  .type-row {
+    display: flex;
+    width: 100%;
+    margin-bottom: 24px;
+
+    img {
+      margin-left: 16px;
+      cursor: pointer;
+    }
+  }
+
+  .seed-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    .ui--Labelled {
+      width: 100%;
+    }
+  }
+
   && .TextAreaWithDropdown {
     display: flex;
-    border: 1px solid var(--border-color);
-    background: var(--input-background-color);
-    margin-bottom: var(--gap);
 
     textarea {
-      width: 80%;
-      border-image: initial;
-      border: none;
-      background: var(--input-background-color);
-      box-sizing: border-box;
-      color: var(--color-text);
-      display: block;
+      border-radius: 4px;
+      height: 40px;
       outline: none;
-      padding: 1.75rem 3rem 0.75rem 1.5rem;
       resize: none;
+      font-family: var(--font-roboto);
     }
-    .ui.buttons {
-      width: 20%;
+  }
 
-      .ui.button.selection.dropdown {
-        padding: 1.75rem 3rem 0.75rem 1.5rem !important;
-        height: 69px;
-        line-height: 1.15;
+  .ui.buttons {
+    width: 100%;
+    height: 40px;
 
-        .text {
-          padding: 0;
-        }
+    .ui.button.selection.dropdown {
+      color: var(--title-color);
+      padding: 8px 16px;
+      font-size: 16px;
+      font-family: var(--font-roboto);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
 
-        .menu {
-          background: var(--input-background-color);
-        }
+      .text {
+        padding: 4px;
+      }
 
-        &:hover {
-          border: none;
-        }
+      .menu {
+        background: var(--input-background-color);
+        border-radius: 4px;
+        border: 0;
+        margin: 0;
       }
     }
   }
 
+  .ui.input.ui--Input {
+
+    input {
+      border-radius: 4px;
+      outline: none;
+      font-family: var(--font-roboto);
+    }
+  }
+
+  .password-input {
+    margin-top: 28px;
+
+
+
+    &:nth-child(1) input{
+      margin-bottom: 24px;
+      border: 1px solid red;
+    }
+  }
+
   .saveToggle {
-    text-align: right;
+    text-align: left;
+    font-family: var(--font-roboto);
+    font-size: 16px;
+    color: var(--title-color);
+    margin-top: 32px;
 
     .ui--Checkbox {
-      margin: 0.8rem 0;
+      margin: 0.8rem 0 0 0;
+
 
       > label {
         font-weight: var(--font-weight-normal);
@@ -492,5 +578,47 @@ export default React.memo(styled(Create)`
   }
     .textRow textarea{
     width: 100% !important;
+  }
+  .footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .step{
+      font-size: 16px;
+      font-family: var(--font-roboto);
+      line-height: 24px;
+      color: var(--title-color);
+    }
+  }
+  .step-3-titles{
+    display: flex;
+    align-items: center;
+
+    p{
+      font-size: 14px;
+      font-family: var(--font-roboto);
+      color: var(--tabs-color);
+      margin:  0 6.25px  14.25px 0;
+    }
+    img{
+      margin-bottom: 14.25px;
+      cursor: pointer;
+    }
+  }
+  .step-3-texts{
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background-color: var(--input-background-disabled-color);
+      min-height: 40px ;
+      margin-bottom: 26.25px;
+      padding: 8px 16px;
+  }
+  .step-3-warning{
+    article{
+      background-color:var(--link-light-color) !important; ;
+      margin: 0 !important; ;
+      color: var(--link-color)!important;
+    }
   }
 `);

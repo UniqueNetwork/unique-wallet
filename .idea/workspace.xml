@@ -16,15 +16,92 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9be71d2-2c4b-4c97-96f3-7592ea9ac82c" name="Default Changelist" comment="NFTPAR-794 - token url without token id fix">
+      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountTableItem.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/AccountsTable.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/clearIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/question.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/searchIcon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/page-accounts/src/modals/images/question-icon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/AccountButtonGroup/images/arrow.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/AccountButtonGroup/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/AccountButtonGroup/style.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/CopyIcon.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/HelpTooltip.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/MarkWarning/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/MarkWarning/info-icon-blue.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/MarkWarning/info-icon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/MarkWarning/styles.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/Modal/images/close-icon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/PageNotFound/images/error.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/PageNotFound/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/PageNotFound/style.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/PopupMenu.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SearchFilter/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/SearchFilter/styles.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/WalletIconSvg.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/images/eye-close.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/images/eye.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/images/file.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/react-components/src/images/infoBlue.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/apps/.env.defaults" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/.env.defaults" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/containers/NftWallet/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/containers/NftWallet/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/react-hooks/src/useCollections.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-hooks/src/useCollections.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.yarn/install-state.gz" beforeDir="false" afterPath="$PROJECT_DIR$/.yarn/install-state.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps-config/src/ui/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps-config/src/ui/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps-routing/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps-routing/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/public/theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/public/theme.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/Apps.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/Apps.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/BalancesHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/BalancesHeader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/ManageAccounts.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/ManageAccounts.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/ManageBalances.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/MobileBalancesHeader.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/Welcome.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/Welcome.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/src/apps.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/src/apps.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/apps/styles/global.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/apps/styles/global.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/Accounts/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/modals/Create.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/modals/Create.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/modals/CreateConfirmation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/modals/CreateConfirmation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/modals/Import.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/modals/Import.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/modals/PasswordInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/modals/PasswordInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-accounts/src/modals/Qr.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-accounts/src/modals/Qr.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-faq/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-faq/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/page-nft-wallet/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/page-nft-wallet/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/AccountSelector.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/AccountSelector.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Button/Button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Button/Button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Button/Group.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Button/Group.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Button/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Button/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Dropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Dropdown.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/ErrorBoundary.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/ErrorBoundary.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/InputAddress/KeyPair.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/InputAddress/KeyPair.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/InputAddress/createHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/InputAddress/CreateHeader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/InputAddress/createItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/InputAddress/createItem.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/InputAddress/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/InputAddress/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Labelled/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Labelled/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Modal/Actions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Modal/Actions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Modal/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Modal/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/Modal/types.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/Modal/types.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/TransferModal/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/TransferModal/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/TransferModal/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/TransferModal/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/WithdrawModal/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/WithdrawModal/styles.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-components/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-components/src/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-params/src/Param/BaseBytes.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-params/src/Param/BaseBytes.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-query/src/FormatBalance.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-query/src/FormatBalance.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-signer/src/TxSigned.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-signer/src/TxSigned.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-signer/src/TxUnsigned.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-signer/src/TxUnsigned.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/react-signer/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/react-signer/src/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +111,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="v1.0.1" />
+        <entry key="$PROJECT_DIR$" value="v1.0.2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -186,22 +263,22 @@
     <option name="LAST_COMMIT_MESSAGE" value="NFTPAR-794 - token url without token id fix" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1632746569122">
+    <state x="18" y="35" width="1736" height="905" key="DiffContextDialog" timestamp="1634707802668">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1632746569122" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1630483189024">
+    <state x="18" y="35" width="1736" height="905" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1634707802668" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1634646266617">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1630483189024" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1634646266617" />
     <state x="552" y="240" key="Vcs.Push.Dialog.v2" timestamp="1632743241389">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="240" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1632743241389" />
-    <state x="679" y="254" key="VcsDiffUtil.ChangesDialog" timestamp="1630476773165">
+    <state x="1114" y="142" key="VcsDiffUtil.ChangesDialog" timestamp="1634707787897">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="679" y="254" key="VcsDiffUtil.ChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1630476773165" />
+    <state x="1114" y="142" key="VcsDiffUtil.ChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1634707787897" />
     <state x="-2" y="67" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1632741989016">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -210,9 +287,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040@0.0.1920.1040" timestamp="1630476616213" />
-    <state x="667" y="255" width="585" height="530" key="find.popup" timestamp="1632746097520">
+    <state x="667" y="255" width="605" height="530" key="find.popup" timestamp="1634707779322">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="667" y="255" width="585" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1632746097520" />
+    <state x="667" y="255" width="605" height="530" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1634707779322" />
   </component>
 </project>

@@ -8,14 +8,15 @@ import React from 'react';
 
 import KeyPair from './KeyPair';
 
-export default function createItem (option: KeyringSectionOption, isUppercase = true): Option {
+export default function CreateItem (option: KeyringSectionOption, isUppercase = true): Option {
   return {
     ...option,
     text: (
       <KeyPair
         address={option.key || ''}
         isUppercase={isUppercase}
-        name={name}
+        key={option.key || option.name}
+        name={option.name}
       />
     )
   };

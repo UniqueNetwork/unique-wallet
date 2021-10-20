@@ -24,6 +24,12 @@ body {
 .ui.popup {
   background: var(--bg-page) !important;
 
+  a{
+    color: unset;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
   &:before,
   &:after {
     background: var(--bg-page) !important;
@@ -42,6 +48,7 @@ hr {
 
 .ui.modal {
   border: 1px solid var(--modal-border-color);
+  background-color: var(--card-background) !important;
   color: var(--modal-text-color);
 
   .header {
@@ -71,48 +78,13 @@ hr {
     .content {
       font-size: 18px;
     }
-    .actions {
-      display: flex;
-      float: right;
-      padding: 1rem !important;
-    }
-  }
-
-  .actions {
-    .ui--Button {
-      background: var(--link-color);
-      color: var(--text-color);
-      margin: 0 1rem;
-
-      &:active {
-        background: var(--link-color);
-        color: var(--text-color);
-      }
-
-      &:hover {
-        background: var(--link-color);
-        color: var(--text-color);
-      }
-
-      &.isDisabled {
-        opacity: 0.5;
-      }
-
-      &:last-child {
-        margin: 0;
-      }
-
-      .ui--Icon {
-        background: var(--link-color) !important;
-      }
-    }
   }
 }
 
 h1.ui.header {
   font: 700 36px/48px var(--font-inter);
   color: var(--title-color);
-  margin-bottom: calc(var(--gap) / 0.6);
+  margin-bottom: calc(var(--gap) * 2);
 }
 
 h2.ui.header {
@@ -226,7 +198,7 @@ h4.ui.header {
     height: 48px;
 
     & .menu > .item {
-      padding: calc(var(--gap) / 3) calc(var(--gap) * 2) !important;
+      padding: 8px calc( (var(--gap) / 2) * 5) !important;
     }
   }
 
@@ -285,6 +257,16 @@ h4.ui.header {
   .load-more {
     margin-top: 1rem;
     margin-bottom: 1rem;
+  }
+
+  &.centered {
+    &:after {
+      left: 0;
+    }
+
+    &:before {
+      left: 0;
+    }
   }
 }
 
@@ -434,8 +416,7 @@ form {
   padding: 1rem var(--gap);
 }
 
-button.ui.button,
-.button-link {
+button.ui.button, .button-link, .ui--Button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -604,7 +585,7 @@ button.ui.button,
 }
 
 .template--AccountSelector {
-  background: var(--account-selector-background);
+  background: var(--title-color);
   border-radius: 6px;
 
   .ui.dropdown {
@@ -643,6 +624,14 @@ button.ui.button,
   box-shadow: 0 4px 12px var(--card-shadow);
   border-radius: 4px;
   padding: 32px;
+
+  &.empty{
+    height: 100%;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .unique-form {
@@ -667,47 +656,61 @@ button.ui.button,
         }
       }
     }
+  }
+}
 
-    .ui--Labelled {
-      .input {
-        .loader {
-          position: absolute;
-          left: 95%;
-          top: 7px;
-        }
+.ui--Labelled {
+  .ui.input.ui--Input {
+    .loader {
+      position: absolute;
+      left: 95%;
+      top: 7px;
+    }
 
-        img {
-          position: absolute;
-          &.search-icon {
-            left: var(--gap);
-            top: calc(var(--gap) / 2);
-          }
+    img {
+      position: absolute;
 
-          &.clear-icon {
-            cursor: pointer;
-            right: var(--gap);
-            top: calc(var(--gap) / 2);
-          }
-        }
-
-        input {
-          border-radius: 4px;
-          padding-right: 4rem !important;
-          height: 40px;
-        }
+      &.search-icon {
+        left: var(--gap);
+        top: calc(var(--gap) / 2);
       }
+
+      &.clear-icon {
+        cursor: pointer;
+        right: var(--gap);
+        top: calc(var(--gap) / 2);
+      }
+    }
+
+    input {
+      border-radius: 4px;
+      padding-right: 4rem !important;
+      height: 40px;
     }
   }
 }
+
 .modalDescription {
+  display: flex;
+  background-color: var(--modal-warning-background-color);
+  font-size: 14px;
+  font-family: var(--font-roboto);
+  line-height: 22px;
+  border-radius: 4px;
+  padding: 8px 10.25px;
   margin: 0 !important;
+
+  img{
+    margin-right: 10.25px;
+  }
+
   div {
+
     p {
       margin: 0;
-      color: var(--title-color);
-      opacity: 0.7;
+      color:var(--modal-warning-text-color);
       font-family: var(--font-roboto);
-      padding: 0.3rem 1.5rem 0px 1.5rem !important;
+      padding: 0.3rem 1.5rem 0 0 !important;
     }
   }
 }

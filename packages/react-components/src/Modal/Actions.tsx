@@ -7,16 +7,21 @@ import React from 'react';
 import { Modal as SUIModal } from 'semantic-ui-react';
 
 import Button from '../Button';
-import ButtonCancel from '../ButtonCancel';
+import CloseIcon from './images/close-icon.svg';
 
-function Actions ({ cancelLabel, children, className = '', onCancel }: ActionsProps): React.ReactElement<ActionsProps> {
+function Actions ({ children, className = '', onCancel }: ActionsProps): React.ReactElement<ActionsProps> {
   return (
     <SUIModal.Actions>
-      <Button.Group className={className}>
-        <ButtonCancel
-          label={cancelLabel}
-          onClick={onCancel}
+      <div
+        className='close-btn'
+        onClick={onCancel}
+      >
+        <img
+          alt='close'
+          src={CloseIcon as string}
         />
+      </div>
+      <Button.Group className={className}>
         {children}
       </Button.Group>
     </SUIModal.Actions>
