@@ -14,7 +14,6 @@ export type EnvConfigType = {
   minPrice: number;
   quoteId: number; // 2
   uniqueCollectionIds: string[]; // ['23']
-  uniqueApi: string;
   uniqueSubstrateApi: string;
   value: number; // 0
   version: string;
@@ -33,7 +32,6 @@ const envConfig: EnvConfigType = {
   midTedCollection: +(process.env.MIN_TED_COLLECTION as string),
   minPrice: +(process.env.MIN_PRICE as string),
   quoteId: +(process.env.QUOTE_ID as string),
-  uniqueApi: (process.env.UNIQUE_API as string),
   uniqueCollectionIds: (process.env.UNIQUE_COLLECTION_IDS as string).split(','),
   uniqueSubstrateApi: (process.env.UNIQUE_SUBSTRATE_API as string),
   value: +(process.env.VALUE as string),
