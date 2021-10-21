@@ -21,7 +21,7 @@ import closeIcon from './closeIconBlack.svg';
 interface Props {
   account?: string;
   collection: NftCollectionInterface;
-  closeModal: () => void;
+  closeModal: (item: any) => void;
   reFungibleBalance: number;
   tokenId: string;
   updateTokens: (collectionId: string) => void;
@@ -43,7 +43,7 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
       accountId: account && account.toString(),
       extrinsic: api.tx.nft.transfer(recipient, collection.id, tokenId, (tokenPart * Math.pow(10, decimalPoints))),
       isUnsigned: false,
-      txStartCb: () => { closeModal(); },
+      txStartCb: () => { closeModal(null); },
       txSuccessCb: () => { updateTokens(collection.id); }
     });
   }, [account, api, closeModal, collection, decimalPoints, recipient, tokenId, tokenPart, updateTokens, queueExtrinsic]);

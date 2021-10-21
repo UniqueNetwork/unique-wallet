@@ -13,7 +13,6 @@ import { OpenPanelType } from '@polkadot/apps-routing/types';
 import { Table, TransferModal } from '@polkadot/react-components';
 import { useCollections } from '@polkadot/react-hooks';
 
-import CollectionSearch from '../../components/CollectionSearch';
 import NftCollectionCard from '../../components/NftCollectionCard';
 
 interface NftWalletProps {
@@ -28,7 +27,7 @@ interface NftWalletProps {
   shouldUpdateTokens?: string;
 }
 
-const { canAddCollections, uniqueCollectionIds } = envConfig;
+const { uniqueCollectionIds } = envConfig;
 
 function NftWallet ({ account, addCollection, collections, openPanel, removeCollectionFromList, setCollections, setShouldUpdateTokens }: NftWalletProps): React.ReactElement {
   const [openTransfer, setOpenTransfer] = useState<{ collection: NftCollectionInterface, tokenId: string, balance: number } | null>(null);
@@ -96,16 +95,6 @@ function NftWallet ({ account, addCollection, collections, openPanel, removeColl
         >
           My tokens
         </Header>
-      )}
-      { canAddCollections && (
-        <>
-          <CollectionSearch
-            account={account}
-            addCollection={addCollection}
-            collections={collections}
-          />
-          <br />
-        </>
       )}
       <Header as='h3'>
         My collections

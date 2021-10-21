@@ -9,13 +9,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useHistory } from 'react-router';
 import Item from 'semantic-ui-react/dist/commonjs/views/Item';
 
-import envConfig from '@polkadot/apps-config/envConfig';
-import pencil from '@polkadot/react-components/ManageCollection/pencil.svg';
 import transfer from '@polkadot/react-components/ManageCollection/transfer.svg';
 import Tooltip from '@polkadot/react-components/Tooltip';
 import { useSchema } from '@polkadot/react-hooks';
-
-const { canEditToken } = envConfig;
 
 interface Props {
   account: string;
@@ -32,10 +28,6 @@ function NftTokenCard ({ account, canTransferTokens, collection, openTransferMod
 
   const openDetailedInformationModal = useCallback((collectionId: string | number, tokenId: string) => {
     history.push(`/wallet/token-details?collectionId=${collectionId}&tokenId=${tokenId}`);
-  }, [history]);
-
-  const editToken = useCallback((collectionId: string, tokenId: string) => {
-    history.push(`/wallet/manage-token?collectionId=${collectionId}&tokenId=${tokenId}`);
   }, [history]);
 
   const attrebutesToShow = useMemo(() => {
@@ -95,26 +87,6 @@ function NftTokenCard ({ account, canTransferTokens, collection, openTransferMod
         </div>
       </div>
       <div className='token-actions'>
-        { canEditToken && tokenState === 'none' && (
-          <>
-            <img
-              alt={'add'}
-              data-for='Edit nft'
-              data-tip='Edit nft'
-              onClick={editToken.bind(null, collection.id, token)}
-              src={pencil as string}
-              title='add'
-            />
-            <Tooltip
-              arrowColor={'transparent'}
-              backgroundColor={'var(--border-color)'}
-              place='bottom'
-              text={'Edit nft'}
-              textColor={'var(--sub-header-text-transform)'}
-              trigger={'Edit nft'}
-            />
-          </>
-        )}
         { canTransferTokens && tokenState === 'none' && (
           <>
             <img

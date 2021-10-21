@@ -3610,16 +3610,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/api-contract@npm:^4.17.2-3":
-  version: 4.17.2-20
-  resolution: "@polkadot/api-contract@npm:4.17.2-20"
+"@polkadot/api-contract@npm:^6.3.1":
+  version: 6.4.2
+  resolution: "@polkadot/api-contract@npm:6.4.2"
   dependencies:
-    "@babel/runtime": ^7.14.6
-    "@polkadot/api": 4.17.2-20
-    "@polkadot/types": 4.17.2-20
-    "@polkadot/util": ^6.11.2-16
-    rxjs: ^7.2.0
-  checksum: 2dce0f2fbc9b7d3dfc17016042d3c55c77ba050bc0ac70da5049bb81d911fb523d5dc798d7f93fbded21f587cdb9350823067fea313247324f50156942b4f49c
+    "@babel/runtime": ^7.15.4
+    "@polkadot/api": 6.4.2
+    "@polkadot/types": 6.4.2
+    "@polkadot/util": ^7.5.1
+    rxjs: ^7.4.0
+  checksum: b06373dc37e5ca374237e87c17317ae052bf19aebfdede0ca1ce21377c9bbff360607ea950717eb7cfefd4db8f7890288e72f0ba1486b3adcfe1e00daa3671af
   languageName: node
   linkType: hard
 
@@ -23015,7 +23015,7 @@ resolve@^2.0.0-next.3:
     "@babel/runtime": ^7.15.4
     "@crustio/crust-pin": ^1.0.0
     "@pinata/sdk": ^1.1.23
-    "@polkadot/api-contract": ^4.17.2-3
+    "@polkadot/api-contract": ^6.3.1
     "@polkadot/dev": ^0.62.70
     "@polkadot/ts": ^0.4.8
     "@types/bn.js": ^4.11.6
