@@ -9,13 +9,6 @@ import { useCallback, useEffect, useRef } from 'react';
 import envConfig from '@polkadot/apps-config/envConfig';
 import { useApi, useCollection } from '@polkadot/react-hooks';
 
-export interface Filters {
-  collectionIds: string[];
-  sort: string;
-  traitsCount: string[];
-  [key: string]: string | string[] | number;
-}
-
 const { uniqueCollectionIds } = envConfig;
 
 export type MetadataType = {

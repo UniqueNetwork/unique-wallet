@@ -7,19 +7,13 @@ import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import Confirm from 'semantic-ui-react/dist/commonjs/addons/Confirm';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 import Item from 'semantic-ui-react/dist/commonjs/views/Item';
 
-import envConfig from '@polkadot/apps-config/envConfig';
 import { Expander } from '@polkadot/react-components';
-import trash from '@polkadot/react-components/ManageCollection/trash.svg';
-import Tooltip from '@polkadot/react-components/Tooltip';
 import { useDecoder, useMetadata, useMyTokens } from '@polkadot/react-hooks';
 
 import NftTokenCard from '../NftTokenCard';
-
-const { uniqueCollectionIds } = envConfig;
 
 interface Props {
   account?: string;
@@ -31,11 +25,10 @@ interface Props {
 
 const perPage = 5;
 
-function NftCollectionCard ({ account, canTransferTokens, collection, openTransferModal, removeCollection }: Props): React.ReactElement<Props> {
+function NftCollectionCard ({ account, canTransferTokens, collection, openTransferModal }: Props): React.ReactElement<Props> {
   const [opened, setOpened] = useState(true);
   const [currentPerPage, setCurrentPerPage] = useState(5);
   const [collectionImageUrl, setCollectionImageUrl] = useState<string>();
-  const [confirmDeleteCollection, setConfirmDeleteCollection] = useState<boolean>(false);
   const { collectionName16Decoder } = useDecoder();
   const cleanup = useRef<boolean>(false);
   const { getTokenImageUrl } = useMetadata();
@@ -57,12 +50,6 @@ function NftCollectionCard ({ account, canTransferTokens, collection, openTransf
 
     setCollectionImageUrl(collectionImage);
   }, [collection, getTokenImageUrl]);
-
-  const toggleConfirmation = useCallback((status, e: React.MouseEvent<any>) => {
-    e.stopPropagation();
-
-    setConfirmDeleteCollection(status);
-  }, []);
 
   const loadMore = useCallback((page: number) => {
     // handle load more on scroll action
@@ -122,34 +109,7 @@ function NftCollectionCard ({ account, canTransferTokens, collection, openTransf
           <div className='tokens-count'>
             <span>Total: {allTokensCount} {!allTokensCount || allTokensCount > 1 ? 'items' : 'item'} (own: {ownTokensCount || 0})</span>
           </div>
-          <div className='link-button'>
-            { !uniqueCollectionIds.includes(collection.id) && (
-              <div className='link-button-with-tooltip'>
-                <img
-                  alt='delete'
-                  className='red'
-                  data-for='Delete collection from wallet'
-                  data-tip='Delete collection from wallet'
-                  onClick={toggleConfirmation.bind(null, true)}
-                  src={trash as string}
-                />
-                <Tooltip
-                  arrowColor={'transparent'}
-                  backgroundColor={'var(--border-color)'}
-                  place='bottom'
-                  text={'Delete collection from wallet'}
-                  textColor={'var(--sub-header-text-transform)'}
-                  trigger={'Delete collection from wallet'}
-                />
-                <Confirm
-                  content='Are you sure to delete collection from the wallet?'
-                  onCancel={toggleConfirmation.bind(null, false)}
-                  onConfirm={removeCollection.bind(null, collection.id)}
-                  open={confirmDeleteCollection}
-                />
-              </div>
-            )}
-          </div>
+          <div className='link-button' />
         </div>
       }
     >
