@@ -266,9 +266,9 @@ function Create ({ className = '', onClose, onStatusChange, restoreFromSeed, see
     []
   );
 
-  const _toggleMnemonicSaved = () => {
+  const _toggleMnemonicSaved = useCallback(() => {
     setIsMnemonicSaved(!isMnemonicSaved);
-  };
+  }, [isMnemonicSaved]);
 
   const _onCommit = useCallback(
     (): void => {

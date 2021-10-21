@@ -10,7 +10,6 @@ export type EnvConfigType = {
   kusamaBackupApiUrl: string;
   kusamaDecimals: number; // 12
   maxGas: number; // 1000000000000
-  midTedCollection: number;
   minPrice: number;
   quoteId: number; // 2
   uniqueCollectionIds: string[]; // ['23']
@@ -29,7 +28,6 @@ const envConfig: EnvConfigType = {
   kusamaBackupApiUrl: (process.env.KUSAMA_BACKUP_API as string),
   kusamaDecimals: +(process.env.KUSAMA_DECIMALS as string),
   maxGas: +(process.env.MAX_GAS as string),
-  midTedCollection: +(process.env.MIN_TED_COLLECTION as string),
   minPrice: +(process.env.MIN_PRICE as string),
   quoteId: +(process.env.QUOTE_ID as string),
   uniqueCollectionIds: (process.env.UNIQUE_COLLECTION_IDS as string).split(','),
