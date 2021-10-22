@@ -19,22 +19,44 @@ export type EnvConfigType = {
   whiteLabelUrl: string;
 };
 
+declare global {
+  interface Window {
+    ENV: {
+      ENVIRONMENT: string;
+      FAVICON_PATH: string;
+      GRAPH_QL_ADMIN_SECRET: string;
+      GRAPH_QL_API: string;
+      KUSAMA_API: string;
+      KUSAMA_BACKUP_API: string;
+      KUSAMA_DECIMALS: number; // 12
+      MAX_GAS: number; // 1000000000000
+      MIN_PRICE: number;
+      QUOTE_ID: number; // 2
+      UNIQUE_COLLECTION_IDS: string[]; // ['23']
+      UNIQUE_SUBSTRATE_API: string;
+      VALUE: number; // 0
+      VERSION: string;
+      WHITE_LABEL_URL: string;
+    }
+  }
+}
+
 const envConfig: EnvConfigType = {
-  environment: (process.env.ENVIRONMENT as string),
-  faviconPath: (process.env.FAVICON_PATH as string),
-  graphQlAdminSecret: (process.env.GRAPH_QL_ADMIN_SECRET as string),
-  graphQlApi: (process.env.GRAPH_QL_API as string),
-  kusamaApiUrl: (process.env.KUSAMA_API as string),
-  kusamaBackupApiUrl: (process.env.KUSAMA_BACKUP_API as string),
-  kusamaDecimals: +(process.env.KUSAMA_DECIMALS as string),
-  maxGas: +(process.env.MAX_GAS as string),
-  minPrice: +(process.env.MIN_PRICE as string),
-  quoteId: +(process.env.QUOTE_ID as string),
-  uniqueCollectionIds: (process.env.UNIQUE_COLLECTION_IDS as string).split(','),
-  uniqueSubstrateApi: (process.env.UNIQUE_SUBSTRATE_API as string),
-  value: +(process.env.VALUE as string),
-  version: (process.env.VERSION as string),
-  whiteLabelUrl: (process.env.WHITE_LABEL_URL as string)
+  environment: window.ENV.ENVIRONMENT,
+  faviconPath: window.ENV.FAVICON_PATH,
+  graphQlAdminSecret: window.ENV.GRAPH_QL_ADMIN_SECRET,
+  graphQlApi: window.ENV.GRAPH_QL_API,
+  kusamaApiUrl: window.ENV.KUSAMA_API,
+  kusamaBackupApiUrl: window.ENV.KUSAMA_BACKUP_API,
+  kusamaDecimals: +window.ENV.KUSAMA_DECIMALS,
+  maxGas: +window.ENV.MAX_GAS,
+  minPrice: +window.ENV.MIN_PRICE,
+  quoteId: +window.ENV.QUOTE_ID,
+  uniqueCollectionIds: window.ENV.UNIQUE_COLLECTION_IDS,
+  uniqueSubstrateApi: window.ENV.UNIQUE_SUBSTRATE_API,
+  value: +window.ENV.VALUE,
+  version: window.ENV.VERSION,
+  whiteLabelUrl: window.ENV.WHITE_LABEL_URL
 };
 
 export default envConfig;

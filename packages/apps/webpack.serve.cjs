@@ -17,13 +17,9 @@ module.exports = merge(
       open: false,
       port: 3000,
       proxy: {
-        [process.env.WHITE_LABEL_URL]: {
+        '/v1/graphql/': {
           changeOrigin: true,
-          target: process.env.WHITE_LABEL_URL
-        },
-        [process.env.GRAPH_QL_API]: {
-          changeOrigin: true,
-          target: process.env.GRAPH_QL_API
+          target: 'https://dev-api-explorer.unique.network'
         }
       },
       static: path.resolve(__dirname, 'build')

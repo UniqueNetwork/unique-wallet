@@ -21,13 +21,17 @@ import NftWallet from './containers/NftWallet';
 
 const { graphQlAdminSecret, graphQlApi } = envConfig;
 
+const graphQlUrl = process.env.NODE_ENV === 'production' ? graphQlApi : '/v1/graphql/';
+
+console.log('graphQlUrl', graphQlUrl);
+
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   headers: {
     'content-type': 'application/json',
     'x-hasura-admin-secret': graphQlAdminSecret
   },
-  uri: graphQlApi
+  uri: graphQlUrl
 });
 
 console.log('graphQlAdminSecret', graphQlAdminSecret, 'graphQlApi', graphQlApi);
