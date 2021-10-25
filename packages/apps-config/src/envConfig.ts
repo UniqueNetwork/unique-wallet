@@ -32,7 +32,7 @@ declare global {
       MAX_GAS: number; // 1000000000000
       MIN_PRICE: number;
       QUOTE_ID: number; // 2
-      UNIQUE_COLLECTION_IDS: string[]; // ['23']
+      UNIQUE_COLLECTION_IDS: string; // ['23']
       UNIQUE_SUBSTRATE_API: string;
       VALUE: number; // 0
       VERSION: string;
@@ -52,7 +52,7 @@ const envConfig: EnvConfigType = {
   maxGas: +window.ENV.MAX_GAS,
   minPrice: +window.ENV.MIN_PRICE,
   quoteId: +window.ENV.QUOTE_ID,
-  uniqueCollectionIds: window.ENV.UNIQUE_COLLECTION_IDS,
+  uniqueCollectionIds: window.ENV.UNIQUE_COLLECTION_IDS.split(','),
   uniqueSubstrateApi: window.ENV.UNIQUE_SUBSTRATE_API,
   value: +window.ENV.VALUE,
   version: window.ENV.VERSION,
