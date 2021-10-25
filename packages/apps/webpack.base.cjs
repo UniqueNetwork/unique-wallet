@@ -36,8 +36,6 @@ function createWebpack (context, mode = 'production') {
         { from: 'public', info: { minimized: true } }] })
     : [];
 
-  console.log('plugins', plugins);
-
   return {
     context,
     entry: ['@babel/polyfill', './src/index.tsx'],
