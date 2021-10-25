@@ -24,7 +24,7 @@
         return Number(variable);
     }
 
-    return variable;
+    return variable || defaults;
   }
 
   window.ENV = window.ENV || {
