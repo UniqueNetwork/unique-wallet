@@ -24,6 +24,10 @@ function Breadcrumbs ({ collectionInfo, setCollectionId, tokenId }: Props): Reac
     collectionInfo && collectionInfo.id && setCollectionId(collectionInfo.id);
   }, [collectionInfo, setCollectionId]);
 
+  const handleNFTClick = useCallback(() => {
+    collectionInfo && collectionInfo.id && setCollectionId('');
+  }, [collectionInfo, setCollectionId]);
+
   return (
     <div
       className='unique-breadcrumbs'
@@ -35,7 +39,10 @@ function Breadcrumbs ({ collectionInfo, setCollectionId, tokenId }: Props): Reac
           src={breadcrumbArrow as string}
         />
       </div>
-      <div className='unique-breadcrumbs--path'>
+      <div
+        className='unique-breadcrumbs--path'
+        onClick={handleNFTClick}
+      >
         <NavLink
           to={'/myStuff/nft'}
         >

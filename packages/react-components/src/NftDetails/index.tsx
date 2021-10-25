@@ -14,7 +14,6 @@ import { Breadcrumbs, SocialShareModal, TransferModal } from '@polkadot/react-co
 import { useDecoder, useSchema, useToggle } from '@polkadot/react-hooks';
 
 import AccordionArrow from './AccordionArrow';
-// import burnTokenIcon from './burnTokenIcon.svg';
 import shareIcon from './shareIcon.svg';
 
 interface NftDetailsProps {
