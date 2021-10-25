@@ -23,8 +23,6 @@ const { graphQlAdminSecret, graphQlApi } = envConfig;
 
 const graphQlUrl = process.env.NODE_ENV === 'production' ? graphQlApi : '/v1/graphql/';
 
-console.log('graphQlUrl', graphQlUrl);
-
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   headers: {
@@ -33,8 +31,6 @@ const client = new ApolloClient({
   },
   uri: graphQlUrl
 });
-
-console.log('graphQlAdminSecret', graphQlAdminSecret, 'graphQlApi', graphQlApi);
 
 function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): React.ReactElement<Props> {
   const location = useLocation();
