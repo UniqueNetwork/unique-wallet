@@ -165,7 +165,7 @@ function createWebpack (context, mode = 'production') {
         process: 'process/browser.js'
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-      new Dotenv({ defaults: true, path: './.env', systemvars: true }),
+      // new Dotenv({ defaults: true, path: './.env', systemvars: true }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(mode),
         'process.env.VERSION': JSON.stringify(pkgJson.version)
