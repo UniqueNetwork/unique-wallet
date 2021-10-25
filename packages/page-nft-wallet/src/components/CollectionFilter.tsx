@@ -14,7 +14,7 @@ export type CollectionImagesType = { [key: string]: string; };
 interface Props {
   clearCheckedValues: () => void;
   collections: NftCollectionInterface[];
-  collectionsLoading: boolean;
+  collectionsLoading?: boolean;
   selectedCollections: string[];
   filterCurrent: (id: string) => void;
   isShowCollection: boolean;
