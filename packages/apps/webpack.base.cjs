@@ -8,7 +8,6 @@ const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const Dotenv = require('dotenv-webpack');
 
 const findPackages = require('../../scripts/findPackages.cjs');
 
@@ -32,8 +31,12 @@ function createWebpack (context, mode = 'production') {
     return alias;
   }, {});
   const plugins = fs.existsSync(path.join(context, 'public'))
-    ? new CopyWebpackPlugin({ patterns: [{ from: 'public' }] })
+    ? new CopyWebpackPlugin(
+      { patterns: [
+        { from: 'public', info: { minimized: true } }] })
     : [];
+
+  console.log('plugins', plugins);
 
   return {
     context,
@@ -165,7 +168,6 @@ function createWebpack (context, mode = 'production') {
         process: 'process/browser.js'
       }),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-      // new Dotenv({ defaults: true, path: './.env', systemvars: true }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(mode),
         'process.env.VERSION': JSON.stringify(pkgJson.version)
