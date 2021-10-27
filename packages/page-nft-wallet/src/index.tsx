@@ -35,7 +35,6 @@ const client = new ApolloClient({
 function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): React.ReactElement<Props> {
   const location = useLocation();
   const history = useHistory();
-  const [shouldUpdateTokens, setShouldUpdateTokens] = useState<string>();
   // To get collection id in token page
   const [collectionId, setCollectionId] = useState<string>();
 
@@ -113,8 +112,6 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
             account={account}
             openPanel={openPanel}
             setOpenPanel={setOpenPanel}
-            setShouldUpdateTokens={setShouldUpdateTokens}
-            shouldUpdateTokens={shouldUpdateTokens}
           />
         </Route>
       </Switch>
