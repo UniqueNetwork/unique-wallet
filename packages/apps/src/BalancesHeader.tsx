@@ -40,6 +40,12 @@ function BalancesHeader (props: Props): React.ReactElement<{ account?: string }>
     setIsPopupActive((prev) => !prev);
   }, []);
 
+  if (!account) {
+    return (
+      <></>
+    );
+  }
+
   return (
     <div
       className='app-balances'
@@ -57,7 +63,7 @@ function BalancesHeader (props: Props): React.ReactElement<{ account?: string }>
               value={freeBalance}
             />
           )}
-          { !freeBalance && (
+          { (account && !freeBalance) && (
             <Loader
               active
               className='centered'
