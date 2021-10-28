@@ -1,15 +1,22 @@
 {
-  "name": "@polkadot/app-faq",
-  "private": true,
-  "version": "2.01",
-  "description": "Faq",
-  "main": "index.js",
-  "scripts": {},
   "author": "Konstantin Pozdnikin <kpozdnikin@usetech.ru>",
+  "bugs": "https://github.com/UniqueNetwork/unique-wallet/issues",
+  "description": "Faq",
+  "homepage": "https://github.com/UniqueNetwork/unique-wallet/tree/master/packages/page-faq#readme",
+  "license": "Apache-2.0",
   "maintainers": [
     "Konstantin Pozdnikin <kpozdnikin@usetech.ru>"
   ],
-  "license": "Apache-2.0",
+  "name": "@polkadot/app-faq",
+  "private": true,
+  "repository": {
+    "directory": "packages/page-faq",
+    "type": "git",
+    "url": "https://github.com/UniqueNetwork/unique-wallet.git"
+  },
+  "sideEffects": false,
+  "version": "2.01",
+  "main": "index.js",
   "dependencies": {
     "@babel/runtime": "^7.13.10",
     "@polkadot/react-components": "^0.83.2-28"

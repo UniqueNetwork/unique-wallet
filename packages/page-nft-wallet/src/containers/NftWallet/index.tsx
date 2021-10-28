@@ -64,7 +64,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   const currentAccount = useRef<string>();
 
   const clearCheckedValues = useCallback(() => {
-    mountedRef && setFilters((prevState) => {
+    mountedRef.current && setFilters((prevState) => {
       const newFilters = { ...prevState, collectionIds: [] };
 
       sessionStorage.setItem('walletFilters', JSON.stringify(newFilters));
@@ -74,7 +74,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   }, [mountedRef]);
 
   const clearAllFilters = useCallback(() => {
-    if (mountedRef) {
+    if (mountedRef.current) {
       setFilters(defaultFilters);
       sessionStorage.removeItem('walletFilters');
       setOpenPanel && setOpenPanel('tokens');
@@ -90,7 +90,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
       newIds = [...filters.collectionIds, id];
     }
 
-    mountedRef && setFilters((prevState) => {
+    mountedRef.current && setFilters((prevState) => {
       const newFilters = { ...prevState, collectionIds: newIds };
 
       sessionStorage.setItem('walletFilters', JSON.stringify(newFilters));
@@ -125,7 +125,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   }, [history]);
 
   const refillTokens = useCallback(() => {
-    if (currentFilter.current !== filters || currentAccount.current !== account) {
+    if (mountedRef.current && (currentFilter.current !== filters || currentAccount.current !== account)) {
       setPage(1);
       setMyTokens({});
       currentFilter.current = filters;
@@ -133,7 +133,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
     }
 
     initializeTokens();
-  }, [account, currentFilter, filters, initializeTokens]);
+  }, [account, currentFilter, filters, initializeTokens, mountedRef]);
 
   useEffect(() => {
     refillTokens();
