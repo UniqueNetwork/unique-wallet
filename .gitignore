@@ -1,6 +1,7 @@
 build/
 coverage/
 node_modules/
+**/node_modules/*
 tmp/
 .DS_Store
 .env
@@ -22,5 +23,3 @@ yarn-error.log*
 .idea/
 NOTES.md
 .vscode
-/packages/react-api/node_modules/
-/packages/react-api/node_modules/
