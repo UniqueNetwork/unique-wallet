@@ -5,9 +5,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack');
 
 const findPackages = require('../../scripts/findPackages.cjs');
 
@@ -172,8 +172,7 @@ function createWebpack (context, mode = 'production') {
       new webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: JSON.stringify(mode),
-          VERSION: JSON.stringify(pkgJson.version),
-          WS_URL: JSON.stringify(process.env.WS_URL)
+          VERSION: JSON.stringify(pkgJson.version)
         }
       }),
       new webpack.optimize.SplitChunksPlugin(),
@@ -188,7 +187,11 @@ function createWebpack (context, mode = 'production') {
       },
       extensions: ['.js', '.jsx', '.mjs', '.ts', '.tsx'],
       fallback: {
+        assert: require.resolve('assert/'),
         crypto: require.resolve('crypto-browserify'),
+        http: require.resolve('stream-http'),
+        https: require.resolve('https-browserify'),
+        os: require.resolve('os-browserify/browser'),
         path: require.resolve('path-browserify'),
         stream: require.resolve('stream-browserify')
       }

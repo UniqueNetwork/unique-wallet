@@ -12,10 +12,12 @@
     "type": "git",
     "url": "https://github.com/UniqueNetwork/unique-wallet.git"
   },
-  "sideEffects": false,
+  "sideEffects": [
+    "*.scss"
+  ],
   "version": "0.83.2-28",
   "main": "index.js",
   "dependencies": {
-    "@babel/runtime": "^7.14.0"
+    "@babel/runtime": "^7.15.4"
   }
 }
