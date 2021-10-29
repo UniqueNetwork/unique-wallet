@@ -23,8 +23,6 @@ interface NftWalletProps {
   account?: string;
   openPanel?: OpenPanelType;
   setOpenPanel?: (openPanel: OpenPanelType) => void;
-  setShouldUpdateTokens: (value: string) => void;
-  shouldUpdateTokens?: string;
 }
 
 function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {

@@ -10,6 +10,7 @@ import type { ActionStatus } from '@polkadot/react-components/Status/types';
 import type { AccountId, Index } from '@polkadot/types/interfaces';
 import type { TxCallback, TxFailedCallback } from './Status/types';
 
+
 export interface BareProps {
   children?: React.ReactNode;
   className?: string;
@@ -47,7 +48,7 @@ export interface TxButtonProps {
   onStart?: () => void;
   onSuccess?: TxCallback;
   onUpdate?: TxCallback;
-  params?: any[] | (() => any[]);
+  params?: unknown[] | (() => unknown[]) | null;
   tooltip?: string;
   tx?: ((...args: any[]) => SubmittableExtrinsic<'promise'>) | null;
   withoutLink?: boolean;
