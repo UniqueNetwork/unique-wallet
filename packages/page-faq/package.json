@@ -10,13 +10,14 @@
   "name": "@polkadot/app-faq",
   "private": true,
   "repository": {
-    "directory": "packages/page-accounts",
+    "directory": "packages/page-faq",
     "type": "git",
     "url": "https://github.com/UniqueNetwork/unique-wallet.git"
   },
   "sideEffects": [
     "*.scss"
   ],
+  "type": "module",
   "version": "2.01",
   "main": "index.js",
   "dependencies": {
