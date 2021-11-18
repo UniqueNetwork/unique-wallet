@@ -23,12 +23,17 @@ const { graphQlAdminSecret, graphQlApi } = envConfig;
 
 const graphQlUrl = process.env.NODE_ENV === 'production' ? graphQlApi : '/v1/graphql/';
 
+const headers: {[k: string]: string} = {
+  'content-type': 'application/json',
+};
+
+if (graphQlAdminSecret) {
+  headers['x-hasura-admin-secret'] = graphQlAdminSecret;
+}
+
 const client = new ApolloClient({
+  headers,
   cache: new InMemoryCache(),
-  headers: {
-    'content-type': 'application/json',
-    'x-hasura-admin-secret': graphQlAdminSecret
-  },
   uri: graphQlUrl
 });
 
