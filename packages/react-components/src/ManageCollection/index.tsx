@@ -102,11 +102,11 @@ function ManageCollection (props: Props): React.ReactElement<Props> {
 
   const decodeOffChainSchema = useCallback((info: NftCollectionInterface): string => {
     try {
-      if (collectionInfo?.SchemaVersion === 'ImageURL') {
-        return hex2a(info.OffchainSchema);
+      if (collectionInfo?.schemaVersion === 'ImageURL') {
+        return hex2a(info.offchainSchema);
       } else {
         // {"metadata" : "https://whitelabel.market/metadata/{id}"}
-        const offChainSchemaDecoded = hex2a(info.OffchainSchema);
+        const offChainSchemaDecoded = hex2a(info.offchainSchema);
         const schemaParsed = JSON.parse(offChainSchemaDecoded) as { metadata: string };
 
         return schemaParsed.metadata;
@@ -318,7 +318,7 @@ function ManageCollection (props: Props): React.ReactElement<Props> {
 
   useEffect(() => {
     if (collectionId && collectionInfo && collectionAdminList) {
-      setIsAdmin(!!collectionAdminList.find((address: string) => address.toString() === account) || collectionInfo.Owner === account);
+      setIsAdmin(!!collectionAdminList.find((address: string) => address.toString() === account) || collectionInfo.owner === account);
     }
   }, [account, collectionAdminList, collectionId, collectionInfo]);
 
