@@ -126,20 +126,20 @@ function ManageCollection (props: Props): React.ReactElement<Props> {
 
         if (info) {
           setCollectionInfo(info);
-          setCurrentSchemaVersion(info.SchemaVersion);
-          setName(collectionName16Decoder(info.Name));
-          setDescription(collectionName16Decoder(info.Description));
-          setTokenPrefix(hex2a(info.TokenPrefix));
+          setCurrentSchemaVersion(info.schemaVersion);
+          setName(collectionName16Decoder(info.name));
+          setDescription(collectionName16Decoder(info.description));
+          setTokenPrefix(hex2a(info.tokenPrefix));
           setCurrentOffchainSchema(decodeOffChainSchema(info));
 
           // add collection to storage
           addCollection(info);
 
-          if (info.Sponsorship.confirmed) {
-            setSponsorAddress(info.Sponsorship.confirmed);
+          if (info.sponsorship.confirmed) {
+            setSponsorAddress(info.sponsorship.confirmed);
           }
 
-          if (info.SchemaVersion === 'Unique') {
+          if (info.schemaVersion === 'Unique') {
             const schema: { metadata: string, metadataJson: MetadataJsonType } = await getAndParseOffchainSchemaMetadata(info);
 
             if (schema.metadataJson.audio) {
@@ -157,9 +157,9 @@ function ManageCollection (props: Props): React.ReactElement<Props> {
             if (schema.metadataJson.video) {
               setVideoUrl(schema.metadataJson.video);
             }
-          } else if (info.SchemaVersion === 'ImageURL') {
-            if (info.OffchainSchema) {
-              setImageUrl(hex2a(info.OffchainSchema).replace('{id}', '1'));
+          } else if (info.schemaVersion === 'ImageURL') {
+            if (info.offchainSchema) {
+              setImageUrl(hex2a(info.offchainSchema).replace('{id}', '1'));
             }
           }
         }
@@ -244,7 +244,7 @@ function ManageCollection (props: Props): React.ReactElement<Props> {
     if (account && collectionId && collectionInfo) {
       let schema = '';
 
-      if (collectionInfo?.SchemaVersion === 'ImageURL') {
+      if (collectionInfo?.schemaVersion === 'ImageURL') {
         schema = currentOffchainSchema;
       } else {
         schema = `{"metadata" : "${currentOffchainSchema}"}`;
@@ -460,7 +460,7 @@ function ManageCollection (props: Props): React.ReactElement<Props> {
                             />
                           </div>
                         </div>
-                        { currentOffchainSchema && collectionInfo?.SchemaVersion === 'ImageURL' && (
+                        { currentOffchainSchema && collectionInfo?.schemaVersion === 'ImageURL' && (
                           <div className='tr edit'>
                             <div className='td'>
                                 Image, token #1
@@ -476,7 +476,7 @@ function ManageCollection (props: Props): React.ReactElement<Props> {
                             </div>
                           </div>
                         )}
-                        { currentOffchainSchema && collectionInfo?.SchemaVersion === 'Unique' && (
+                        { currentOffchainSchema && collectionInfo?.schemaVersion === 'Unique' && (
                           <>
                             <div className='tr edit'>
                               <div className='td'>
@@ -589,19 +589,19 @@ function ManageCollection (props: Props): React.ReactElement<Props> {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column width={8}>
-                    { collectionInfo?.Sponsorship.unconfirmed && (
+                    { collectionInfo?.sponsorship.unconfirmed && (
                       <div className='text-block error'>
-                        {collectionInfo?.Sponsorship.unconfirmed} unconfirmed
+                        {collectionInfo?.sponsorship.unconfirmed} unconfirmed
                       </div>
                     )}
-                    { collectionInfo?.Sponsorship.disabled && (
+                    { collectionInfo?.sponsorship.disabled && (
                       <div className='text-block disabled'>
-                        {collectionInfo?.Sponsorship.unconfirmed} disabled
+                        {collectionInfo?.sponsorship.unconfirmed} disabled
                       </div>
                     )}
-                    { collectionInfo?.Sponsorship.confirmed && (
+                    { collectionInfo?.sponsorship.confirmed && (
                       <div className='text-block confirmed'>
-                        {collectionInfo?.Sponsorship.unconfirmed} confirmed
+                        {collectionInfo?.sponsorship.unconfirmed} confirmed
                       </div>
                     )}
                   </Grid.Column>

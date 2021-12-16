@@ -77,7 +77,7 @@ function CollectionFilter (props: Props): React.ReactElement<Props> {
             { !collectionsLoading && collections.map((collection, index) => (
               <CollectionFilterItem
                 collectionId={collection.id}
-                collectionName={collection.Name}
+                collectionName={collection.name}
                 collections={collections}
                 filterCurrent={filterCurrent}
                 images={images}
