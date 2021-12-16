@@ -23,6 +23,9 @@ interface Props {
 
 function CollectionFilter (props: Props): React.ReactElement<Props> {
   const { clearCheckedValues, collections, collectionsLoading, filterCurrent, isShowCollection, selectedCollections, setIsShowCollection } = props;
+
+  console.log('end', collections, selectedCollections);
+
   const { getTokenImageUrl } = useMetadata();
   const [images, setImages] = useState <CollectionImagesType>({});
 

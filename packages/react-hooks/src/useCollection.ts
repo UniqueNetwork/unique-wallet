@@ -76,7 +76,7 @@ export function useCollection () {
 
   const getCreatedCollectionCount = useCallback(async () => {
     try {
-      return parseInt((await api.query.nft.createdCollectionCount()).toString(), 10);
+      return (await api.rpc.unique.collectionStats()).created.toNumber();
     } catch (e) {
       console.log('getCreatedCollectionCount error', e);
     }
@@ -146,7 +146,7 @@ export function useCollection () {
     }
 
     try {
-      return await api.query.nft.adminList(collectionId);
+      return (await api.rpc.unique.adminlist(collectionId)).toHuman() as string[];
     } catch (e) {
       console.log('getCollectionAdminList error', e);
     }
@@ -246,7 +246,9 @@ export function useCollection () {
     }
 
     try {
-      const collectionInfo = (await api.query.nft.collectionById(collectionId)).toJSON() as unknown as NftCollectionInterface;
+      console.log('collectionId', collectionId);
+      console.log('api.rpc', api.rpc);
+      const collectionInfo = (await api.rpc.unique.collectionById(collectionId)).toJSON() as unknown as NftCollectionInterface | null;
 
       return {
         ...collectionInfo,
@@ -294,7 +296,7 @@ export function useCollection () {
     }
 
     try {
-      return await api.query.nft.addressTokens(collectionId, ownerId);
+      return await api.query.unique.accountTokens(collectionId, { Substrate: ownerId });
     } catch (e) {
       console.log('getTokensOfCollection error', e);
     }
