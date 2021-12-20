@@ -144,8 +144,8 @@ export const useMetadata = (): UseMetadataInterface => {
     const tokenDetails = await getTokenDetails(collectionInfo, tokenId);
 
     return {
-      ...decodeStruct({ attr: onChainSchema.attributesConst, data: tokenDetails?.ConstData }),
-      ...decodeStruct({ attr: onChainSchema.attributesVar, data: tokenDetails?.VariableData })
+      ...decodeStruct({ attr: onChainSchema.attributesConst, data: tokenDetails?.constData }),
+      ...decodeStruct({ attr: onChainSchema.attributesVar, data: tokenDetails?.variableData })
     };
   }, [getOnChainSchema, getTokenDetails, decodeStruct]);
 
