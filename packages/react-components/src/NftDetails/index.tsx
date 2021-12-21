@@ -33,7 +33,7 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
   const { collectionName16Decoder } = useDecoder();
   const [isCollectionCollapsed, toggleCollectionCollapsed] = useToggle(true);
   const [isAttributesCollapsed, toggleAttributesCollapsed] = useToggle(true);
-  const uOwnIt = tokenDetails?.Owner?.toString() === account;
+  const uOwnIt = tokenDetails?.owner?.toString() === account;
 
   useEffect(() => {
     setShouldUpdateOwner(false);
@@ -42,6 +42,8 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
   const onTransferSuccess = useCallback(() => {
     setShouldUpdateOwner(true);
   }, []);
+
+  console.log('td', tokenDetails);
 
   return (
     <div className='token-details'>
@@ -84,8 +86,8 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
                   Share link
                 </a>
               </div>
-              { (!uOwnIt && tokenDetails?.Owner) && (
-                <div className='info-row'><strong>Owner:</strong> <p>{tokenDetails?.Owner?.toString()}</p></div>
+              { (!uOwnIt && tokenDetails?.owner) && (
+                <div className='info-row'><strong>Owner:</strong> <p>{tokenDetails?.owner?.Substrate?.toString()}</p></div>
               )}
               { uOwnIt && (
                 <div className='action-block'>
