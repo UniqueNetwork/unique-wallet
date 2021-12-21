@@ -6,11 +6,12 @@ import { useCallback, useContext } from 'react';
 import { StatusContext } from '@polkadot/react-components';
 import { useApi } from '@polkadot/react-hooks/useApi';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+import { normalizeAccountId } from './utils';
 
 export interface TokenDetailsInterface {
-  Owner?: any[];
-  ConstData?: string;
-  VariableData?: string;
+  owner?: any;
+  constData?: string;
+  variableData?: string;
 }
 
 interface UseTokenInterface {
@@ -65,14 +66,24 @@ export function useToken (): UseTokenInterface {
     if (!api) {
       return {};
     }
-
+  
     try {
-      const tokenInfo = await api.query.unique.nftItemList(collectionId, tokenId);
-
-      return tokenInfo.toJSON() as unknown as TokenDetailsInterface;
+      let tokenDetailsData: TokenDetailsInterface = {};
+  
+      const variableData = (await api.rpc.unique.variableMetadata(collectionId, tokenId)).toJSON() as string;
+      const constData: string = (await api.rpc.unique.constMetadata(collectionId, tokenId)).toJSON() as string;
+      const crossAccount = normalizeAccountId((await api.rpc.unique.tokenOwner(collectionId, tokenId)).toJSON() as string) as { Substrate: string };
+  
+      tokenDetailsData = {
+        constData,
+        owner: crossAccount,
+        variableData
+      };
+  
+      return tokenDetailsData;
     } catch (e) {
       console.log('getDetailedTokenInfo error', e);
-
+  
       return {};
     }
   }, [api]);
@@ -83,7 +94,8 @@ export function useToken (): UseTokenInterface {
     }
 
     try {
-      return (await api.query.unique.nftItemList(collectionId, tokenId) as unknown as TokenDetailsInterface);
+      const tokenInfo = (await api.rpc.unique.constMetadata(collectionId, tokenId) as unknown as TokenDetailsInterface);
+      return tokenInfo;
     } catch (e) {
       console.log('getDetailedReFungibleTokenInfo error', e);
 
