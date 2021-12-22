@@ -33,7 +33,7 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
   const { collectionName16Decoder } = useDecoder();
   const [isCollectionCollapsed, toggleCollectionCollapsed] = useToggle(true);
   const [isAttributesCollapsed, toggleAttributesCollapsed] = useToggle(true);
-  const uOwnIt = tokenDetails?.owner?.toString() === account;
+  const uOwnIt = tokenDetails?.owner?.Substrate?.toString() === account;
 
   useEffect(() => {
     setShouldUpdateOwner(false);
