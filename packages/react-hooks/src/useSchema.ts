@@ -53,9 +53,9 @@ export function useSchema (account: string | undefined, collectionId: string, to
 
   const getReFungibleDetails = useCallback(() => {
     try {
-      if (account && tokenDetails?.Owner) {
+      if (account && tokenDetails?.owner) {
         if (Object.prototype.hasOwnProperty.call(collectionInfo?.mode, 'reFungible')) {
-          const owner = tokenDetails.Owner.find((item: { fraction: BN, owner: string }) => item.owner.toString() === account) as { fraction: BN, owner: string } | undefined;
+          const owner = tokenDetails.owner.find((item: { fraction: BN, owner: string }) => item.owner.Substrate.toString() === account) as { fraction: BN, owner: string } | undefined;
 
           if (typeof collectionInfo?.decimalPoints === 'number') {
             const balance = owner && owner.fraction.toNumber() / Math.pow(10, collectionInfo.decimalPoints);
@@ -71,7 +71,7 @@ export function useSchema (account: string | undefined, collectionId: string, to
     } catch (e) {
       console.error('token balance calculation error', e);
     }
-  }, [account, collectionInfo, tokenDetails?.Owner]);
+  }, [account, collectionInfo, tokenDetails?.owner]);
 
   const getCollectionInfo = useCallback(async () => {
     if (collectionId) {
