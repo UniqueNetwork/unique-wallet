@@ -31,7 +31,7 @@ function GetTestUNQModal ({ onClose }: Props): React.ReactElement<Props> {
       <Modal.Actions onCancel={onClose}>
         <div className='modal-btn'>
           <a
-            href={envConfig.testUniqueTelegram}
+            href={envConfig.uniqueTelegram}
             rel='noreferrer'
             target='_blank'
           >Go to telegram</a>

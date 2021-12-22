@@ -9,7 +9,7 @@ export type EnvConfigType = {
   midTedCollection: number;
   minPrice: number;
   quoteId: number; // 2
-  testUniqueTelegram: string;
+  uniqueTelegram: string;
   uniqueCollectionIds: string[]; // ['23']
   uniqueApi: string;
   uniqueSubstrateApi: string;
@@ -26,10 +26,10 @@ const envConfig: EnvConfigType = {
   midTedCollection: +(process.env.MIN_TED_COLLECTION as string),
   minPrice: +(process.env.MIN_PRICE as string),
   quoteId: +(process.env.QUOTE_ID as string),
-  testUniqueTelegram: (process.env.TESTUNQ_TELEGRAM as string),
   uniqueApi: (process.env.UNIQUE_API as string),
   uniqueCollectionIds: (process.env.UNIQUE_COLLECTION_IDS as string).split(','),
   uniqueSubstrateApi: (process.env.UNIQUE_SUBSTRATE_API as string),
+  uniqueTelegram: (process.env.UNQ_TELEGRAM as string),
   value: +(process.env.VALUE as string),
   version: (process.env.VERSION as string),
   whiteLabelUrl: (process.env.WHITE_LABEL_URL as string)
