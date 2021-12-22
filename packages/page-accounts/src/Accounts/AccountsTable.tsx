@@ -5,7 +5,7 @@ import type { KeyringAddress } from '@polkadot/ui-keyring/types';
 
 import React, { useCallback } from 'react';
 
-import HelpTooltip from '@polkadot/react-components/HelpTooltip';
+import { HelpTooltip } from '@polkadot/react-components';
 
 import { SortedAccount } from '../types';
 import AccountTableItem from './AccountTableItem';

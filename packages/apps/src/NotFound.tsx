@@ -4,10 +4,6 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 
-import envConfig from '@polkadot/apps-config/envConfig';
-
-const { walletMode } = envConfig;
-
 interface Props {
   basePath: string;
   missingApis?: (string | string[])[];
@@ -15,12 +11,6 @@ interface Props {
 
 function NotFound ({ basePath, missingApis = [] }: Props): React.ReactElement {
   console.log(`Redirecting from route "${basePath}" to "/market"${missingApis.length ? `, missing the following APIs: ${JSON.stringify(missingApis)}` : ''}`);
-
-  if (walletMode) {
-    return (
-      <Redirect to='/myStuff' />
-    );
-  }
 
   return (
     <Redirect to='/myStuff' />

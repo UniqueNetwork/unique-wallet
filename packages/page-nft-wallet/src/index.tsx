@@ -5,58 +5,43 @@ import './styles.scss';
 
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 // external imports
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header/Header';
 
+import envConfig from '@polkadot/apps-config/envConfig';
 import { NftDetails, Tabs } from '@polkadot/react-components';
 // local imports and components
 import { AppProps as Props } from '@polkadot/react-components/types';
-import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 
 import NetworkWallet from './containers/NetworkWallet';
 import NftWallet from './containers/NftWallet';
 
+const { graphQlAdminSecret, graphQlApi } = envConfig;
+
+const graphQlUrl = process.env.NODE_ENV === 'production' ? graphQlApi : '/v1/graphql/';
+
+const headers: {[k: string]: string} = {
+  'content-type': 'application/json',
+};
+
+if (graphQlAdminSecret) {
+  headers['x-hasura-admin-secret'] = graphQlAdminSecret;
+}
+
 const client = new ApolloClient({
+  headers,
   cache: new InMemoryCache(),
-  headers: {
-    'content-type': 'application/json',
-    'x-hasura-admin-secret': 'qwerty123'
-  },
-  uri: 'https://dev-api-explorer.unique.network/v1/graphql'
+  uri: graphQlUrl
 });
 
 function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): React.ReactElement<Props> {
   const location = useLocation();
   const history = useHistory();
-  const [shouldUpdateTokens, setShouldUpdateTokens] = useState<string>();
-  const collectionsStorage: NftCollectionInterface[] = JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
-  const [collections, setCollections] = useState<NftCollectionInterface[]>(collectionsStorage);
   // To get collection id in token page
   const [collectionId, setCollectionId] = useState<string>();
-
-  const addCollection = useCallback((collection: NftCollectionInterface) => {
-    setCollections((prevCollections: NftCollectionInterface[]) => {
-      let newCollections = [...prevCollections];
-
-      if (!prevCollections.find((prevCollection) => prevCollection.id === collection.id)) {
-        newCollections = [...prevCollections, collection];
-      }
-
-      localStorage.setItem('tokenCollections', JSON.stringify(newCollections));
-
-      return newCollections;
-    });
-  }, []);
-
-  const removeCollectionFromList = useCallback((collectionToRemove: string) => {
-    const newCollectionList = collections.filter((item: NftCollectionInterface) => item.id !== collectionToRemove);
-
-    setCollections(newCollectionList);
-    localStorage.setItem('tokenCollections', JSON.stringify(newCollectionList));
-  }, [collections]);
 
   const items = useMemo(() => [
     {
@@ -121,11 +106,8 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
           <ApolloProvider client={client}>
             <NftWallet
               account={account}
-              addCollection={addCollection}
               collectionId={collectionId}
-              collections={collections}
               openPanel={openPanel}
-              setCollections={setCollections}
               setOpenPanel={setOpenPanel}
             />
           </ApolloProvider>
@@ -133,14 +115,8 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
         <Route path={`${basePath}/tokens`}>
           <NetworkWallet
             account={account}
-            addCollection={addCollection}
-            collections={collections}
             openPanel={openPanel}
-            removeCollectionFromList={removeCollectionFromList}
-            setCollections={setCollections}
             setOpenPanel={setOpenPanel}
-            setShouldUpdateTokens={setShouldUpdateTokens}
-            shouldUpdateTokens={shouldUpdateTokens}
           />
         </Route>
       </Switch>

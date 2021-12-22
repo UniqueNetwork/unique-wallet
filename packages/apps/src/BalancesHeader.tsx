@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import menuArrow from '@polkadot/apps/images/menu-arrow.svg';
 import PopupMenu from '@polkadot/react-components/PopupMenu';
@@ -39,6 +40,12 @@ function BalancesHeader (props: Props): React.ReactElement<{ account?: string }>
     setIsPopupActive((prev) => !prev);
   }, []);
 
+  if (!account) {
+    return (
+      <></>
+    );
+  }
+
   return (
     <div
       className='app-balances'
@@ -50,10 +57,19 @@ function BalancesHeader (props: Props): React.ReactElement<{ account?: string }>
           <div className='item-icon'>
             <WalletIconSvg />
           </div>
-          <FormatBalance
-            className='result'
-            value={freeBalance}
-          />
+          { freeBalance && (
+            <FormatBalance
+              className='result'
+              value={freeBalance}
+            />
+          )}
+          { (account && !freeBalance) && (
+            <Loader
+              active
+              className='centered'
+              inline='centered'
+            />
+          )}
         </div>
       </div>
       <div className={isPopupActive ? 'rotate-icon' : 'icon'}>

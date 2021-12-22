@@ -1,4 +1,4 @@
-// [object Object]
+// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 // eslint-disable-next-line header/header
@@ -20,7 +20,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onStatusChange }) => {
       <p className='text'>Please select one of the options:
       </p>
     </div>
-    <AccountButtonsGroup onStatusChange={onStatusChange}/>
+    <AccountButtonsGroup onStatusChange={onStatusChange} />
 
   </div>;
 };

@@ -136,7 +136,8 @@ class InputAddress extends React.PureComponent<Props, State> {
 
   public override render (): React.ReactNode {
     const { className = '', defaultValue, help, hideAddress = false, isDisabled = false, isError, isMultiple, label, labelExtra, options, optionsAll, placeholder, type = DEFAULT_TYPE, withEllipsis, withLabel } = this.props;
-    const hasOptions = (options && options.length !== 0) || (optionsAll && Object.keys(optionsAll[type]).length !== 0);
+    // one option is account footer
+    const hasOptions = (options && options.length !== 0) || (optionsAll && Object.keys(optionsAll[type]).length > 1);
 
     // the options could be delayed, don't render without
     if (!hasOptions && !isDisabled) {
@@ -168,6 +169,7 @@ class InputAddress extends React.PureComponent<Props, State> {
       isDisabled && actualValue
       ? [createOption(actualValue)]
       : this.getFiltered();
+
     const _defaultValue = (isMultiple || !isUndefined(value))
       ? undefined
       : actualValue;
@@ -217,8 +219,9 @@ class InputAddress extends React.PureComponent<Props, State> {
   private getLastOptionValue (): KeyringSectionOption | undefined {
     const available = this.getFiltered();
 
+    // first value is 'manage accounts', last value is 'footer', so we take penultimate value
     return available.length
-      ? available[available.length - 1]
+      ? available[available.length - 2]
       : undefined;
   }
 

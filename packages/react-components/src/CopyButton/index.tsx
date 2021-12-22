@@ -14,7 +14,7 @@ interface Props {
   label?: React.ReactNode;
   type?: string;
   isMnemonic?: boolean;
-  value: string;
+  value?: string;
 }
 
 const NOOP = () => undefined;
@@ -38,7 +38,7 @@ function CopyButton ({ children, className = '', type, value }: Props): React.Re
     <div className={`ui--CopyButton ${className}`}>
       <CopyToClipboard
         onCopy={_onCopy}
-        text={value}
+        text={value || ''}
       >
         <div className='copyContainer'>
           {children}

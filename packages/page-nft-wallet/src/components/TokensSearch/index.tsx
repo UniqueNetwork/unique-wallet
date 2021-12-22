@@ -3,32 +3,26 @@
 
 import './styles.scss';
 
-import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
-
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Form from 'semantic-ui-react/dist/commonjs/collections/Form';
 import Dropdown, { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown';
 
-import { SearchFilter } from '@polkadot/react-components';
-import { useCollections, useDecoder } from '@polkadot/react-hooks';
+import { Filters } from '@polkadot/app-nft-wallet/containers/NftWallet';
+// import { SearchFilter } from '@polkadot/react-components';
 
 import ArrowDown from '../ArrowDown';
 import ArrowUp from '../ArrowUp';
 
 interface Props {
   account: string | null | undefined;
-  addCollection: (item: NftCollectionInterface) => void;
-  collections: NftCollectionInterface[];
+  filters: Filters;
+  setFilters: (filters: Filters) => void;
+  tokensCount: number
 }
 
-function TokensSearch ({ account, addCollection, collections }: Props): React.ReactElement<Props> {
-  const [collectionsAvailable, setCollectionsAvailable] = useState<Array<NftCollectionInterface>>([]);
-  const [collectionsMatched, setCollectionsMatched] = useState<Array<NftCollectionInterface>>([]);
-  const [searchString, setSearchString] = useState<string>('');
-  const [sortValue, setSortValue] = useState<string>('creationDate-desc');
-  const { presetTokensCollections } = useCollections();
-  const currentAccount = useRef<string | null | undefined>();
-  const { collectionName16Decoder } = useDecoder();
+function TokensSearch ({ account, filters, setFilters, tokensCount }: Props): React.ReactElement<Props> {
+  // const [searchString, setSearchString] = useState<string>('');
+  const [sortValue, setSortValue] = useState<string>('tokenId-desc');
 
   const optionNode = useCallback((active: boolean, order: string, text: string) => {
     return (
@@ -45,24 +39,29 @@ function TokensSearch ({ account, addCollection, collections }: Props): React.Re
   }, []);
 
   const sortOptions = useMemo(() => ([
-    { content: (optionNode(false, 'asc', 'Price')), key: 'PriceUp', text: 'Price', value: 'price-asc' },
-    { content: (optionNode(false, 'desc', 'Price')), key: 'PriceDown', text: 'Price', value: 'price-desc' },
     { content: (optionNode(false, 'asc', 'Token ID')), key: 'TokenIDUp', text: 'Token ID', value: 'tokenId-asc' },
-    { content: (optionNode(false, 'desc', 'Token ID')), key: 'TokenIDDown', text: 'Token ID', value: 'tokenId-desc' },
-    { content: (optionNode(false, 'asc', 'Listing date')), key: 'ListingDateUp', text: 'Listing date', value: 'creationDate-asc' },
-    { content: (optionNode(false, 'desc', 'Listing date')), key: 'ListingDateDown', text: 'Listing date', value: 'creationDate-desc' }
+    { content: (optionNode(false, 'desc', 'Token ID')), key: 'TokenIDDown', text: 'Token ID', value: 'tokenId-desc' }
   ]), [optionNode]);
 
   const setSort = useCallback((event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
     const { value } = data;
 
-    setSortValue(value?.toString() || 'creationDate-desc');
-  }, []);
+    const key = value?.toString() || 'tokenId-desc';
 
-  const clearFilters = useCallback(() => {
+    setSortValue(key);
+
+    if (key && filters) {
+      const newFilters = { ...filters, sort: `${key.split('-')[1]}` as 'asc' | 'desc' };
+
+      setFilters(newFilters);
+      sessionStorage.setItem('walletFilters', JSON.stringify(newFilters));
+    }
+  }, [filters, setFilters]);
+
+  /* const clearFilters = useCallback(() => {
     // clearAllFilters();
     setSearchString('');
-  }, []);
+  }, []); */
 
   const currentValue = useMemo(() => {
     if (sortValue) {
@@ -76,7 +75,7 @@ function TokensSearch ({ account, addCollection, collections }: Props): React.Re
     return optionNode(false, 'none', 'Sort by');
   }, [optionNode, sortOptions, sortValue]);
 
-  const searchCollection = useCallback(() => {
+  /* const searchCollection = useCallback(() => {
     const filteredCollections = collectionsAvailable.filter((collection) => {
       const collectionName = collectionName16Decoder(collection.Name).toLowerCase();
 
@@ -89,53 +88,27 @@ function TokensSearch ({ account, addCollection, collections }: Props): React.Re
     });
 
     setCollectionsMatched(filteredCollections);
-  }, [collectionName16Decoder, collectionsAvailable, searchString]);
-
-  const getCollections = useCallback(async () => {
-    const collections = await presetTokensCollections();
-
-    if (collections && collections.length) {
-      setCollectionsAvailable(collections);
-      setCollectionsMatched(collections);
-    }
-  }, [presetTokensCollections]);
-
-  const clearSearch = useCallback(() => {
-    setSearchString('');
-    setCollectionsMatched([]);
-  }, []);
-
-  useEffect(() => {
-    if (searchString.length >= 3) {
-      searchCollection();
-    }
-  }, [searchCollection, searchString]);
+  }, [collectionName16Decoder, collectionsAvailable, searchString]); */
 
   // clear search results if account changed
-  useEffect(() => {
+  /* useEffect(() => {
     if (currentAccount.current && currentAccount.current !== account) {
       setCollectionsMatched([]);
       setSearchString('');
     }
 
     currentAccount.current = account;
-  }, [account]);
-
-  useEffect(() => {
-    void getCollections();
-  }, [getCollections]);
-
-  const areFiltersActive = true;
+  }, [account]); */
 
   return (
     <Form className='tokens-search'>
-      <Form.Field className='search-field'>
+      {/* <Form.Field className='search-field'>
         <SearchFilter
           clearSearch={clearSearch}
           searchString={searchString}
           setSearchString={setSearchString}
         />
-      </Form.Field>
+      </Form.Field> */}
       <Form.Field className='sort-field'>
         <Dropdown
           onChange={setSort}
@@ -145,9 +118,9 @@ function TokensSearch ({ account, addCollection, collections }: Props): React.Re
       </Form.Field>
       <Form.Field className='search-results'>
         <span>
-          {collectionsMatched.length} items
+          {tokensCount} items
         </span>
-        { areFiltersActive && <a onClick={clearFilters}>Clear all filters</a> }
+        {/* { areFiltersActive && <a onClick={clearFilters}>Clear all filters</a> } */}
       </Form.Field>
     </Form>
   );

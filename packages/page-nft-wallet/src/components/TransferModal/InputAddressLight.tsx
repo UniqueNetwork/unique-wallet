@@ -11,9 +11,8 @@ import store from 'store';
 
 import { withMulti, withObservable } from '@polkadot/react-api/hoc';
 import { Dropdown } from '@polkadot/react-components';
-import CreateHeader from '@polkadot/react-components/InputAddress/CreateHeader';
 import createItem from '@polkadot/react-components/InputAddress/createItem';
-import { getAddressName } from '@polkadot/react-components/util';
+import { getAddressName, toAddress } from '@polkadot/react-components/util';
 import addressToAddress from '@polkadot/react-components/util/toAddress';
 import { keyring } from '@polkadot/ui-keyring';
 import { createOptionItem } from '@polkadot/ui-keyring/options/item';
@@ -58,7 +57,7 @@ const MULTI_DEFAULT: string[] = [];
 
 function transformToAddress (value?: string | Uint8Array | null): string | null {
   try {
-    return addressToAddress(value) || null;
+    return toAddress(value) || null;
   } catch (error) {
     // noop, handled by return
   }

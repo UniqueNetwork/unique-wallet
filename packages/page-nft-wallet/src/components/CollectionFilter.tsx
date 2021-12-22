@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { memo, useCallback, useEffect, useState } from 'react';
+import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
-import { MyTokensType } from '@polkadot/app-nft-wallet/containers/NftWallet';
 import { useMetadata } from '@polkadot/react-hooks';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 
@@ -14,33 +14,27 @@ export type CollectionImagesType = { [key: string]: string; };
 interface Props {
   clearCheckedValues: () => void;
   collections: NftCollectionInterface[];
+  collectionsLoading?: boolean;
   selectedCollections: string[];
   filterCurrent: (id: string) => void;
   isShowCollection: boolean;
   setIsShowCollection: (isShowCollection: boolean) => void;
-  myTokens: MyTokensType[]
 }
 
 function CollectionFilter (props: Props): React.ReactElement<Props> {
-  const { clearCheckedValues, collections, filterCurrent, isShowCollection, myTokens, selectedCollections, setIsShowCollection } = props;
+  const { clearCheckedValues, collections, collectionsLoading, filterCurrent, isShowCollection, selectedCollections, setIsShowCollection } = props;
   const { getTokenImageUrl } = useMetadata();
   const [images, setImages] = useState <CollectionImagesType>({});
 
   const updateImageUrl = useCallback(() => {
-    collections.forEach((element: NftCollectionInterface) => {
-      for (let i = 0; i < myTokens.length; i++) {
-        if (myTokens[i].collectionId === element.id) {
-          void getTokenImageUrl(element, myTokens[i].tokenId)
-            .then((res) => {
-              if (res) {
-                setImages((prev) => ({ ...prev, [myTokens[i].collectionId]: res }));
-              }
-            });
-          break;
+    collections.forEach((collection: NftCollectionInterface) => {
+      void getTokenImageUrl(collection, '1').then((res) => {
+        if (res) {
+          setImages((prev) => ({ ...prev, [collection.id]: res }));
         }
-      }
+      });
     });
-  }, [collections, getTokenImageUrl, myTokens]);
+  }, [collections, getTokenImageUrl]);
 
   const onShowCollectionsClick = useCallback(() => {
     setIsShowCollection(!isShowCollection);
@@ -70,7 +64,14 @@ function CollectionFilter (props: Props): React.ReactElement<Props> {
       { isShowCollection && (
         <div className='collection-filter--body'>
           <div className='collection-list'>
-            {collections.map((collection, index) => (
+            { collectionsLoading && (
+              <Loader
+                active
+                className='load-info'
+                inline='centered'
+              />
+            )}
+            { !collectionsLoading && collections.map((collection, index) => (
               <CollectionFilterItem
                 collectionId={collection.id}
                 collectionName={collection.Name}

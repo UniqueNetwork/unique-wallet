@@ -1,1 +1,22 @@
-{}
+{
+  "If the recipient account is new, the balance needs to be more than the existential deposit. Likewise if the sending account balance drops below the same value, the account will be removed from the state.": "If the recipient account is new, the balance needs to be more than the existential deposit. Likewise if the sending account balance drops below the same value, the account will be removed from the state.",
+  "Make Transfer": "Make Transfer",
+  "Normal transfer without keep-alive checks": "Normal transfer without keep-alive checks",
+  "Select a contact or paste the address you want to send funds to.": "Select a contact or paste the address you want to send funds to.",
+  "Send funds": "Send funds",
+  "The account you will send funds from.": "The account you will send funds from.",
+  "The beneficiary will have access to the transferred fees when the transaction is included in a block.": "The beneficiary will have access to the transferred fees when the transaction is included in a block.",
+  "The full account balance to be transferred, minus the transaction fees": "The full account balance to be transferred, minus the transaction fees",
+  "The minimum amount that an account should have to be deemed active": "The minimum amount that an account should have to be deemed active",
+  "The transferred balance will be subtracted (along with fees) from the sender account.": "The transferred balance will be subtracted (along with fees) from the sender account.",
+  "Transfer the full account balance, reap the sender": "Transfer the full account balance, reap the sender",
+  "Transfer with account keep-alive checks": "Transfer with account keep-alive checks",
+  "Type the amount you want to transfer. Note that you can select the unit on the right e.g sending 1 milli is equivalent to sending 0.001.": "Type the amount you want to transfer. Note that you can select the unit on the right e.g sending 1 milli is equivalent to sending 0.001.",
+  "With the keep-alive option set, the account is protected against removal due to low balances.": "With the keep-alive option set, the account is protected against removal due to low balances.",
+  "amount": "amount",
+  "existential deposit": "existential deposit",
+  "send from account": "send from account",
+  "send to address": "send to address",
+  "transferrable": "transferrable",
+  "transferrable minus fees": "transferrable minus fees"
+}

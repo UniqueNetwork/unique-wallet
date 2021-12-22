@@ -4,19 +4,43 @@
 export type EnvConfigType = {
   environment: string;
   faviconPath: string;
+  graphQlAdminSecret: string;
+  graphQlApi: string;
+  kusamaApiUrl: string;
+  kusamaBackupApiUrl: string;
   kusamaDecimals: number; // 12
   maxGas: number; // 1000000000000
-  midTedCollection: number;
   minPrice: number;
   quoteId: number; // 2
   uniqueTelegram: string;
   uniqueCollectionIds: string[]; // ['23']
-  uniqueApi: string;
   uniqueSubstrateApi: string;
   value: number; // 0
   version: string;
   whiteLabelUrl: string;
 };
+
+declare global {
+  interface Window {
+    ENV: {
+      ENVIRONMENT: string;
+      FAVICON_PATH: string;
+      GRAPH_QL_ADMIN_SECRET: string;
+      GRAPH_QL_API: string;
+      KUSAMA_API: string;
+      KUSAMA_BACKUP_API: string;
+      KUSAMA_DECIMALS: number; // 12
+      MAX_GAS: number; // 1000000000000
+      MIN_PRICE: number;
+      QUOTE_ID: number; // 2
+      UNIQUE_COLLECTION_IDS: string; // ['23']
+      UNIQUE_SUBSTRATE_API: string;
+      VALUE: number; // 0
+      VERSION: string;
+      WHITE_LABEL_URL: string;
+    }
+  }
+}
 
 const envConfig: EnvConfigType = {
   environment: (process.env.ENVIRONMENT as string),

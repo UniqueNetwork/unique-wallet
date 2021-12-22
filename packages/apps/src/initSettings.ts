@@ -43,6 +43,8 @@ function getApiUrl (): string {
   const stored = store.get('settings') as Record<string, unknown> || {};
   const fallbackUrl = endpoints.find(({ info }) => info === 'unique');
 
+  console.log('stored.apiUrl', stored.apiUrl, 'process.env.WS_URL', process.env.WS_URL, 'settings.apiUrl', settings.apiUrl, 'fallbackUrl', fallbackUrl);
+
   // via settings, or the default chain
   return [stored.apiUrl, process.env.WS_URL].includes(settings.apiUrl) && settings.apiUrl === envConfig.uniqueSubstrateApi
     ? settings.apiUrl // keep as-is
