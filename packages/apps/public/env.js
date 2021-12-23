@@ -39,6 +39,7 @@
     WHITE_LABEL_URL: defaults('${WHITE_LABEL_URL}', 'https://whitelabel.unique.network'),
     UNIQUE_COLLECTION_IDS: defaults('${UNIQUE_COLLECTION_IDS}', [3].join(',')),
     UNIQUE_SUBSTRATE_API: defaults('${UNIQUE_SUBSTRATE_API}', 'wss://quartz.unique.network'),
+    UNIQUE_TELEGRAM: defaults('${UNIQUE_TELEGRAM}', 'https://t.me/unique2faucetbot'),
     KUSAMA_API: defaults('${KUSAMA_API}', 'wss://kusama-rpc.polkadot.io'),
     KUSAMA_BACKUP_API: defaults('${KUSAMA_BACKUP_API}', 'wss://polkadot.api.onfinality.io/public-ws'),
     GRAPH_QL_API: defaults('${GRAPH_QL_API}', 'https://quartz-explorer-api.unique.network/v1/graphql'),

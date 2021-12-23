@@ -5,6 +5,7 @@ import './style.scss';
 
 import React from 'react';
 
+import envConfig from '@polkadot/apps-config/envConfig';
 import { Modal } from '@polkadot/react-components';
 
 interface Props {
@@ -30,7 +31,7 @@ function GetTestUNQModal ({ onClose }: Props): React.ReactElement<Props> {
       <Modal.Actions onCancel={onClose}>
         <div className='modal-btn'>
           <a
-            href={'https://web.telegram.org/'}
+            href={envConfig.uniqueTelegram}
             rel='noreferrer'
             target='_blank'
           >Go to telegram</a>
