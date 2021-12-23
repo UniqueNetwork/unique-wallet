@@ -36,7 +36,7 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
   // const [balanceTooLow, setBalanceTooLow] = useState<boolean>(false);
   const [isAddressError, setIsAddressError] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
-  const decimalPoints = collection?.DecimalPoints instanceof BN ? collection?.DecimalPoints.toNumber() : 1;
+  const decimalPoints = collection?.decimalPoints instanceof BN ? collection?.decimalPoints.toNumber() : 1;
 
   const transferToken = useCallback(() => {
     queueExtrinsic({
@@ -126,7 +126,7 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
               placeholder='Recipient address'
             />
           </Form.Field>
-          { Object.prototype.hasOwnProperty.call(collection.Mode, 'reFungible') && (
+          { Object.prototype.hasOwnProperty.call(collection.mode, 'reFungible') && (
             <Form.Field>
               <Label label={`Please enter part of token you want to transfer, your token balance is: ${reFungibleBalance}`} />
               <Input

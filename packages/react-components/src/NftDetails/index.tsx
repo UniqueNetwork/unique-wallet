@@ -33,7 +33,7 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
   const { collectionName16Decoder } = useDecoder();
   const [isCollectionCollapsed, toggleCollectionCollapsed] = useToggle(true);
   const [isAttributesCollapsed, toggleAttributesCollapsed] = useToggle(true);
-  const uOwnIt = tokenDetails?.Owner?.toString() === account;
+  const uOwnIt = tokenDetails?.owner?.Substrate?.toString() === account;
 
   useEffect(() => {
     setShouldUpdateOwner(false);
@@ -42,6 +42,8 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
   const onTransferSuccess = useCallback(() => {
     setShouldUpdateOwner(true);
   }, []);
+
+  console.log('td', tokenDetails);
 
   return (
     <div className='token-details'>
@@ -70,7 +72,7 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
           <div className='token-info--row--attributes'>
             <div className='token-info--row--attributes--block'>
               <Header as='h2'>
-                {collectionInfo && <span>{hex2a(collectionInfo.TokenPrefix)}</span>} #{tokenId}
+                {collectionInfo && <span>{hex2a(collectionInfo.tokenPrefix)}</span>} #{tokenId}
               </Header>
               <div className='share'>
                 <a
@@ -84,8 +86,8 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
                   Share link
                 </a>
               </div>
-              { (!uOwnIt && tokenDetails?.Owner) && (
-                <div className='info-row'><strong>Owner:</strong> <p>{tokenDetails?.Owner?.toString()}</p></div>
+              { (!uOwnIt && tokenDetails?.owner) && (
+                <div className='info-row'><strong>Owner:</strong> <p>{tokenDetails?.owner?.Substrate?.toString()}</p></div>
               )}
               { uOwnIt && (
                 <div className='action-block'>
@@ -126,7 +128,7 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
                     <div className='accordion-left--body'>
                       <p>
                         <strong>Name: </strong>
-                        <a>{collectionName16Decoder(collectionInfo.Name)}</a>
+                        <a>{collectionName16Decoder(collectionInfo.name)}</a>
                       </p>
                       <p>
                         <strong>Collection ID: </strong>
@@ -134,7 +136,7 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
                       </p>
                       <p>
                         <strong>Description: </strong>
-                        {collectionName16Decoder(collectionInfo.Description)}
+                        {collectionName16Decoder(collectionInfo.description)}
                       </p>
                     </div>
                   )}

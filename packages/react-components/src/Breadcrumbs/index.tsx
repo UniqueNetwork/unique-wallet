@@ -62,7 +62,7 @@ function Breadcrumbs ({ collectionInfo, setCollectionId, tokenId }: Props): Reac
             <NavLink
               to={'/myStuff/nft'}
             >
-              Collection: {collectionName16Decoder(collectionInfo.Name)}
+              Collection: {collectionName16Decoder(collectionInfo.name)}
               <img
                 alt='breadcrumbArrow'
                 src={breadcrumbArrow as string}
@@ -71,7 +71,7 @@ function Breadcrumbs ({ collectionInfo, setCollectionId, tokenId }: Props): Reac
           </div>
           { tokenId && (
             <div className='unique-breadcrumbs--path'>
-              {collectionInfo && <span>{hex2a(collectionInfo.TokenPrefix)}</span>} #{tokenId}
+              {collectionInfo && <span>{hex2a(collectionInfo.tokenPrefix)}</span>} #{tokenId}
             </div>
           )}
         </>

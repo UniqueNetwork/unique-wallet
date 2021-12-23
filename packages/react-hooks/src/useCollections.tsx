@@ -61,7 +61,7 @@ export function useCollections () {
       for (let i = 1; i <= collectionsCount; i++) {
         const collectionInf = await getDetailedCollectionInfo(i.toString()) as unknown as NftCollectionInterface;
 
-        if (collectionInf && collectionInf.Owner && collectionInf.Owner.toString() !== '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM') {
+        if (collectionInf && collectionInf.owner && collectionInf.owner.toString() !== '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM') {
           collections.push({ ...collectionInf, id: i.toString() });
         }
       }
@@ -95,7 +95,7 @@ export function useCollections () {
       for (let i = 0; i < collectionIdsList.length; i++) {
         const mintCollectionInfo = await getDetailedCollectionInfo(collectionIdsList[i]) as unknown as NftCollectionInterface;
 
-        if (mintCollectionInfo && mintCollectionInfo.Owner && mintCollectionInfo.Owner.toString() !== '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM' && !collections.find((collection) => collection.id === collectionIdsList[i])) {
+        if (mintCollectionInfo && mintCollectionInfo.owner && mintCollectionInfo.owner.toString() !== '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM' && !collections.find((collection) => collection.id === collectionIdsList[i])) {
           collections.push({ ...mintCollectionInfo, id: collectionIdsList[i] });
         }
       }

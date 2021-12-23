@@ -23,6 +23,7 @@ interface Props {
 
 function CollectionFilter (props: Props): React.ReactElement<Props> {
   const { clearCheckedValues, collections, collectionsLoading, filterCurrent, isShowCollection, selectedCollections, setIsShowCollection } = props;
+
   const { getTokenImageUrl } = useMetadata();
   const [images, setImages] = useState <CollectionImagesType>({});
 
@@ -74,7 +75,7 @@ function CollectionFilter (props: Props): React.ReactElement<Props> {
             { !collectionsLoading && collections.map((collection, index) => (
               <CollectionFilterItem
                 collectionId={collection.id}
-                collectionName={collection.Name}
+                collectionName={collection.name}
                 collections={collections}
                 filterCurrent={filterCurrent}
                 images={images}

@@ -14,6 +14,7 @@ export type EnvConfigType = {
   quoteId: number; // 2
   uniqueCollectionIds: string[]; // ['23']
   uniqueSubstrateApi: string;
+  uniqueTelegram: string,
   value: number; // 0
   version: string;
   whiteLabelUrl: string;
@@ -34,6 +35,7 @@ declare global {
       QUOTE_ID: number; // 2
       UNIQUE_COLLECTION_IDS: string; // ['23']
       UNIQUE_SUBSTRATE_API: string;
+      UNIQUE_TELEGRAM: string;
       VALUE: number; // 0
       VERSION: string;
       WHITE_LABEL_URL: string;
@@ -54,6 +56,7 @@ const envConfig: EnvConfigType = {
   quoteId: +window.ENV.QUOTE_ID,
   uniqueCollectionIds: window.ENV.UNIQUE_COLLECTION_IDS.split(','),
   uniqueSubstrateApi: window.ENV.UNIQUE_SUBSTRATE_API,
+  uniqueTelegram: window.ENV.UNIQUE_TELEGRAM,
   value: +window.ENV.VALUE,
   version: window.ENV.VERSION,
   whiteLabelUrl: window.ENV.WHITE_LABEL_URL
