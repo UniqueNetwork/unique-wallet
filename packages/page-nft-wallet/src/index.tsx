@@ -24,7 +24,7 @@ const { graphQlAdminSecret, graphQlApi } = envConfig;
 const graphQlUrl = process.env.NODE_ENV === 'production' ? graphQlApi : '/v1/graphql/';
 
 const headers: {[k: string]: string} = {
-  'content-type': 'application/json',
+  'content-type': 'application/json'
 };
 
 if (graphQlAdminSecret) {
@@ -32,16 +32,19 @@ if (graphQlAdminSecret) {
 }
 
 const client = new ApolloClient({
-  headers,
   cache: new InMemoryCache(),
+  headers,
   uri: graphQlUrl
 });
 
 function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): React.ReactElement<Props> {
   const location = useLocation();
+  const { search } = location;
   const history = useHistory();
+  const queryParams = React.useMemo(() => new URLSearchParams(search), [search]);
+  const preSelectedCollection = React.useMemo(() => queryParams.get('collectionId'), [queryParams]);
   // To get collection id in token page
-  const [collectionId, setCollectionId] = useState<string>();
+  const [collectionId, setCollectionId] = useState<string>(preSelectedCollection || '');
 
   const items = useMemo(() => [
     {
