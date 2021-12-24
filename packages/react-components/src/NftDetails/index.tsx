@@ -156,6 +156,10 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
                   { isAttributesCollapsed && (
                     <div className='accordion-left--body'>
                       {Object.keys(attributes).map((attrKey) => {
+                        if (attrKey === 'ipfsJson') {
+                          return null;
+                        }
+
                         if (!Array.isArray(attributes[attrKey])) {
                           return <p key={attrKey}><strong>{attrKey}</strong>: {attributes[attrKey]}</p>;
                         }
