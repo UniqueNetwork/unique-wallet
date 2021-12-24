@@ -58,7 +58,7 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
     },
     {
       name: 'tokens',
-      text: 'Tokens'
+      text: 'Coins'
     }
   ], []);
 
@@ -72,7 +72,7 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
     <div className='my-tokens'>
       { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && openPanel === 'tokens' && (
         <>
-          <Header as='h1'>My stuff</Header>
+          <Header as='h1'>My tokens</Header>
         </>
       )}
       { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && openPanel === 'tokens' && (

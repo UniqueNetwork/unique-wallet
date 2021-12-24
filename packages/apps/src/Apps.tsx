@@ -116,7 +116,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                         <Menu.Item
                           active={location.pathname === '/myStuff'}
                           as={NavLink}
-                          name='myStuff'
+                          name='myTokens'
                           to='/myStuff'
                         />
                         <Menu.Item

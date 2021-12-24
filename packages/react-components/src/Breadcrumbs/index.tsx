@@ -33,7 +33,7 @@ function Breadcrumbs ({ collectionInfo, setCollectionId, tokenId }: Props): Reac
       className='unique-breadcrumbs'
     >
       <div className='unique-breadcrumbs--path'>
-        My stuff
+        My tokens
         <img
           alt='breadcrumbArrow'
           src={breadcrumbArrow as string}

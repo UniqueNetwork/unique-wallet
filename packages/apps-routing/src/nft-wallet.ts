@@ -19,6 +19,6 @@ export default function create (t: TFunction): Route {
     group: 'nft',
     icon: 'users',
     name: 'myStuff',
-    text: t('nav.nftWallet', 'My stuff', { ns: 'apps-routing' })
+    text: t('nav.nftWallet', 'My tokens', { ns: 'apps-routing' })
   };
 }
