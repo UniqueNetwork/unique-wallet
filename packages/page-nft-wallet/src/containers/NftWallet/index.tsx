@@ -53,6 +53,8 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   const [showCollectionsFilter, toggleCollectionsFilter] = useState<boolean>(true);
   const [filters, setFilters] = useState<Filters>(collectionId ? { ...initialFilters, collectionIds: [collectionId] } : initialFilters);
   const [myTokens, setMyTokens] = useState<MyTokensListType>({});
+  // temporary solution to avoid "No tokens" message, while we are fetching tokens
+  const [isTokensFilled, setIsTokensFilled] = useState<boolean>(false);
   const mountedRef = useIsMountedRef();
   const history = useHistory();
   const [page, setPage] = useState<number>(1);
@@ -77,7 +79,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
     if (mountedRef.current) {
       setFilters(defaultFilters);
       sessionStorage.removeItem('walletFilters');
-      setOpenPanel && setOpenPanel('tokens');
+      setOpenPanel && setOpenPanel('coins');
     }
   }, [mountedRef, setOpenPanel]);
 
@@ -114,6 +116,8 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
         return myTokensList;
       });
     }
+
+    setIsTokensFilled(true);
   }, [account, mountedRef, userTokens, userTokensLoading]);
 
   const fetchScrolledData = useCallback(() => {
@@ -125,6 +129,8 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   }, [history]);
 
   const refillTokens = useCallback(() => {
+    setIsTokensFilled(false);
+
     if (mountedRef.current && (currentFilter.current !== filters || currentAccount.current !== account)) {
       setPage(1);
       setMyTokens({});
@@ -187,7 +193,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                       tokenId={tokenId}
                     />
                   ))}
-                  { userTokensLoading && (
+                  { (userTokensLoading || !isTokensFilled) && (
                     <Loader
                       active
                       className='load-info'
@@ -197,13 +203,13 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                 </div>
               </InfiniteScroll>
             )}
-            {(!userTokensLoading && !tokensCount && !userCollectionsLoading) && (
+            {(!userTokensLoading && !tokensCount && !userCollectionsLoading && isTokensFilled) && (
               <div className='no-tokens'>
                 <img
                   alt='no tokens'
                   src={noMyTokensIcon as string}
                 />
-                <p className='no-tokens-text'>You have no tokens</p>
+                <p className='no-tokens-text'>You have no coins</p>
               </div>
             )}
           </div>
@@ -226,7 +232,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
         />
       )}
       <div className='nft-wallet--footer'>
-        { openPanel === 'tokens' && (
+        { openPanel === 'coins' && (
           <>
             <Button
               className='footer-button'
@@ -242,7 +248,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
           <Button
             className='footer-button'
             fluid
-            onClick={setOpenPanel && setOpenPanel.bind(null, 'tokens')}
+            onClick={setOpenPanel && setOpenPanel.bind(null, 'coins')}
           >
               SHOW
           </Button>
