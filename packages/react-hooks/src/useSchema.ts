@@ -6,9 +6,12 @@ import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
 
 import BN from 'bn.js';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import envConfig from '@polkadot/apps-config/envConfig';
 
-import { useMetadata, useToken } from '@polkadot/react-hooks';
+import { useIsMountedRef, useMetadata, useToken } from '@polkadot/react-hooks';
 import { useCollection } from '@polkadot/react-hooks/useCollection';
+
+const { ipfsGateway } = envConfig;
 
 export type AttributesDecoded = {
   [key: string]: string | string[],
@@ -28,6 +31,8 @@ interface UseSchemaInterface {
   shouldUpdateOwner?: boolean;
 }
 
+export type IpfsJsonType = { ipfs: string, type: 'image' };
+
 export function useSchema (account: string | undefined, collectionId: string, tokenId: string | number, shouldUpdateOwner?: boolean): UseSchemaInterface {
   const [collectionInfo, setCollectionInfo] = useState<NftCollectionInterface>();
   const [reFungibleBalance, setReFungibleBalance] = useState<number>(0);
@@ -36,6 +41,7 @@ export function useSchema (account: string | undefined, collectionId: string, to
   const [tokenDetails, setTokenDetails] = useState<TokenDetailsInterface>();
   const { getTokenInfo } = useToken();
   const { getDetailedCollectionInfo } = useCollection();
+  const mountedRef = useIsMountedRef();
   const cleanup = useRef<boolean>(false);
   const { getTokenAttributes, getTokenImageUrl } = useMetadata();
 
@@ -115,14 +121,24 @@ export function useSchema (account: string | undefined, collectionId: string, to
   }, [collectionInfo, getTokenAttributes, tokenId]);
 
   const saveTokenImageUrl = useCallback(async (collectionInf: NftCollectionInterface, tokenId: string) => {
-    const tokenImageUrl = await getTokenImageUrl(collectionInf, tokenId);
+    let tokenImageUrl: string;
+    let ipfsJson: IpfsJsonType;
 
-    if (cleanup.current) {
-      return;
+    if (collectionInf.schemaVersion === 'Unique' && attributes?.ipfsJson) {
+      try {
+        ipfsJson = JSON.parse(attributes.ipfsJson as string) as IpfsJsonType;
+        tokenImageUrl = `${ipfsGateway}/${ipfsJson?.ipfs}`;
+      } catch (e) {
+        console.log('ipfsJson parse error', e);
+        tokenImageUrl = '';
+      }
+    } else {
+      // use old logic
+      tokenImageUrl = await getTokenImageUrl(collectionInf, tokenId);
     }
 
-    setTokenUrl(tokenImageUrl);
-  }, [getTokenImageUrl]);
+    mountedRef.current && setTokenUrl(tokenImageUrl);
+  }, [attributes, getTokenImageUrl, mountedRef]);
 
   useEffect(() => {
     if (collectionInfo) {

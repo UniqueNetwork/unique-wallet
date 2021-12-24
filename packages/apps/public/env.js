@@ -30,6 +30,7 @@
 
   window.ENV = window.ENV || {
     FAVICON_PATH: defaults('${FAVICON_PATH}', 'favicons/marketplace'),
+    IPFS_GATEWAY: defaults('${IPFS_GATEWAY}', 'https://dev-ipfs.unique.network/ipfs'),
     KUSAMA_DECIMALS: defaults('${KUSAMA_DECIMALS}', 12),
     MAX_GAS: defaults('${MAX_GAS}', 1000000000000),
     MIN_PRICE: defaults('${MIN_PRICE}', 0.000001),
