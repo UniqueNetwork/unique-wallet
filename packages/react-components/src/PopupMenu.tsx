@@ -26,7 +26,7 @@ const PopupMenu = (props: Props) => {
         <Menu.Item
           active={location.pathname === '/myStuff/Tokens'}
           className=''
-          name='View all tokens'
+          name='View all coins'
           onClick={goToMyTokens}
         />
       </div>

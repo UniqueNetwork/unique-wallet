@@ -28,7 +28,7 @@ function Faq (): React.ReactElement<Props> {
         <p>A: You need to transfer (withdraw) from the other wallet or exchange. To do that:</p>
         <ol>
           <li>Autorise with your account;</li>
-          <li>Copy your Kusama network address at My Stuff Tokens page;</li>
+          <li>Copy your Kusama network address at My Tokens Coins page;</li>
           <li>Use this Kusama address to send KSM from any wallet or exchange.</li>
         </ol>
       </div>

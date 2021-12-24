@@ -71,7 +71,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
     <div className='network-wallet'>
       <div className='network-wallet--block'>
         <div className='network-wallet--block--header'>
-          Network tokens
+          Network coins
         </div>
         <div className='network-wallet--block--body'>
           <div className='token-item'>
