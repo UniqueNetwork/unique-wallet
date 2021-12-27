@@ -24,18 +24,18 @@ interface Props {
 function CollectionFilter (props: Props): React.ReactElement<Props> {
   const { clearCheckedValues, collections, collectionsLoading, filterCurrent, isShowCollection, selectedCollections, setIsShowCollection } = props;
 
-  const { getTokenImageUrl } = useMetadata();
+  const { getCollectionCoverImageUrl } = useMetadata();
   const [images, setImages] = useState <CollectionImagesType>({});
 
   const updateImageUrl = useCallback(() => {
     collections.forEach((collection: NftCollectionInterface) => {
-      void getTokenImageUrl(collection, '1').then((res) => {
+      void getCollectionCoverImageUrl(collection).then((res) => {
         if (res) {
           setImages((prev) => ({ ...prev, [collection.id]: res }));
         }
       });
     });
-  }, [collections, getTokenImageUrl]);
+  }, [collections, getCollectionCoverImageUrl]);
 
   const onShowCollectionsClick = useCallback(() => {
     setIsShowCollection(!isShowCollection);
