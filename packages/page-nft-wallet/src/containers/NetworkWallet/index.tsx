@@ -9,6 +9,7 @@ import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
 import GetTestUNQModal from '@polkadot/app-nft-wallet/components/GetTestUNQModal';
+import envConfig from '@polkadot/apps-config/envConfig';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
 import { ChainImg, CopyIcon } from '@polkadot/react-components';
 import StatusContext from '@polkadot/react-components/Status/Context';
@@ -169,6 +170,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
                   Send
               </Button>
               <Button
+                disabled={!envConfig.uniqueTelegram}
                 onClick={toggleGetTestUNQModal}
               >
                   Get
