@@ -96,7 +96,7 @@ export const useMetadata = (): UseMetadataInterface => {
   }, [hex2a, setUnique, tokenImageUrl]);
 
   const getCollectionCoverImageUrl = useCallback(async (collectionInfo: NftCollectionInterface): Promise<string> => {
-    if (collectionInfo.schemaVersion === 'Unique' && collectionInfo?.variableOnChainSchema) {
+    if (collectionInfo?.variableOnChainSchema && hex2a(collectionInfo?.variableOnChainSchema)) {
       const collectionSchema = getCollectionOnChainSchema(collectionInfo);
       const image = collectionSchema?.variableSchema?.collectionCover as string;
 
