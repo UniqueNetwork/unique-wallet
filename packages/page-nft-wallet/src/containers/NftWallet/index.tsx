@@ -203,7 +203,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                   alt='no tokens'
                   src={noMyTokensIcon as string}
                 />
-                <p className='no-tokens-text'>You have no coins</p>
+                <p className='no-tokens-text'>You have no tokens</p>
               </div>
             )}
           </div>
