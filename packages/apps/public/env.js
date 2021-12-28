@@ -1,6 +1,8 @@
 // Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/* eslint-disable no-template-curly-in-string */
+
 (function (window) {
   function defaults (variable, defaults) {
     if (/^\$\{(.*)\}$/.test(variable)) {
@@ -41,7 +43,7 @@
     UNIQUE_COLLECTION_IDS: defaults('${UNIQUE_COLLECTION_IDS}', [3].join(',')),
     UNIQUE_SUBSTRATE_API: defaults('${UNIQUE_SUBSTRATE_API}', 'wss://opal.unique.network'),
     // UNIQUE_SUBSTRATE_API: defaults('${UNIQUE_SUBSTRATE_API}', 'wss://quartz.unique.network'),
-    UNIQUE_TELEGRAM: defaults('${UNIQUE_TELEGRAM}', ''),
+    UNIQUE_TELEGRAM: defaults('${UNIQUE_TELEGRAM}', '' /* 'https://t.me/unique2faucetbot' */),
     KUSAMA_API: defaults('${KUSAMA_API}', 'wss://kusama-rpc.polkadot.io'),
     KUSAMA_BACKUP_API: defaults('${KUSAMA_BACKUP_API}', 'wss://polkadot.api.onfinality.io/public-ws'),
     GRAPH_QL_API: defaults('${GRAPH_QL_API}', 'https://dev-api-explorer.unique.network/v1/graphql'),

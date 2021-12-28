@@ -53,8 +53,6 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   const [showCollectionsFilter, toggleCollectionsFilter] = useState<boolean>(true);
   const [filters, setFilters] = useState<Filters>(collectionId ? { ...initialFilters, collectionIds: [collectionId] } : initialFilters);
   const [myTokens, setMyTokens] = useState<MyTokensListType>({});
-  // temporary solution to avoid "No tokens" message, while we are fetching tokens
-  const [isTokensFilled, setIsTokensFilled] = useState<boolean>(false);
   const mountedRef = useIsMountedRef();
   const history = useHistory();
   const [page, setPage] = useState<number>(1);
@@ -116,8 +114,6 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
         return myTokensList;
       });
     }
-
-    setIsTokensFilled(true);
   }, [account, mountedRef, userTokens, userTokensLoading]);
 
   const fetchScrolledData = useCallback(() => {
@@ -129,8 +125,6 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   }, [history]);
 
   const refillTokens = useCallback(() => {
-    setIsTokensFilled(false);
-
     if (mountedRef.current && (currentFilter.current !== filters || currentAccount.current !== account)) {
       setPage(1);
       setMyTokens({});
@@ -193,7 +187,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                       tokenId={tokenId}
                     />
                   ))}
-                  { (userTokensLoading || !isTokensFilled) && (
+                  { userTokensLoading && (
                     <Loader
                       active
                       className='load-info'
@@ -203,7 +197,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                 </div>
               </InfiniteScroll>
             )}
-            {(!userTokensLoading && !tokensCount && !userCollectionsLoading && isTokensFilled) && (
+            {(!userTokensLoading && !tokensCount && !userCollectionsLoading) && (
               <div className='no-tokens'>
                 <img
                   alt='no tokens'
