@@ -72,6 +72,14 @@ function CollectionFilter (props: Props): React.ReactElement<Props> {
                 inline='centered'
               />
             )}
+            {
+              !collectionsLoading && !collections?.length &&
+              <div className='no-collections'>
+                <p className='no-collections-text'>
+                  You have no collections
+                </p>
+              </div>
+            }
             { !collectionsLoading && collections.map((collection, index) => (
               <CollectionFilterItem
                 collectionId={collection.id}
