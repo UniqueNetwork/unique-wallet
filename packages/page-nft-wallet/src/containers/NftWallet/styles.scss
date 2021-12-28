@@ -48,11 +48,22 @@
             left: 0;
           }
         }
+
       }
-      .no-tokens{
+
+      .no-collections {
+
+        p {
+          color: var(--tabs-color);
+          font-family: var(--font-roboto);
+          line-height: 26px
+        }
+      }
+
+      .no-tokens {
         text-align: center;
 
-        p{
+        p {
           color: var(--tabs-color);
           font-family: var(--font-roboto);
           margin-top: 24px;
