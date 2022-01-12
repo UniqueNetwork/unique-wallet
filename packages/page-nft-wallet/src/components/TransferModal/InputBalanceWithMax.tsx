@@ -79,7 +79,7 @@ function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, 
   }, [isKusama]);
 
   const onValueChange = useCallback((val: string) => {
-    const floatBnValue = parseFloat(val || '0') * Math.pow(10, isKusama ? kusamaDecimals : formatBalance.getDefaults().decimals);
+    const floatBnValue = Math.round(parseFloat(val || '0') * Math.pow(10, isKusama ? kusamaDecimals : formatBalance.getDefaults().decimals));
 
     if (floatBnValue < 1) {
       return;
