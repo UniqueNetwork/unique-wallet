@@ -79,13 +79,17 @@ function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, 
   }, [isKusama]);
 
   const onValueChange = useCallback((val: string) => {
-    const floatBnValue = Math.round(parseFloat(val || '0') * Math.pow(10, isKusama ? kusamaDecimals : formatBalance.getDefaults().decimals));
+    const decimals = new BN(isKusama ? kusamaDecimals : formatBalance.getDefaults().decimals);
+    const normalizedVal = val.replace('.', '');
+    const parts = val.split('.');
+    // converting price: "1.000000000000000001" -> BN:1000000000000000001 | "0.000000000000000123" -> BN:123
+    const price = new BN(normalizedVal).mul(new BN(10).pow(decimals.sub(new BN(normalizedVal.length - parts[0].length))));
 
-    if (floatBnValue < 1) {
+    if (!Number(price.toString()[0])) {
       return;
     }
 
-    onChange(new BN(floatBnValue.toString()));
+    onChange(price);
   }, [isKusama, onChange]);
 
   const onSetMax = useCallback(() => {
