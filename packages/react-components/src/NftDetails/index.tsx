@@ -43,8 +43,6 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
     setShouldUpdateOwner(true);
   }, []);
 
-  console.log('td', tokenDetails);
-
   return (
     <div className='token-details'>
       <Breadcrumbs

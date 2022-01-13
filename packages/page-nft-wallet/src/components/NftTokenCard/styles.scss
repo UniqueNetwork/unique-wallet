@@ -39,6 +39,7 @@
           }
 
           &__field {
+            word-wrap: anywhere;
             color: var(--input-placeholder-search-color);
             font-size: 14px;
           }

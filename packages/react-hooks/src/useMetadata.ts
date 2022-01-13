@@ -7,17 +7,23 @@ import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
 
 import { useCallback } from 'react';
 
+import envConfig from '@polkadot/apps-config/envConfig';
 import { deserializeNft, ProtobufAttributeType } from '@polkadot/react-components/util/protobufUtils';
 import { useDecoder } from '@polkadot/react-hooks/useDecoder';
 import { AttributesDecoded } from '@polkadot/react-hooks/useSchema';
 import { useToken } from '@polkadot/react-hooks/useToken';
 
+import { useCollection } from '.';
+
+const { ipfsGateway } = envConfig;
+
 interface UseMetadataInterface {
   decodeStruct: ({ attr, data }: { attr?: any, data?: string }) => AttributesDecoded;
   getAndParseOffchainSchemaMetadata: (collectionInfo: NftCollectionInterface) => Promise<{ metadata: string, metadataJson: MetadataJsonType }>
+  getCollectionCover: (collectionInfo: NftCollectionInterface) => string;
   getOnChainSchema: (collectionInfo: NftCollectionInterface) => { attributesConst: string, attributesVar: string };
   getTokenAttributes: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<AttributesDecoded>;
-  getTokenImageUrl: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<string>;
+  getCollectionCoverImageUrl: (collectionInfo: NftCollectionInterface) => Promise<string>;
   setUnique: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<string>;
   tokenImageUrl: (urlString: string, tokenId: string) => string;
 }
@@ -32,6 +38,7 @@ export type MetadataJsonType = {
 export const useMetadata = (): UseMetadataInterface => {
   const { hex2a } = useDecoder();
   const { getDetailedReFungibleTokenInfo, getDetailedTokenInfo } = useToken();
+  const { getCollectionOnChainSchema } = useCollection();
 
   const decodeStruct = useCallback(({ attr, data }: { attr?: any, data?: string }): AttributesDecoded => {
     if (attr && data) {
@@ -87,6 +94,19 @@ export const useMetadata = (): UseMetadataInterface => {
 
     return '';
   }, [hex2a, setUnique, tokenImageUrl]);
+
+  const getCollectionCoverImageUrl = useCallback(async (collectionInfo: NftCollectionInterface): Promise<string> => {
+    if (collectionInfo?.variableOnChainSchema && hex2a(collectionInfo?.variableOnChainSchema)) {
+      const collectionSchema = getCollectionOnChainSchema(collectionInfo);
+      const image = collectionSchema?.variableSchema?.collectionCover as string;
+
+      return `${ipfsGateway}/${image}`;
+    } else {
+      return await getTokenImageUrl(collectionInfo, '1');
+    }
+
+    return '';
+  }, [getCollectionOnChainSchema, getTokenImageUrl]);
 
   const getAndParseOffchainSchemaMetadata = useCallback(async (collectionInfo: NftCollectionInterface) => {
     try {
@@ -152,6 +172,7 @@ export const useMetadata = (): UseMetadataInterface => {
   return {
     decodeStruct,
     getAndParseOffchainSchemaMetadata,
+    getCollectionCoverImageUrl,
     getOnChainSchema,
     getTokenAttributes,
     getTokenImageUrl,
