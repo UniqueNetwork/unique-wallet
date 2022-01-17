@@ -34,6 +34,9 @@
       grid-column-gap: calc(var(--gap) * 2);
 
       &--image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background-color: var(--card-background);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         border-radius: 4px;
