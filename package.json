@@ -69,6 +69,7 @@
     "cypress": "^6.8.0",
     "deep-equal": "^2.0.5",
     "dotenv": "^14.2.0",
+    "dotenv-webpack": "^7.0.3",
     "graphql": "^15.6.0",
     "lodash": "^4.17.21",
     "prismjs": "^1.24.1",

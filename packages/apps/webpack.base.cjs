@@ -170,7 +170,7 @@ function createWebpack (context, mode = 'production') {
         contextRegExp: /moment$/,
         resourceRegExp: /^\.\/locale$/
       }),
-      new Dotenv({ defaults: true, path: './.env', systemvars: true }),,
+      new Dotenv({ defaults: true, path: './.env', systemvars: true }),
       new webpack.optimize.SplitChunksPlugin(),
       new MiniCssExtractPlugin({
         filename: '[name].[contenthash:8].css'
