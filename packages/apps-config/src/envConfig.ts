@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export type EnvConfigType = {
+  decimals: number;
   environment: string;
   faviconPath: string;
   graphQlAdminSecret: string;
@@ -24,6 +25,7 @@ export type EnvConfigType = {
 declare global {
   interface Window {
     ENV?: {
+      DECIMALS: number;
       ENVIRONMENT: string;
       FAVICON_PATH: string;
       GRAPH_QL_ADMIN_SECRET: string;
@@ -46,6 +48,7 @@ declare global {
 }
 
 const envConfig: EnvConfigType = {
+  decimals: +(window.ENV?.DECIMALS || process.env.DECIMALS),
   environment: window.ENV?.ENVIRONMENT || process.env.ENVIRONMENT,
   faviconPath: window.ENV?.FAVICON_PATH || process.env.FAVICON_PATH,
   graphQlAdminSecret: window.ENV?.GRAPH_QL_ADMIN_SECRET || process.env.GRAPH_QL_ADMIN_SECRET,

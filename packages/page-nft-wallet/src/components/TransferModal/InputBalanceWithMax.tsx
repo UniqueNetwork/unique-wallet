@@ -6,7 +6,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import envConfig from '@polkadot/apps-config/envConfig';
 import { Input } from '@polkadot/react-components';
-import { formatKsmBalance, formatStrBalance } from '@polkadot/react-hooks/useKusamaApi';
+import { formatKsmBalance } from '@polkadot/react-hooks/useKusamaApi';
+import { formatStrBalance } from '@polkadot/react-hooks/utils';
 import { formatBalance } from '@polkadot/util';
 
 const { kusamaDecimals } = envConfig;
@@ -49,7 +50,7 @@ function reformat (value: BN | undefined, isKusama: boolean): string {
     return formatKsmBalance(value);
   }
 
-  return formatStrBalance(formatBalance.getDefaults().decimals, value);
+  return formatStrBalance(value, formatBalance.getDefaults().decimals);
 }
 
 function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, isError, isKusama, label, maxTransfer, onChange, onEnter, onEscape, placeholder, withLabel }: Props): React.ReactElement<Props> {

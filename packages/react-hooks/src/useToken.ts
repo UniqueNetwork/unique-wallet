@@ -6,17 +6,17 @@ import { useCallback, useContext } from 'react';
 import { StatusContext } from '@polkadot/react-components';
 import { useApi } from '@polkadot/react-hooks/useApi';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+
 import { normalizeAccountId } from './utils';
 
 export interface TokenDetailsInterface {
-  owner?: any;
+  owner?: { Ethereum?: string, Substrate?: string };
   constData?: string;
   variableData?: string;
 }
 
 interface UseTokenInterface {
   createNft: (obj: { account: string, collectionId: string, constData: string, variableData: string, successCallback?: () => void, errorCallback?: () => void, owner: string }) => void;
-  getDetailedReFungibleTokenInfo: (collectionId: string, tokenId: string) => Promise<TokenDetailsInterface>;
   getDetailedTokenInfo: (collectionId: string, tokenId: string) => Promise<TokenDetailsInterface>
   getTokenInfo: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<TokenDetailsInterface>;
   setVariableMetadata: (obj: { account: string, collectionId: string, variableData: string, successCallback?: () => void, errorCallback?: () => void, tokenId: string }) => void;
@@ -66,38 +66,23 @@ export function useToken (): UseTokenInterface {
     if (!api) {
       return {};
     }
-  
+
     try {
       let tokenDetailsData: TokenDetailsInterface = {};
-  
+
       const variableData = (await api.rpc.unique.variableMetadata(collectionId, tokenId)).toJSON() as string;
       const constData: string = (await api.rpc.unique.constMetadata(collectionId, tokenId)).toJSON() as string;
       const crossAccount = normalizeAccountId((await api.rpc.unique.tokenOwner(collectionId, tokenId)).toJSON() as string) as { Substrate: string };
-  
+
       tokenDetailsData = {
         constData,
         owner: crossAccount,
         variableData
       };
-  
+
       return tokenDetailsData;
     } catch (e) {
       console.log('getDetailedTokenInfo error', e);
-  
-      return {};
-    }
-  }, [api]);
-
-  const getDetailedReFungibleTokenInfo = useCallback(async (collectionId: string, tokenId: string): Promise<TokenDetailsInterface> => {
-    if (!api) {
-      return {};
-    }
-
-    try {
-      const tokenInfo = (await api.rpc.unique.constMetadata(collectionId, tokenId) as unknown as TokenDetailsInterface);
-      return tokenInfo;
-    } catch (e) {
-      console.log('getDetailedReFungibleTokenInfo error', e);
 
       return {};
     }
@@ -109,17 +94,14 @@ export function useToken (): UseTokenInterface {
     if (tokenId && collectionInfo) {
       if (Object.prototype.hasOwnProperty.call(collectionInfo.mode, 'nft')) {
         tokenDetailsData = await getDetailedTokenInfo(collectionInfo.id, tokenId);
-      } else if (Object.prototype.hasOwnProperty.call(collectionInfo.mode, 'reFungible')) {
-        tokenDetailsData = await getDetailedReFungibleTokenInfo(collectionInfo.id, tokenId);
       }
     }
 
     return tokenDetailsData;
-  }, [getDetailedTokenInfo, getDetailedReFungibleTokenInfo]);
+  }, [getDetailedTokenInfo]);
 
   return {
     createNft,
-    getDetailedReFungibleTokenInfo,
     getDetailedTokenInfo,
     getTokenInfo,
     setVariableMetadata

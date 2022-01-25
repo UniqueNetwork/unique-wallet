@@ -20,9 +20,9 @@ const { ipfsGateway } = envConfig;
 interface UseMetadataInterface {
   decodeStruct: ({ attr, data }: { attr?: any, data?: string }) => AttributesDecoded;
   getAndParseOffchainSchemaMetadata: (collectionInfo: NftCollectionInterface) => Promise<{ metadata: string, metadataJson: MetadataJsonType }>
-  getCollectionCover: (collectionInfo: NftCollectionInterface) => string;
   getOnChainSchema: (collectionInfo: NftCollectionInterface) => { attributesConst: string, attributesVar: string };
   getTokenAttributes: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<AttributesDecoded>;
+  getTokenImageUrl: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<string>;
   getCollectionCoverImageUrl: (collectionInfo: NftCollectionInterface) => Promise<string>;
   setUnique: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<string>;
   tokenImageUrl: (urlString: string, tokenId: string) => string;
@@ -37,10 +37,10 @@ export type MetadataJsonType = {
 
 export const useMetadata = (): UseMetadataInterface => {
   const { hex2a } = useDecoder();
-  const { getDetailedReFungibleTokenInfo, getDetailedTokenInfo } = useToken();
+  const { getDetailedTokenInfo } = useToken();
   const { getCollectionOnChainSchema } = useCollection();
 
-  const decodeStruct = useCallback(({ attr, data }: { attr?: any, data?: string }): AttributesDecoded => {
+  const decodeStruct = useCallback(({ attr, data }: { attr?: string, data?: string }): AttributesDecoded => {
     if (attr && data) {
       try {
         const schema = JSON.parse(attr) as ProtobufAttributeType;
@@ -104,9 +104,7 @@ export const useMetadata = (): UseMetadataInterface => {
     } else {
       return await getTokenImageUrl(collectionInfo, '1');
     }
-
-    return '';
-  }, [getCollectionOnChainSchema, getTokenImageUrl]);
+  }, [getCollectionOnChainSchema, getTokenImageUrl, hex2a]);
 
   const getAndParseOffchainSchemaMetadata = useCallback(async (collectionInfo: NftCollectionInterface) => {
     try {
@@ -149,15 +147,13 @@ export const useMetadata = (): UseMetadataInterface => {
     if (tokenId && collectionInfo) {
       if (Object.prototype.hasOwnProperty.call(collectionInfo.mode, 'nft')) {
         tokenDetailsData = await getDetailedTokenInfo(collectionInfo.id, tokenId.toString());
-      } else if (Object.prototype.hasOwnProperty.call(collectionInfo.mode, 'reFungible')) {
-        tokenDetailsData = await getDetailedReFungibleTokenInfo(collectionInfo.id, tokenId.toString());
       }
 
       return tokenDetailsData;
     }
 
     return tokenDetailsData;
-  }, [getDetailedTokenInfo, getDetailedReFungibleTokenInfo]);
+  }, [getDetailedTokenInfo]);
 
   const getTokenAttributes = useCallback(async (collectionInfo: NftCollectionInterface, tokenId: string): Promise<AttributesDecoded> => {
     const onChainSchema = getOnChainSchema(collectionInfo);
