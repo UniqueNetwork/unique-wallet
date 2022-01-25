@@ -3,7 +3,7 @@
 
 import './styles.scss';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button';
 import Header from 'semantic-ui-react/dist/commonjs/elements/Header';
@@ -27,21 +27,16 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
   const collectionId = query.get('collectionId') || '';
   const [showTransferForm, setShowTransferForm] = useToggle(false);
   const [showSocialShareModal, setShowSocialShareModal] = useToggle(false);
-  const [shouldUpdateOwner, setShouldUpdateOwner] = useState<boolean>(false);
   const { hex2a } = useDecoder();
-  const { attributes, collectionInfo, reFungibleBalance, tokenDetails, tokenUrl } = useSchema(account, collectionId, tokenId, shouldUpdateOwner);
+  const { attributes, collectionInfo, getTokenDetails, tokenDetails, tokenUrl } = useSchema(account, collectionId, tokenId);
   const { collectionName16Decoder } = useDecoder();
   const [isCollectionCollapsed, toggleCollectionCollapsed] = useToggle(true);
   const [isAttributesCollapsed, toggleAttributesCollapsed] = useToggle(true);
   const uOwnIt = tokenDetails?.owner?.Substrate?.toString() === account;
 
   useEffect(() => {
-    setShouldUpdateOwner(false);
-  }, [account]);
-
-  const onTransferSuccess = useCallback(() => {
-    setShouldUpdateOwner(true);
-  }, []);
+    void getTokenDetails();
+  }, [account, getTokenDetails]);
 
   return (
     <div className='token-details'>
@@ -181,9 +176,8 @@ function NftDetails ({ account, setCollectionId }: NftDetailsProps): React.React
                 account={account}
                 closeModal={setShowTransferForm}
                 collection={collectionInfo}
-                reFungibleBalance={reFungibleBalance}
                 tokenId={tokenId}
-                updateTokens={onTransferSuccess}
+                updateTokens={getTokenDetails}
               />
             )}
           </div>
