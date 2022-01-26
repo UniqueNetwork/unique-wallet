@@ -59,7 +59,7 @@ const envConfig: EnvConfigType = {
   quoteId: +(window.ENV?.QUOTE_ID || process.env.QUOTE_ID),
   uniqueCollectionIds: (window.ENV?.UNIQUE_COLLECTION_IDS || process.env.UNIQUE_COLLECTION_IDS).split(','),
   uniqueSubstrateApi: window.ENV?.UNIQUE_SUBSTRATE_API || process.env.UNIQUE_SUBSTRATE_API,
-  uniqueTelegram: window.ENV?.UNIQUE_TELEGRAM === "" ? "" : process.env.UNIQUE_TELEGRAM,
+  uniqueTelegram: typeof window.ENV?.UNIQUE_TELEGRAM === 'string' ? window.ENV?.UNIQUE_TELEGRAM : process.env.UNIQUE_TELEGRAM,
   value: Number(window.ENV?.VALUE || process.env.VALUE),
   version: window.ENV?.VERSION || process.env.VERSION,
   whiteLabelUrl: window.ENV?.WHITE_LABEL_URL || process.env.WHITE_LABEL_URL
