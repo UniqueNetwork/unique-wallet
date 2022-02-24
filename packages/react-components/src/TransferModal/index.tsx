@@ -21,7 +21,7 @@ import closeIcon from './closeIconBlack.svg';
 interface Props {
   account?: string;
   collection: NftCollectionInterface;
-  closeModal: (isOpen: null) => void;
+  closeModal: () => void;
   reFungibleBalance: number;
   tokenId: string;
   updateTokens: (collectionId: string) => void;
@@ -38,19 +38,15 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
   const [isError, setIsError] = useState<boolean>(false);
   const decimalPoints = collection?.decimalPoints instanceof BN ? collection?.decimalPoints.toNumber() : 1;
 
-  const onCloseModal = useCallback(() => {
-    closeModal(null);
-  }, [closeModal]);
-
   const transferToken = useCallback(() => {
     queueExtrinsic({
       accountId: account && account.toString(),
       extrinsic: api.tx.unique.transfer({ Substrate: recipient }, collection.id, tokenId, 1),
       isUnsigned: false,
-      txStartCb: () => onCloseModal,
+      txStartCb: () => { closeModal(); },
       txSuccessCb: () => { updateTokens(collection.id); }
     });
-  }, [account, api, onCloseModal, collection, decimalPoints, recipient, tokenId, tokenPart, updateTokens, queueExtrinsic]);
+  }, [account, api, closeModal, collection, decimalPoints, recipient, tokenId, tokenPart, updateTokens, queueExtrinsic]);
 
   const setRecipientAddress = useCallback((value: string) => {
     try {
@@ -82,7 +78,6 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
   /* const checkBalanceEnough = useCallback(async () => {
     if (account && recipient) {
       const transferFee = await api.tx.nft.transfer(recipient, collection.id, tokenId, (tokenPart * Math.pow(10, decimalPoints))).paymentInfo(account) as { partialFee: BN };
-
       if (transferFee && (!balance?.free || balance?.free.sub(transferFee.partialFee).lt(api.consts.balances.existentialDeposit))) {
         setBalanceTooLow(true);
       } else {
@@ -105,7 +100,7 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
         <h2>Send NFT token</h2>
         <img
           alt='Close modal'
-          onClick={onCloseModal}
+          onClick={closeModal}
           src={closeIcon as string}
         />
       </Modal.Header>
