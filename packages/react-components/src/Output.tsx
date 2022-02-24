@@ -44,7 +44,7 @@ function Output ({ children, className = '', help, isError, isFull, isHidden, is
         {children}
       </div>
       {withCopy && (
-        <CopyButton value={value} />
+        <CopyButton value={value || ''} />
       )}
     </Labelled>
   );

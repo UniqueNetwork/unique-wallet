@@ -5,9 +5,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 
 const findPackages = require('../../scripts/findPackages.cjs');
@@ -32,7 +32,9 @@ function createWebpack (context, mode = 'production') {
     return alias;
   }, {});
   const plugins = fs.existsSync(path.join(context, 'public'))
-    ? new CopyWebpackPlugin({ patterns: [{ from: 'public' }] })
+    ? new CopyWebpackPlugin(
+      { patterns: [
+        { from: 'public', info: { minimized: true } }] })
     : [];
 
   return {
@@ -164,12 +166,11 @@ function createWebpack (context, mode = 'production') {
         Buffer: ['buffer', 'Buffer'],
         process: 'process/browser.js'
       }),
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-      new Dotenv({ defaults: true, path: './.env', systemvars: true }),
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(mode),
-        'process.env.VERSION': JSON.stringify(pkgJson.version)
+      new webpack.IgnorePlugin({
+        contextRegExp: /moment$/,
+        resourceRegExp: /^\.\/locale$/
       }),
+      new Dotenv({ defaults: true, path: './.env', systemvars: true }),
       new webpack.optimize.SplitChunksPlugin(),
       new MiniCssExtractPlugin({
         filename: '[name].[contenthash:8].css'
@@ -182,7 +183,11 @@ function createWebpack (context, mode = 'production') {
       },
       extensions: ['.js', '.jsx', '.mjs', '.ts', '.tsx'],
       fallback: {
+        assert: require.resolve('assert/'),
         crypto: require.resolve('crypto-browserify'),
+        http: require.resolve('stream-http'),
+        https: require.resolve('https-browserify'),
+        os: require.resolve('os-browserify/browser'),
         path: require.resolve('path-browserify'),
         stream: require.resolve('stream-browserify')
       }

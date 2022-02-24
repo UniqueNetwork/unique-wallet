@@ -7,6 +7,7 @@ import styled from 'styled-components';
 
 import { formatNumber, hexToU8a, isHex, u8aToString } from '@polkadot/util';
 
+import FileIcon from './images/file.svg';
 import Labelled from './Labelled';
 
 export interface InputFilePropsBase {
@@ -98,12 +99,16 @@ function InputFile ({ accept, className = '', clearContent, help, isDisabled, is
       ref={dropRef}
     >
       {({ getInputProps, getRootProps }): JSX.Element => (
-        <div {...getRootProps({ className: `ui--InputFile${isError ? ' error' : ''} ${className}` })} >
+        <div {...getRootProps({ className: `ui--InputFile${isError ? ' error' : ''} ${className}` })}>
           <input {...getInputProps()} />
-          <em className='label' >
+          <em className='label'>
             {
               !file || clearContent
-                ? placeholder || 'click to select or drag and drop the file here'
+                ? placeholder || <div className='selectInput'>
+                  <img
+                    alt='file'
+                    src={FileIcon as string}
+                  /><p>Click to select or drag and drop the file here</p></div>
                 : placeholder || '{{name}} ({{size}} bytes)'.replace('{{name}}', file.name).replace('{{size}}', formatNumber(file.size))
             }
           </em>
@@ -129,12 +134,13 @@ function InputFile ({ accept, className = '', clearContent, help, isDisabled, is
 
 export default React.memo(styled(InputFile)`
   background: var(--bg-input);
-  border: 1px solid rgba(34, 36, 38, 0.15);
-  border-radius: 0.28571429rem;
   font-size: 1rem;
   margin: 0.25rem 0;
-  padding: 0.67857143em 1em;
   width: 100% !important;
+  border: 1px dashed var(--link-color);
+  border-radius: 8px;
+  padding: 24px 27px;
+  overflow-wrap: break-word;
 
   &.error {
     background: var(--bg-input-error);
@@ -143,5 +149,18 @@ export default React.memo(styled(InputFile)`
 
   &:hover {
     cursor: pointer;
+  }
+
+  .selectInput{
+    display: flex;
+    align-items: center;
+
+    p{
+      margin-left: 11.75px;
+      color: var(--tabs-color);
+      font-size: 16px;
+      font-family: var(--font-roboto);
+      font-style: normal;
+    }
   }
 `);

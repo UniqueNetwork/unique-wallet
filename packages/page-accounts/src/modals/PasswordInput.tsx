@@ -48,20 +48,20 @@ export default function PasswordInput ({ onChange, onEnter }: Props): React.Reac
         className='isSmall'
         help={'This password is used to encrypt your private key. It must be strong and unique! You will need it to sign transactions with this account. You can recover this account using this password together with the backup file (generated in the next step).'}
         isError={!isPass1Valid}
-        label={'password'}
+        label={'Password'}
         onChange={_onPassword1Change}
         onEnter={onEnter}
-        placeholder={'password'}
+        placeholder={'Password'}
         value={password1}
       />
       <Password
         className='isSmall'
         help={'Verify the password entered above.'}
         isError={!isPass2Valid}
-        label={'password (repeat)'}
+        label={'Repeat password'}
         onChange={onPassword2Change}
         onEnter={onEnter}
-        placeholder={'password (repeat)'}
+        placeholder={'Repeat password'}
         value={password2}
       />
       <PasswordStrength value={password1} />

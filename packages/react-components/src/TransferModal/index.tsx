@@ -15,12 +15,13 @@ import { Input, Label, StatusContext } from '@polkadot/react-components';
 import { useApi } from '@polkadot/react-hooks';
 import { keyring } from '@polkadot/ui-keyring';
 
+import infoIcon from '../MarkWarning/info-icon.svg';
 import closeIcon from './closeIconBlack.svg';
 
 interface Props {
   account?: string;
   collection: NftCollectionInterface;
-  closeModal: (isOpen: null) => void;
+  closeModal: () => void;
   reFungibleBalance: number;
   tokenId: string;
   updateTokens: (collectionId: string) => void;
@@ -31,25 +32,21 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
   const [recipient, setRecipient] = useState<string>();
   // const { balance } = useBalance(account);
   const { queueExtrinsic } = useContext(StatusContext);
-  const [tokenPart, setTokenPart] = useState<number>(0);
+  const [tokenPart, setTokenPart] = useState<number>(1);
   // const [balanceTooLow, setBalanceTooLow] = useState<boolean>(false);
   const [isAddressError, setIsAddressError] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
-  const decimalPoints = collection?.DecimalPoints instanceof BN ? collection?.DecimalPoints.toNumber() : 1;
-
-  const onCloseModal = useCallback(() => {
-    closeModal(null);
-  }, [closeModal]);
+  const decimalPoints = collection?.decimalPoints instanceof BN ? collection?.decimalPoints.toNumber() : 1;
 
   const transferToken = useCallback(() => {
     queueExtrinsic({
       accountId: account && account.toString(),
-      extrinsic: api.tx.nft.transfer(recipient, collection.id, tokenId, (tokenPart * Math.pow(10, decimalPoints))),
+      extrinsic: api.tx.unique.transfer({ Substrate: recipient }, collection.id, tokenId, 1),
       isUnsigned: false,
-      txStartCb: () => onCloseModal,
+      txStartCb: () => { closeModal(); },
       txSuccessCb: () => { updateTokens(collection.id); }
     });
-  }, [account, api, onCloseModal, collection, decimalPoints, recipient, tokenId, tokenPart, updateTokens, queueExtrinsic]);
+  }, [account, api, closeModal, collection, decimalPoints, recipient, tokenId, tokenPart, updateTokens, queueExtrinsic]);
 
   const setRecipientAddress = useCallback((value: string) => {
     try {
@@ -81,7 +78,6 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
   /* const checkBalanceEnough = useCallback(async () => {
     if (account && recipient) {
       const transferFee = await api.tx.nft.transfer(recipient, collection.id, tokenId, (tokenPart * Math.pow(10, decimalPoints))).paymentInfo(account) as { partialFee: BN };
-
       if (transferFee && (!balance?.free || balance?.free.sub(transferFee.partialFee).lt(api.consts.balances.existentialDeposit))) {
         setBalanceTooLow(true);
       } else {
@@ -97,22 +93,30 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
   return (
     <Modal
       className='unique-modal'
-      onClose={onCloseModal}
       open
       size='tiny'
     >
       <Modal.Header>
-        <h2>Transfer NFT Token</h2>
+        <h2>Send NFT token</h2>
         <img
           alt='Close modal'
-          onClick={onCloseModal}
+          onClick={closeModal}
           src={closeIcon as string}
         />
       </Modal.Header>
       <Modal.Content>
         <Form className='transfer-form'>
+          <Modal.Description className='modalDescription'>
+            <img
+              src={infoIcon as string}
+            />
+            <div>
+              <p> Be careful, the transaction cannot be reverted.</p>
+              <p> Make sure to use the Substrate address created with polkadot&#123;.js&#125;.</p>
+              <p> Do not use address of third party wallets, exchanges or hardware signers, like ledger nano.</p>
+            </div>
+          </Modal.Description>
           <Form.Field>
-            <Label label={'Please enter an address you want to transfer'} />
             <Input
               className='isSmall'
               isError={isAddressError}
@@ -121,7 +125,7 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
               placeholder='Recipient address'
             />
           </Form.Field>
-          { Object.prototype.hasOwnProperty.call(collection.Mode, 'reFungible') && (
+          { Object.prototype.hasOwnProperty.call(collection.mode, 'reFungible') && (
             <Form.Field>
               <Label label={`Please enter part of token you want to transfer, your token balance is: ${reFungibleBalance}`} />
               <Input
@@ -142,17 +146,10 @@ function TransferModal ({ account, closeModal, collection, reFungibleBalance, to
             target='_blank'>Get testUNQ here.</a></div>
         )} */}
       </Modal.Content>
-      <Modal.Description className='modalDescription'>
-        <div>
-          <p> Be careful, the transaction cannot be reverted.</p>
-          <p> Make sure to use the Substrate address created with polkadot.js or this marketplace.</p>
-          <p> Do not use address of third party wallets, exchanges or hardware signers, like ledger nano.</p>
-        </div>
-      </Modal.Description>
 
       <Modal.Actions>
         <Button
-          content='Transfer token'
+          content='Submit'
           disabled={!recipient}
           onClick={transferToken}
         />

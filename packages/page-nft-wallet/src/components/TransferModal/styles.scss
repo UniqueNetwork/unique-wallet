@@ -1,0 +1,96 @@
+.unique-modal.transfer-token {
+  .ui.loader {
+
+    &:after {
+      border-color: var(--link-color) transparent transparent;
+      left: inherit;
+    }
+    &:before {
+      border-color: var(--text-color) transparent transparent;
+    }
+
+    &.active {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      margin: 4px 0;
+
+      &:after, &:before {
+        left: unset;
+      }
+    }
+  }
+
+  .transfer-modal-content {
+
+    .ui--Labelled.ui--Dropdown.ui--InputAddress {
+      border-radius: calc(var(--gap) / 4);
+    }
+
+    &--row {
+      .ui--FormatBalance, .balance-value {
+        display: flex;
+        justify-content: flex-end;
+        color: var(--text-color);
+        font-family: var(--font-roboto);
+        margin-top: calc(var(--gap) / 4);
+        font-size: 14px;
+        font-weight: 500;
+      }
+      margin-bottom: var(--gap);
+
+      header {
+        color: var(--input-placeholder-search-color);
+        margin-bottom: calc(var(--gap) / 2);
+      }
+    }
+
+    .fees-info {
+      margin-top: calc((var(--gap) / 2) * 3);
+    }
+  }
+}
+
+.input-balance-with-max {
+  position: relative;
+  margin-top: calc(var(--gap) * 2);
+
+  .ui--Labelled {
+    .ui--Labelled-content {
+      .ui.input.ui--Input {
+        margin: 0;
+
+        input {
+          font-size: 16px;
+          font-family: var(--font-roboto);
+
+          &::placeholder {
+            color: var(--input-placeholder-search-color);
+          }
+        }
+      }
+    }
+  }
+
+  .set-max-amount {
+    cursor: pointer;
+    position: absolute;
+    right: calc(var(--gap) / 2);
+    top: calc(var(--gap) / 2);
+    font-weight: 500;
+    font-family: var(--font-roboto);
+    font-size: 16px;
+    color: var(--link-color);
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+}

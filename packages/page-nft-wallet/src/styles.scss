@@ -30,11 +30,7 @@
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1279px) {
-
-}
-
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
   .my-tokens {
     h1.ui.header, h4.ui.header {
       display: block;
@@ -51,17 +47,42 @@
     overflow: hidden;
     background-color: var(--card-background);
 
-    h1.ui.header, h4.ui.header {
-      display: none;
-
-      &.mobile-header {
-        display: block;
-        margin: calc((var(--gap) / 2) * 3) 0 0 0;
-      }
+    h1.ui.header {
+      margin-top: calc((var(--gap) / 2) * 3);
+      padding: 0 var(--gap);
     }
 
-    .ui.header {
+    .stuff-tabs {
       padding: 0 var(--gap);
+    }
+
+    .stuff-filter-tabs {
+      padding: calc((var(--gap) / 2) * 3) var(--gap);
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+
+      button.ui.button {
+        border: 1px solid var(--link-color);
+        background-color: var(--card-background) !important;
+        color: var(--link-color) !important;
+
+        &.primary {
+          border: none;
+          background-color: var(--link-color) !important;
+          color: var(--card-background) !important;
+        }
+
+        &:first-child {
+          border-top-right-radius: 0 !important;
+          border-bottom-right-radius: 0 !important;
+        }
+
+        &:last-child {
+          border-top-left-radius: 0 !important;
+          border-bottom-left-radius: 0 !important;
+        }
+      }
     }
   }
 }

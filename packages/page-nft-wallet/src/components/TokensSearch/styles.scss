@@ -1,0 +1,107 @@
+.tokens-search {
+  display: grid;
+  grid-template-columns: 1fr 192px;
+  grid-column-gap: 24px;
+
+  .sort-field {
+    .ui.dropdown {
+      width: 100%;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+
+      .current {
+        display: flex;
+        align-items: center;
+        grid-column-gap: 8px;
+        color: var(--black-color);
+      }
+
+      .dropdown.icon {
+        position: absolute;
+        right: 18px;
+        color: var(--tabs-color);
+      }
+
+      &.active {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+
+      .menu {
+        width: calc(100% + 2px);
+        left: -1px;
+        background-color: var(--card-background);
+        border: 1px solid var(--border-color);
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        box-shadow: none;
+
+        .item {
+          .text{
+            color: var(--black-color);
+
+            & svg {
+              fill: var(--black-color);
+            }
+          }
+
+          &:hover{
+            background-color: transparent;
+            .text{
+              color: var(--link-color);
+
+              & svg {
+                fill: var(--link-color);
+              }
+            }
+          }
+
+          &.selected {
+            background-color: transparent;
+          }
+
+          &.active, &active.selected {
+            background-color: var(--link-light-color);
+            .text{
+              color: var(--link-color);
+
+              &.current{
+                font-weight: normal;
+              }
+
+              & svg {
+                fill: var(--link-color);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .search-results {
+    font-size: 16px;
+    line-height: 40px;
+    margin-bottom: 0;
+    margin-left: 16px;
+
+    a {
+      color: var(--error-color);
+      font-weight: 500;
+      margin-left: 16px;
+      cursor: pointer;
+
+      &:hover{
+        text-decoration: underline;
+      }
+
+      &:active{
+        color:  var(--error-color-dark);
+      }
+    }
+  }
+}
