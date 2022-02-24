@@ -3,147 +3,259 @@
 
 import './styles.scss';
 
-import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import equal from 'deep-equal';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Header from 'semantic-ui-react/dist/commonjs/elements/Header/Header';
+import InfiniteScroll from 'react-infinite-scroller';
+import { useHistory } from 'react-router';
+import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
+import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
-import envConfig from '@polkadot/apps-config/envConfig';
+import NftTokenCard from '@polkadot/app-nft-wallet/components/NftTokenCard';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
-import { Table, TransferModal } from '@polkadot/react-components';
-import { useCollections } from '@polkadot/react-hooks';
+import { useGraphQlCollectionsTokens, useGraphQlTokens, useIsMountedRef } from '@polkadot/react-hooks';
 
-import CollectionSearch from '../../components/CollectionSearch';
-import NftCollectionCard from '../../components/NftCollectionCard';
+import CollectionFilter from '../../components/CollectionFilter';
+import TokensSearch from '../../components/TokensSearch';
+import WalletFilters from '../../components/WalletFilters';
+import WalletSort from '../../components/WalletSort';
+import noMyTokensIcon from './noMyTokensIcon.svg';
+
+export type Filters = {
+  collectionIds: string[];
+  sort: 'asc' | 'desc';
+}
 
 interface NftWalletProps {
   account?: string;
-  addCollection: (collection: NftCollectionInterface) => void;
-  collections: NftCollectionInterface[];
   openPanel?: OpenPanelType;
-  removeCollectionFromList: (collectionToRemove: string) => void;
+  collectionId?: string;
   setOpenPanel?: (openPanel: OpenPanelType) => void;
-  setCollections: (collections: (prevCollections: NftCollectionInterface[]) => (NftCollectionInterface[])) => void;
-  setShouldUpdateTokens: (value: string) => void;
-  shouldUpdateTokens?: string;
 }
 
-const { canAddCollections, uniqueCollectionIds } = envConfig;
+const defaultFilters: Filters = {
+  collectionIds: [],
+  sort: 'desc'
+};
 
-function NftWallet ({ account, addCollection, collections, openPanel, removeCollectionFromList, setCollections, setShouldUpdateTokens }: NftWalletProps): React.ReactElement {
-  const [openTransfer, setOpenTransfer] = useState<{ collection: NftCollectionInterface, tokenId: string, balance: number } | null>(null);
-  const [selectedCollection, setSelectedCollection] = useState<NftCollectionInterface>();
-  const [canTransferTokens] = useState<boolean>(true);
-  const currentAccount = useRef<string | null | undefined>();
-  const { presetCollections } = useCollections();
-  const cleanup = useRef<boolean>(false);
+export type MyTokensType = { collectionId: string, tokenId: string };
+export type MyTokensListType = {
+  [key: string]: MyTokensType
+};
 
-  console.log('wallet uniqueCollectionIds', uniqueCollectionIds);
+const limit = 10;
 
-  const addMintCollectionToList = useCallback(async () => {
-    const firstCollections: NftCollectionInterface[] = await presetCollections();
+function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalletProps): React.ReactElement {
+  const storageFilters = JSON.parse(sessionStorage.getItem('walletFilters') as string) as Filters;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const initialFilters = storageFilters && !equal(storageFilters, defaultFilters) ? storageFilters : defaultFilters;
+  const [showCollectionsFilter, toggleCollectionsFilter] = useState<boolean>(true);
+  const [filters, setFilters] = useState<Filters>(collectionId ? { ...initialFilters, collectionIds: [collectionId] } : initialFilters);
+  const [myTokens, setMyTokens] = useState<MyTokensListType>({});
+  const mountedRef = useIsMountedRef();
+  const history = useHistory();
+  const [page, setPage] = useState<number>(1);
+  const { userCollections, userCollectionsIds, userCollectionsLoading } = useGraphQlCollectionsTokens(account);
+  const { userTokens, userTokensLoading } = useGraphQlTokens(limit, (page - 1) * limit, filters.sort, filters.collectionIds?.length ? filters.collectionIds : userCollectionsIds, account);
+  const tokensCount = userTokens?.tokens_aggregate?.aggregate?.count || 0;
+  const hasMore = !!(tokensCount && Object.keys(myTokens).length < tokensCount);
+  const currentFilter = useRef<Filters>(defaultFilters);
+  const currentAccount = useRef<string>();
 
-    if (cleanup.current) {
-      return;
-    }
+  const clearCheckedValues = useCallback(() => {
+    mountedRef.current && setFilters((prevState) => {
+      const newFilters = { ...prevState, collectionIds: [] };
 
-    setCollections((prevCollections: NftCollectionInterface[]) => {
-      if (JSON.stringify(firstCollections) !== JSON.stringify(prevCollections)) {
-        return [...firstCollections];
-      } else {
-        return prevCollections;
-      }
+      sessionStorage.setItem('walletFilters', JSON.stringify(newFilters));
+
+      return newFilters;
     });
-  }, [setCollections, presetCollections]);
+  }, [mountedRef]);
 
-  const removeCollection = useCallback((collectionToRemove: string) => {
-    if (selectedCollection && selectedCollection.id === collectionToRemove) {
-      setSelectedCollection(undefined);
+  const clearAllFilters = useCallback(() => {
+    if (mountedRef.current) {
+      setFilters(defaultFilters);
+      sessionStorage.removeItem('walletFilters');
+      setOpenPanel && setOpenPanel('coins');
+    }
+  }, [mountedRef, setOpenPanel]);
+
+  const onCollectionCheck = useCallback((id: string) => {
+    let newIds: string[] = [];
+
+    if (filters.collectionIds.includes(id)) {
+      newIds = filters.collectionIds.filter((item) => item !== id);
+    } else {
+      newIds = [...filters.collectionIds, id];
     }
 
-    removeCollectionFromList(collectionToRemove);
-  }, [removeCollectionFromList, selectedCollection]);
+    mountedRef.current && setFilters((prevState) => {
+      const newFilters = { ...prevState, collectionIds: newIds };
 
-  const openTransferModal = useCallback((collection: NftCollectionInterface, tokenId: string, balance: number) => {
-    setOpenTransfer({ balance, collection, tokenId });
-  }, []);
+      sessionStorage.setItem('walletFilters', JSON.stringify(newFilters));
 
-  const updateTokens = useCallback((collectionId) => {
-    setShouldUpdateTokens(collectionId);
-  }, [setShouldUpdateTokens]);
+      return newFilters;
+    });
+  }, [mountedRef, filters]);
+
+  const initializeTokens = useCallback(() => {
+    if (account && !userTokensLoading && userTokens?.tokens) {
+      mountedRef.current && setMyTokens((prevState: MyTokensListType) => {
+        const myTokensList: MyTokensListType = { ...prevState };
+
+        for (let j = 0; j < userTokens.tokens.length; j++) {
+          myTokensList[`${userTokens.tokens[j].collection_id}-${userTokens.tokens[j].token_id}`] = {
+            collectionId: userTokens.tokens[j].collection_id.toString(),
+            tokenId: userTokens.tokens[j].token_id.toString()
+          };
+        }
+
+        return myTokensList;
+      });
+    }
+  }, [account, mountedRef, userTokens, userTokensLoading]);
+
+  const fetchScrolledData = useCallback(() => {
+    !userTokensLoading && setPage((prevPage: number) => prevPage + 1);
+  }, [userTokensLoading]);
+
+  const openDetailedInformationModal = useCallback((collectionId: string, tokenId: string) => {
+    history.push(`/myStuff/token-details?collectionId=${collectionId}&tokenId=${tokenId}`);
+  }, [history]);
+
+  const refillTokens = useCallback(() => {
+    if (mountedRef.current && (currentFilter.current !== filters || currentAccount.current !== account)) {
+      setPage(1);
+      setMyTokens({});
+      currentFilter.current = filters;
+      currentAccount.current = account;
+    }
+
+    initializeTokens();
+  }, [account, currentFilter, filters, initializeTokens, mountedRef]);
 
   useEffect(() => {
-    currentAccount.current = account;
-    setShouldUpdateTokens('all');
-  }, [account, setShouldUpdateTokens]);
-
-  useEffect(() => {
-    void addMintCollectionToList();
-  }, [addMintCollectionToList]);
-
-  useEffect(() => {
-    return () => {
-      cleanup.current = true;
-    };
-  }, []);
+    refillTokens();
+  }, [refillTokens]);
 
   return (
-    <div className={`nft-wallet unique-card ${openPanel || ''}`}>
-      { openPanel === 'tokens' && (
-        <Header
-          as='h1'
-          className='mobile-header'
-        >
-          My tokens
-        </Header>
-      )}
-      { canAddCollections && (
-        <>
-          <CollectionSearch
-            account={account}
-            addCollection={addCollection}
-            collections={collections}
-          />
-          <br />
-        </>
-      )}
-      <Header as='h3'>
-        My collections
-      </Header>
-      { !collections?.length && (
-        <div className='empty-label'>
-          You haven`t added anything yet. Use the collection search.
-        </div>
-      )}
-      { collections?.length > 0 && (
-        <Table
-          header={[]}
-        >
-          { collections.map((collection) => (
-            <tr key={collection.id}>
-              <td className='overflow'>
-                <NftCollectionCard
-                  account={account}
-                  canTransferTokens={canTransferTokens}
-                  collection={collection}
-                  openTransferModal={openTransferModal}
-                  removeCollection={removeCollection}
+    <div className={`nft-wallet ${openPanel || ''}`}>
+      <div className='nft-wallet--row'>
+        <CollectionFilter
+          clearCheckedValues={clearCheckedValues}
+          collections={userCollections}
+          collectionsLoading={userCollectionsLoading}
+          filterCurrent={onCollectionCheck}
+          isShowCollection={showCollectionsFilter}
+          selectedCollections={filters.collectionIds}
+          setIsShowCollection={toggleCollectionsFilter}
+        />
+        <div className='collection-list'>
+          <div className='unique-card'>
+            <TokensSearch
+              account={account}
+              filters={filters}
+              setFilters={setFilters}
+              tokensCount={tokensCount}
+            />
+          </div>
+          <div className={`unique-card ${Object.keys(myTokens).length ? '' : 'empty'}`}>
+            { (userTokensLoading && Object.keys(myTokens).length === 0) && (
+              <Loader
+                active
+                className='load-info'
+                inline='centered'
+              />
+            )}
+            { Object.keys(myTokens).length > 0 && (
+              <InfiniteScroll
+                hasMore={hasMore}
+                initialLoad={false}
+                loadMore={fetchScrolledData}
+                pageStart={1}
+                threshold={200}
+                useWindow={true}
+              >
+                <div className='tokens-list'>
+                  {Object.values(myTokens).map(({ collectionId, tokenId }: MyTokensType) => (
+                    <NftTokenCard
+                      account={account}
+                      collectionId={collectionId}
+                      key={`${collectionId}-${tokenId}`}
+                      openDetailedInformationModal={openDetailedInformationModal}
+                      tokenId={tokenId}
+                    />
+                  ))}
+                  { userTokensLoading && (
+                    <Loader
+                      active
+                      className='load-info'
+                      inline='centered'
+                    />
+                  )}
+                </div>
+              </InfiniteScroll>
+            )}
+            {(!userTokensLoading && !tokensCount && !userCollectionsLoading) && (
+              <div className='no-tokens'>
+                <img
+                  alt='no tokens'
+                  src={noMyTokensIcon as string}
                 />
-              </td>
-            </tr>
-          ))}
-        </Table>
-      )}
-      { openTransfer && openTransfer.tokenId && openTransfer.collection && (
-        <TransferModal
-          account={account}
-          closeModal={setOpenTransfer}
-          collection={openTransfer.collection}
-          reFungibleBalance={openTransfer.balance}
-          tokenId={openTransfer.tokenId}
-          updateTokens={updateTokens}
+                <p className='no-tokens-text'>You have no tokens</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      { openPanel === 'filters' && (
+        <WalletFilters
+          clearCheckedValues={clearCheckedValues}
+          collections={userCollections}
+          filterCurrent={onCollectionCheck}
+          isShowCollection={showCollectionsFilter}
+          selectedCollections={filters.collectionIds}
+          setIsShowCollection={toggleCollectionsFilter}
         />
       )}
+      { openPanel === 'sort' && (
+        <WalletSort
+          filters={filters}
+          setFilters={setFilters}
+        />
+      )}
+      <div className='nft-wallet--footer'>
+        { openPanel === 'coins' && (
+          <>
+            <Button
+              className='footer-button'
+              fluid
+              onClick={setOpenPanel && setOpenPanel.bind(null, 'filters')}
+              primary
+            >
+                Filters and sort
+            </Button>
+          </>
+        )}
+        { (openPanel === 'filters' || openPanel === 'sort') && (
+          <Button
+            className='footer-button'
+            fluid
+            onClick={setOpenPanel && setOpenPanel.bind(null, 'coins')}
+          >
+              SHOW
+          </Button>
+        )}
+        { openPanel === 'filters' && (
+          <Button
+            className='footer-button clear'
+            fluid
+            onClick={clearAllFilters}
+          >Clear all
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

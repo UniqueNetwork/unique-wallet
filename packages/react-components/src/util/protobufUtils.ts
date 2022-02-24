@@ -97,15 +97,20 @@ export function convertEnumToString (value: string, key: string, NFTMeta: Type, 
 export function deserializeNft (onChainSchema: ProtobufAttributeType, buffer: Uint8Array, locale: string): { [key: string]: any } {
   try {
     const root = defineMessage(onChainSchema);
+    let NFTMeta: Type = root.lookupType('onChainMetaData.NFTMeta');
+
     // Obtain the message type
-    const NFTMeta = root.lookupType('onChainMetaData.NFTMeta');
+    if (root?.nested?.onchainmetadata) {
+      NFTMeta = root.lookupType('onchainmetadata.NFTMeta');
+    }
+
     // Decode a Uint8Array (browser) or Buffer (node) to a message
     const message = NFTMeta.decode(buffer);
     // Maybe convert the message back to a plain object
     const objectItem = NFTMeta.toObject(message, {
       arrays: true, // populates empty arrays (repeated fields) even if defaults=false
       bytes: String, // bytes as base64 encoded strings
-      defaults: true, // includes default values
+      defaults: false, // includes default values
       enums: String, // enums as string names
       longs: String, // longs as strings (requires long.js)
       objects: true, // populates empty objects (map fields) even if defaults=false

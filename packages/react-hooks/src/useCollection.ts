@@ -13,39 +13,39 @@ import { strToUTF16 } from '@polkadot/react-hooks/utils';
 export type SchemaVersionTypes = 'ImageURL' | 'Unique';
 
 export interface NftCollectionInterface {
-  Access?: 'Normal' | 'WhiteList'
+  access?: 'Normal' | 'WhiteList'
   id: string;
-  DecimalPoints: BN | number;
-  Description: number[];
-  TokenPrefix: string;
-  MintMode?: boolean;
-  Mode: {
+  decimalPoints: BN | number;
+  description: number[];
+  tokenPrefix: string;
+  mintMode?: boolean;
+  mode: {
     nft: null;
     fungible: null;
     reFungible: null;
     invalid: null;
   };
-  Name: number[];
-  OffchainSchema: string;
-  Owner?: string;
-  SchemaVersion: SchemaVersionTypes;
-  Sponsorship: {
+  name: number[];
+  offchainSchema: string;
+  owner?: string;
+  schemaVersion: SchemaVersionTypes;
+  sponsorship: {
     confirmed?: string;
     disabled?: string | null;
     unconfirmed?: string | null;
   };
-  Limits?: {
-    AccountTokenOwnershipLimit: string;
-    SponsoredDataSize: string;
-    SponsoredDataRateLimit: string;
-    SponsoredMintSize: string;
-    TokenLimit: string;
-    SponsorTimeout: string;
-    OwnerCanTransfer: boolean;
-    OwnerCanDestroy: boolean;
+  limits?: {
+    accountTokenOwnershipLimit: string;
+    sponsoredDataSize: string;
+    sponsoredDataRateLimit: string;
+    sponsoredMintSize: string;
+    tokenLimit: string;
+    sponsorTimeout: string;
+    ownerCanTransfer: boolean;
+    ownerCanDestroy: boolean;
   },
-  VariableOnChainSchema: string;
-  ConstOnChainSchema: string;
+  variableOnChainSchema: string;
+  constOnChainSchema: string;
 }
 
 interface TransactionCallBacks {
@@ -76,7 +76,7 @@ export function useCollection () {
 
   const getCreatedCollectionCount = useCallback(async () => {
     try {
-      return parseInt((await api.query.nft.createdCollectionCount()).toString(), 10);
+      return (await api.rpc.unique.collectionStats()).created.toNumber();
     } catch (e) {
       console.log('getCreatedCollectionCount error', e);
     }
@@ -146,7 +146,7 @@ export function useCollection () {
     }
 
     try {
-      return await api.query.nft.adminList(collectionId);
+      return (await api.rpc.unique.adminlist(collectionId)).toHuman() as string[];
     } catch (e) {
       console.log('getCollectionAdminList error', e);
     }
@@ -246,7 +246,7 @@ export function useCollection () {
     }
 
     try {
-      const collectionInfo = (await api.query.nft.collectionById(collectionId)).toJSON() as unknown as NftCollectionInterface;
+      const collectionInfo = (await api.rpc.unique.collectionById(collectionId)).toJSON() as unknown as NftCollectionInterface | null;
 
       return {
         ...collectionInfo,
@@ -269,8 +269,8 @@ export function useCollection () {
     };
 
     try {
-      const constSchema = hex2a(collectionInfo.ConstOnChainSchema);
-      const varSchema = hex2a(collectionInfo.VariableOnChainSchema);
+      const constSchema = hex2a(collectionInfo.constOnChainSchema);
+      const varSchema = hex2a(collectionInfo.variableOnChainSchema);
 
       if (constSchema && constSchema.length) {
         result.constSchema = JSON.parse(constSchema) as ProtobufAttributeType;
@@ -294,7 +294,7 @@ export function useCollection () {
     }
 
     try {
-      return await api.query.nft.addressTokens(collectionId, ownerId);
+      return await api.query.unique.accountTokens(collectionId, { Substrate: ownerId });
     } catch (e) {
       console.log('getTokensOfCollection error', e);
     }

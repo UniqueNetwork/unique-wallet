@@ -51,10 +51,6 @@ export default React.memo(styled(AddressSmall)`
     max-width: 26rem;
     overflow: hidden;
 
-    &.withSidebar {
-      cursor: help;
-    }
-
     @media only screen and (max-width: 1700px) {
       max-width: 24rem;
     }

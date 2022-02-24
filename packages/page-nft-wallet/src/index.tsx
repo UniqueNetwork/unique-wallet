@@ -47,9 +47,15 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
     <div className='my-tokens'>
       { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && (
         <>
-          <Header as='h1'>My Tokens</Header>
-          <Header as='h4'>NFTs owned by me</Header>
+          <Header as='h1'>{location.pathname === '/myStuff' ? 'My stuff' : 'Tokens'}</Header>
         </>
+      )}
+      { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && (
+        <Tabs
+          basePath={basePath}
+          className='stuff-tabs'
+          items={items}
+        />
       )}
       <Switch>
         <Route path={`${basePath}/token-details`}>

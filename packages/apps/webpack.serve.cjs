@@ -8,8 +8,6 @@ const { merge } = require('webpack-merge');
 
 const baseConfig = require('./webpack.base.cjs');
 
-require('dotenv-defaults').config();
-
 module.exports = merge(
   baseConfig(__dirname, 'development'),
   {
@@ -17,17 +15,10 @@ module.exports = merge(
       open: false,
       port: 3000,
       proxy: {
-        '/health': {
+        '/v1/graphql/': {
           changeOrigin: true,
-          target: process.env.UNIQUE_API
-        },
-        '/mint': {
-          changeOrigin: true,
-          target: process.env.UNIQUE_API
-        },
-        [process.env.WHITE_LABEL_URL]: {
-          changeOrigin: true,
-          target: process.env.WHITE_LABEL_URL
+          target: 'https://hasura-opal.unique.network'
+          // target: 'https://hasura-quartz.unique.network'
         }
       },
       static: path.resolve(__dirname, 'build')

@@ -33,12 +33,12 @@ function Static ({ children, className = '', defaultValue, help, isFull, isHidde
       label={label}
       withLabel={withLabel}
     >
-      <div className='ui--Static ui dropdown selection disabled'>
+      <div className='step-3-texts'>
         {value || defaultValue}
         {children}
       </div>
       {withCopy && (
-        <CopyButton value={value} />
+        <CopyButton value={value as string} />
       )}
     </Labelled>
   );

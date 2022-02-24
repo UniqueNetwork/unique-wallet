@@ -3,9 +3,8 @@
 
 import type { TabItem } from './types';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
 
 import Badge from '../Badge';
 
@@ -13,10 +12,11 @@ interface Props extends TabItem {
   basePath: string;
   className?: string;
   count?: number;
+  disabled?: boolean;
   index: number;
 }
 
-function Tab ({ basePath, className = '', count, hasParams, index, isExact, isRoot, name, text }: Props): React.ReactElement<Props> {
+function Tab ({ basePath, className = '', count, disabled, hasParams, index, isExact, isRoot, name, text }: Props): React.ReactElement<Props> {
   const to = isRoot
     ? basePath
     : `${basePath}/${name}`;
@@ -25,11 +25,18 @@ function Tab ({ basePath, className = '', count, hasParams, index, isExact, isRo
   // params are problematic for dynamic hidden such as app-accounts
   const tabIsExact = isExact || !hasParams || index === 0;
 
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    if (disabled) {
+      e.preventDefault();
+    }
+  }, [disabled]);
+
   return (
     <NavLink
       activeClassName='tabLinkActive'
-      className={`ui--Tab ${className}`}
+      className={`ui--Tab ${className} ${disabled ? 'disabled' : ''}`}
       exact={tabIsExact}
+      onClick={handleClick}
       strict={tabIsExact}
       to={to}
     >
@@ -44,29 +51,4 @@ function Tab ({ basePath, className = '', count, hasParams, index, isExact, isRo
   );
 }
 
-export default React.memo(styled(Tab)`
-  border-bottom: 2px solid transparent;
-  color: var(--color-text) !important;
-  margin-bottom: -3px;
-  padding: 0.5rem 1.5rem 0.75rem;
-
-  &.tabLinkActive {
-    border-bottom-color: #e6e6e6;
-  }
-
-  &:hover {
-    filter: highlight(120%);
-
-    &:not(.tabLinkActive) {
-      border-bottom-color: #e6e6e6;
-    }
-  }
-
-  .tabCounter {
-    margin: -1rem 0 -1rem 0.75rem;
-  }
-
-  .tabIcon {
-    margin-left: 0.75rem;
-  }
-`);
+export default React.memo(Tab);

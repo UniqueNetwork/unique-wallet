@@ -6,9 +6,12 @@ import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
 
 import BN from 'bn.js';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import envConfig from '@polkadot/apps-config/envConfig';
 
-import { useMetadata, useToken } from '@polkadot/react-hooks';
+import { useIsMountedRef, useMetadata, useToken } from '@polkadot/react-hooks';
 import { useCollection } from '@polkadot/react-hooks/useCollection';
+
+const { ipfsGateway } = envConfig;
 
 export type AttributesDecoded = {
   [key: string]: string | string[],
@@ -25,9 +28,12 @@ interface UseSchemaInterface {
   tokenDetails?: TokenDetailsInterface;
   tokenName: { name: string, value: string } | null;
   tokenUrl: string;
+  shouldUpdateOwner?: boolean;
 }
 
-export function useSchema (account: string | undefined, collectionId: string, tokenId: string | number): UseSchemaInterface {
+export type IpfsJsonType = { ipfs: string, type: 'image' };
+
+export function useSchema (account: string | undefined, collectionId: string, tokenId: string | number, shouldUpdateOwner?: boolean): UseSchemaInterface {
   const [collectionInfo, setCollectionInfo] = useState<NftCollectionInterface>();
   const [reFungibleBalance, setReFungibleBalance] = useState<number>(0);
   const [tokenUrl, setTokenUrl] = useState<string>('');
@@ -35,6 +41,7 @@ export function useSchema (account: string | undefined, collectionId: string, to
   const [tokenDetails, setTokenDetails] = useState<TokenDetailsInterface>();
   const { getTokenInfo } = useToken();
   const { getDetailedCollectionInfo } = useCollection();
+  const mountedRef = useIsMountedRef();
   const cleanup = useRef<boolean>(false);
   const { getTokenAttributes, getTokenImageUrl } = useMetadata();
 
@@ -52,12 +59,12 @@ export function useSchema (account: string | undefined, collectionId: string, to
 
   const getReFungibleDetails = useCallback(() => {
     try {
-      if (account && tokenDetails?.Owner) {
-        if (Object.prototype.hasOwnProperty.call(collectionInfo?.Mode, 'reFungible')) {
-          const owner = tokenDetails.Owner.find((item: { fraction: BN, owner: string }) => item.owner.toString() === account) as { fraction: BN, owner: string } | undefined;
+      if (account && tokenDetails?.owner) {
+        if (Object.prototype.hasOwnProperty.call(collectionInfo?.mode, 'reFungible')) {
+          const owner = tokenDetails.owner.find((item: { fraction: BN, owner: string }) => item.owner.Substrate.toString() === account) as { fraction: BN, owner: string } | undefined;
 
-          if (typeof collectionInfo?.DecimalPoints === 'number') {
-            const balance = owner && owner.fraction.toNumber() / Math.pow(10, collectionInfo.DecimalPoints);
+          if (typeof collectionInfo?.decimalPoints === 'number') {
+            const balance = owner && owner.fraction.toNumber() / Math.pow(10, collectionInfo.decimalPoints);
 
             if (cleanup.current) {
               return;
@@ -70,7 +77,7 @@ export function useSchema (account: string | undefined, collectionId: string, to
     } catch (e) {
       console.error('token balance calculation error', e);
     }
-  }, [account, collectionInfo, tokenDetails?.Owner]);
+  }, [account, collectionInfo, tokenDetails?.owner]);
 
   const getCollectionInfo = useCallback(async () => {
     if (collectionId) {
@@ -114,14 +121,24 @@ export function useSchema (account: string | undefined, collectionId: string, to
   }, [collectionInfo, getTokenAttributes, tokenId]);
 
   const saveTokenImageUrl = useCallback(async (collectionInf: NftCollectionInterface, tokenId: string) => {
-    const tokenImageUrl = await getTokenImageUrl(collectionInf, tokenId);
+    let tokenImageUrl: string;
+    let ipfsJson: IpfsJsonType;
 
-    if (cleanup.current) {
-      return;
+    if (collectionInf.schemaVersion === 'Unique' && attributes?.ipfsJson) {
+      try {
+        ipfsJson = JSON.parse(attributes.ipfsJson as string) as IpfsJsonType;
+        tokenImageUrl = `${ipfsGateway}/${ipfsJson?.ipfs}`;
+      } catch (e) {
+        console.log('ipfsJson parse error', e);
+        tokenImageUrl = '';
+      }
+    } else {
+      // use old logic
+      tokenImageUrl = await getTokenImageUrl(collectionInf, tokenId);
     }
 
-    setTokenUrl(tokenImageUrl);
-  }, [getTokenImageUrl]);
+    mountedRef.current && setTokenUrl(tokenImageUrl);
+  }, [attributes, getTokenImageUrl, mountedRef]);
 
   useEffect(() => {
     if (collectionInfo) {
@@ -133,6 +150,10 @@ export function useSchema (account: string | undefined, collectionId: string, to
   useEffect(() => {
     void getCollectionInfo();
   }, [getCollectionInfo]);
+
+  useEffect(() => {
+    void getTokenDetails();
+  }, [getTokenDetails, shouldUpdateOwner]);
 
   useEffect(() => {
     if (collectionInfo && tokenDetails) {

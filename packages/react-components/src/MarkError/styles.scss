@@ -1,0 +1,6 @@
+.mark {
+  &.error {
+    background: var(--error-background-color);
+    color: var(--error-color);
+  }
+}

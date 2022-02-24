@@ -1,0 +1,41 @@
+.ui.modal.unique-modal.share-modal {
+  .header {
+    padding: calc((var(--gap) / 2) * 3) !important;
+
+    h2 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      font-family: var(--font-inter);
+    }
+
+    img {
+      position: absolute;
+      right: 24px;
+      top: 24px;
+      cursor: pointer;
+    }
+  }
+
+  .content {
+    padding: calc(var(--gap) / 2) calc((var(--gap) / 2) * 3) calc((var(--gap) / 2) * 3) calc((var(--gap) / 2) * 3) !important;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: var(--gap);
+
+    button, .copy-link {
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      grid-column-gap: calc(var(--gap) / 2);
+      width: 100%;
+      align-items: center;
+      color: var(--text-color) !important;
+
+      &:hover {
+        color: var(--link-color) !important;
+      }
+    }
+  }
+}

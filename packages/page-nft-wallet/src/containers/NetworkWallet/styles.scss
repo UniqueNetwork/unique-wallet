@@ -1,0 +1,180 @@
+.network-wallet {
+
+  .ui.loader {
+
+    &:after {
+      border-color: var(--link-color) transparent transparent;
+      left: inherit;
+    }
+    &:before {
+      border-color: var(--text-color) transparent transparent;
+    }
+
+    &.active {
+      display: flex !important;
+      justify-content: flex-start;
+      width: 100%;
+      margin: 4px 0;
+
+      &:after, &:before {
+        left: 8px;
+      }
+    }
+  }
+
+  .network-wallet--block {
+    background: var(--card-background);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    padding: calc(var(--gap) * 2);
+    font-family: var(--font-roboto);
+
+    &--header {
+      font-size: 18px;
+      font-weight: 500;
+      padding-bottom: calc((var(--gap) / 2) * 3);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    &--body {
+      padding-top: calc(var(--gap) / 2);
+
+      .token-item {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--gap) 0;
+        border-bottom: 1px solid var(--border-color);
+        align-items: center;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &--account {
+          flex: 2;
+          display: flex;
+          flex-direction: column;
+          margin-right: 20px;
+
+          span {
+
+            &:first-child {
+              display: flex;
+              align-items: center;
+              font-size: 16px;
+              font-weight: 500;
+            }
+
+            &:last-child {
+              display: flex;
+              align-items: center;
+              color: var(--input-placeholder-search-color);
+              font-size: 14px;
+              word-break: break-word;
+              margin-top: 4px;
+
+              a{
+                margin-left: 11px;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+
+        &--balances {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+
+          &--row {
+            &:first-child {
+              font-size: 16px;
+              font-weight: 500;
+            }
+
+            &:last-child {
+              display: flex;
+              color: var(--input-placeholder-search-color);
+              font-size: 14px;
+              flex-direction: column;
+            }
+          }
+        }
+
+        &--actions {
+          flex: 1;
+          display: flex;
+          justify-content: right;
+
+          button.ui.button {
+            background-color: var(--card-background) !important;
+            border: 1px solid var(--link-color);
+            color: var(--link-color) !important;
+            margin-left: 12px;
+            margin-right: 0;
+
+            &:hover{
+                background-color: var(--button-background-hover) !important;
+            }
+          }
+          button.ui.button[disabled]{
+            border-color: #BEC2CD;
+            color: #C7CBD4 !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+
+  .network-wallet {
+
+    .network-wallet--block {
+      padding: 0 16px;
+      box-shadow: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+
+  .network-wallet {
+
+    .network-wallet--block {
+
+      &--header {
+        padding-bottom: calc((var(--gap) / 2) * 2);
+      }
+
+      &--body {
+        padding-top: 0;
+
+        .token-item {
+          display: block;
+
+          &--actions {
+            width: 100%;
+
+            button.ui.button {
+              width: 100%;
+              margin-left: 0;
+              margin-right: 8px;
+            }
+          }
+
+          &--balances {
+            margin: 16px 0;
+
+            &--row {
+              &:first-child {
+                margin-bottom: 4px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

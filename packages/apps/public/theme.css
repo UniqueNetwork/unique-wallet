@@ -16,6 +16,7 @@
   --black-color: #000;
   --border-color: #ececec;
   --error-color: #ff6335;
+  --error-background-color: #FFF2EC;
   --error-color-dark: #E65E35 ;
   --success-color: #93ff35;
   --divider-color: #f5f5f5;
@@ -51,11 +52,14 @@
   --button-background-hover: #F5FCFF;
   --button-background-active: #40ABE6;
   --button-background-filled-hover: #66C9FF;
+  --button-background-disabled-border: #C7CBD4;
+  --button-background-disabled: #BEC2CD;
   --input-background-color: #ffffff;
   --input-border-color-hover: #e1e1e1;
   --input-border-color-outline: #cccccc;
   --input-background-disabled-color: #fafafa;
   --input-placeholder-search-color: #81858E;
+  --input-copy-icon-color:  #A9AFBD;
   --input-text-color: #040b1d;
   --max-header-width: 100%;
   --card-border-color: #ececec;
@@ -64,12 +68,14 @@
   --card-text-color: #000;
   --card-link-color: #40bcff;
   --account-selector-background: #f9faff;
-  --account-selector-name-color: #000;
+  --account-selector-name-color: #040b1d;
   --account-selector-address-color: #000;
-  --dropdown-scrollbar-color: #000;
+  --dropdown-scrollbar-color: #cccccc;
   --modal-border-color: transparent;
   --modal-text-color: #000;
   --color-checkbox: #000;
+  --modal-warning-background-color: #fef6da;
+  --modal-warning-text-color: #E7AA0F;
 }
 
 [data-theme="NF3Digital"] {

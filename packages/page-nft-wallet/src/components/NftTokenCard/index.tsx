@@ -3,141 +3,52 @@
 
 import './styles.scss';
 
-import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+import React, { useCallback } from 'react';
+import Image from 'semantic-ui-react/dist/commonjs/elements/Image';
+import Card from 'semantic-ui-react/dist/commonjs/views/Card';
 
-import React, { useCallback, useMemo, useState } from 'react';
-import { useHistory } from 'react-router';
-import Item from 'semantic-ui-react/dist/commonjs/views/Item';
-
-import envConfig from '@polkadot/apps-config/envConfig';
-import pencil from '@polkadot/react-components/ManageCollection/pencil.svg';
-import transfer from '@polkadot/react-components/ManageCollection/transfer.svg';
-import Tooltip from '@polkadot/react-components/Tooltip';
-import { useSchema } from '@polkadot/react-hooks';
-
-const { canEditToken } = envConfig;
+import { useDecoder, useSchema } from '@polkadot/react-hooks';
 
 interface Props {
-  account: string;
-  canTransferTokens: boolean;
-  collection: NftCollectionInterface;
-  openTransferModal: (collection: NftCollectionInterface, tokenId: string, balance: number) => void;
-  token: string;
+  account: string | undefined;
+  collectionId: string;
+  openDetailedInformationModal: (collectionId: string, tokenId: string) => void;
+  tokenId: string;
 }
 
-function NftTokenCard ({ account, canTransferTokens, collection, openTransferModal, token }: Props): React.ReactElement<Props> {
-  const { attributes, reFungibleBalance, tokenUrl } = useSchema(account, collection.id, token);
-  const [tokenState] = useState<'none'>('none');
-  const history = useHistory();
+const NftTokenCard = ({ account, collectionId, openDetailedInformationModal, tokenId }: Props): React.ReactElement<Props> => {
+  const { collectionInfo, tokenName, tokenUrl } = useSchema(account, collectionId, tokenId);
+  const { collectionName16Decoder, hex2a } = useDecoder();
 
-  const openDetailedInformationModal = useCallback((collectionId: string | number, tokenId: string) => {
-    history.push(`/wallet/token-details?collectionId=${collectionId}&tokenId=${tokenId}`);
-  }, [history]);
-
-  const editToken = useCallback((collectionId: string, tokenId: string) => {
-    history.push(`/wallet/manage-token?collectionId=${collectionId}&tokenId=${tokenId}`);
-  }, [history]);
-
-  const attrebutesToShow = useMemo(() => {
-    if (attributes) {
-      return [...Object.keys(attributes).map((attr: string) => {
-        if (attr.toLowerCase().includes('hash')) {
-          return `${attr}: ${(attributes[attr] as string).substring(0, 8)}...`;
-        }
-
-        if (Array.isArray(attributes[attr])) {
-          return `${attr}: ${((attributes[attr] as string[]).join(', '))}`;
-        }
-
-        return `${attr}: ${(attributes[attr] as string)}`;
-      })].join(', ');
-    }
-
-    return '';
-  }, [attributes]);
-
-  if (!reFungibleBalance && collection?.Mode?.reFungible) {
-    return <></>;
-  }
+  const onOpenTokenPage = useCallback(() => {
+    openDetailedInformationModal(collectionId, tokenId);
+  }, [collectionId, openDetailedInformationModal, tokenId]);
 
   return (
-    <div
-      className='token-row'
-      key={token}
+    <Card
+      className='token-card'
+      key={tokenId}
+      onClick={onOpenTokenPage}
     >
-      <div
-        className='token-image'
-        onClick={openDetailedInformationModal.bind(null, collection.id, token)}
-      >
-        { tokenUrl && (
-          <Item.Image
-            size='mini'
-            src={tokenUrl}
-          />
-        )}
-      </div>
-      <div
-        className='token-info-attributes'
-        onClick={openDetailedInformationModal.bind(null, collection.id, token)}
-      >
-        <div className='token-name'>
-          #{token.toString()}
-        </div>
-        <div className='token-balance'>
-          { collection && Object.prototype.hasOwnProperty.call(collection.Mode, 'reFungible') && <span>Balance: {reFungibleBalance}</span> }
-        </div>
-        <div className='token-attributes'>
-          { attributes && Object.values(attributes).length > 0 && (
-            <span>
-              <strong>Attributes: </strong>{attrebutesToShow}
-            </span>
-          )}
-        </div>
-      </div>
-      <div className='token-actions'>
-        { canEditToken && tokenState === 'none' && (
-          <>
-            <img
-              alt={'add'}
-              data-for='Edit nft'
-              data-tip='Edit nft'
-              onClick={editToken.bind(null, collection.id, token)}
-              src={pencil as string}
-              title='add'
-            />
-            <Tooltip
-              arrowColor={'transparent'}
-              backgroundColor={'var(--border-color)'}
-              place='bottom'
-              text={'Edit nft'}
-              textColor={'var(--sub-header-text-transform)'}
-              trigger={'Edit nft'}
-            />
-          </>
-        )}
-        { canTransferTokens && tokenState === 'none' && (
-          <>
-            <img
-              alt={'add'}
-              data-for='Transfer nft'
-              data-tip='Transfer nft'
-              onClick={openTransferModal.bind(null, collection, token, reFungibleBalance)}
-              src={transfer as string}
-              title='add'
-            />
-            <Tooltip
-              arrowColor={'transparent'}
-              backgroundColor={'var(--border-color)'}
-              place='bottom'
-              text={'Transfer nft'}
-              textColor={'var(--sub-header-text-transform)'}
-              trigger={'Transfer nft'}
-            />
-          </>
-        )}
-      </div>
-    </div>
+      { tokenId && (
+        <Image
+          src={tokenUrl}
+          ui={false}
+          wrapped
+        />
+      )}
+      { !!(tokenId && collectionInfo) && (
+        <Card.Content>
+          <Card.Description>
+            <div className='card-name'>
+              <div className='card-name__title'>{hex2a(collectionInfo.tokenPrefix)} {`#${tokenId}`} {tokenName?.value}</div>
+              <div className='card-name__field'>{ collectionName16Decoder(collectionInfo.name)}</div>
+            </div>
+          </Card.Description>
+        </Card.Content>
+      )}
+    </Card>
   );
-}
+};
 
 export default React.memo(NftTokenCard);
