@@ -8,10 +8,7 @@ import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
 import BN from 'bn.js';
 import { useCallback, useState } from 'react';
 
-import envConfig from '@polkadot/apps-config/envConfig';
 import { useApi, useCollection, useIsMountedRef /*, useFetch */ } from '@polkadot/react-hooks';
-
-const { uniqueCollectionIds } = envConfig;
 
 export type MetadataType = {
   metadata?: string;
@@ -90,7 +87,7 @@ export function useCollections () {
     try {
       const collections: Array<NftCollectionInterface> = []; // JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
 
-      const collectionIdsList = (collectionIds?.length ? collectionIds.map((item) => item.toString()) : uniqueCollectionIds);
+      const collectionIdsList = (collectionIds?.length ? collectionIds.map((item) => item.toString()) : []);
 
       for (let i = 0; i < collectionIdsList.length; i++) {
         const mintCollectionInfo = await getDetailedCollectionInfo(collectionIdsList[i]) as unknown as NftCollectionInterface;
