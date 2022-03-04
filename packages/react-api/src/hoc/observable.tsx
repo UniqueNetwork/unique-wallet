@@ -8,7 +8,8 @@ import type { CallState } from '../types';
 import type { DefaultProps, HOC, Options, RenderFn } from './types';
 
 import React from 'react';
-import { catchError, map, of } from 'rxjs';
+import { of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import echoTransform from '../transform/echo';
 import { intervalObservable, isEqual, triggerChange } from '../util';
