@@ -35,6 +35,8 @@ interface Props {
   withEllipsis?: boolean;
   withLabel?: boolean;
   withMax?: boolean;
+  // ограничение на длину числового значения передаваемых коинов в кошельке
+  limitNumberDigits?: number;
 }
 
 interface CustomSyntheticEvent extends React.SyntheticEvent{
@@ -53,7 +55,7 @@ function reformat (value: BN | undefined, isKusama: boolean): string {
   return formatStrBalance(value, formatBalance.getDefaults().decimals);
 }
 
-function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, isError, isKusama, label, maxTransfer, onChange, onEnter, onEscape, placeholder, withLabel }: Props): React.ReactElement<Props> {
+function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, isError, isKusama, label, maxTransfer, onChange, onEnter, onEscape, placeholder, withLabel, limitNumberDigits = 0 }: Props): React.ReactElement<Props> {
   const [valueLocal, setValueLocal] = useState<string>('0');
 
   const defaultValue = useMemo(
@@ -62,6 +64,11 @@ function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, 
   );
 
   const onValueLocalChange = useCallback((val: string) => {
+
+    if(limitNumberDigits !== 0 && val.replace(/\D/g,'').length > limitNumberDigits) {
+      return;
+    }
+
     let arr: string[] = [];
 
     if (val.includes('.')) {
