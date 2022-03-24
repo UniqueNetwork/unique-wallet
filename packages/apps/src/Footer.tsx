@@ -85,6 +85,7 @@ export default memo(styled(Footer)`
   background: var(--card-background);
   font-size: 14px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: relative;
 
   .app-footer--container {
     display: flex;
@@ -94,10 +95,6 @@ export default memo(styled(Footer)`
 
   .app-footer__info__powered {
     color: var(--blue-gray-500);
-  }
-
-  .app-footer__info {
-    color: var(--foter-text-color);
   }
 
   .app-footer__social-links {
@@ -115,7 +112,7 @@ export default memo(styled(Footer)`
   }
 
   @media (max-width: 1023px) {
-    border-top: 1px solid var(--enum-input-border-disabled-color);
+    border-top: 1px solid var(--gray-300);
   }
 
   @media (max-width: 767px) {
