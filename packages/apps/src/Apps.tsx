@@ -52,7 +52,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
   const { isApiConnected, isApiReady, systemChain, systemName } = useApi();
   const { queueAction } = useContext(StatusContext);
   const [account, setAccount] = useState<string>();
-  const [openPanel, setOpenPanel] = useState<OpenPanelType>('tokens');
+  const [openPanel, setOpenPanel] = useState<OpenPanelType>('coins');
   const [isPageFound, setIsPageFound] = useState<boolean>(true);
 
   const uiHighlight = useMemo(

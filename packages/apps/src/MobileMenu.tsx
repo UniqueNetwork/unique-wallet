@@ -19,7 +19,7 @@ const MobileMenuHeader = (props: Props): React.ReactElement<Props> => {
 
   useEffect(() => {
     if (currentLocation.current && currentLocation.current !== location.pathname) {
-      setOpenPanel('tokens');
+      setOpenPanel('coins');
     }
 
     currentLocation.current = location.pathname;

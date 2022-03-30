@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import './styles.scss';
@@ -68,14 +68,16 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
     }
   }, [history, location]);
 
+  console.log('openPanel', openPanel);
+
   return (
     <div className='my-tokens'>
-      { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && openPanel === 'tokens' && (
+      { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && openPanel === 'coins' && (
         <>
           <Header as='h1'>My tokens</Header>
         </>
       )}
-      { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && openPanel === 'tokens' && (
+      { !location.pathname.includes('token-details') && !location.pathname.includes('manage-') && openPanel === 'coins' && (
         <Tabs
           basePath={basePath}
           className='stuff-tabs'
