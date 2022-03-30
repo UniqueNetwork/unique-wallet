@@ -22,7 +22,7 @@ const MobileAccountSelector = (props: MobileAccountSelectorProps): React.ReactEl
     if (openPanel !== 'accounts') {
       setOpenPanel('accounts');
     } else {
-      setOpenPanel('tokens');
+      setOpenPanel('coins');
     }
   }, [openPanel, setOpenPanel]);
 

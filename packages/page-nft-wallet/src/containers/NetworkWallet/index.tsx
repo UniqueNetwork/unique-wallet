@@ -1,13 +1,13 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import './styles.scss';
 
-import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import React, { useCallback, useContext } from 'react';
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
+import GetKSMModal from '@polkadot/app-nft-wallet/components/GetKSMModal';
 import GetTestUNQModal from '@polkadot/app-nft-wallet/components/GetTestUNQModal';
 import envConfig from '@polkadot/apps-config/envConfig';
 import { OpenPanelType } from '@polkadot/apps-routing/types';
@@ -32,6 +32,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
   const [isTransferOpen, toggleTransfer] = useToggle();
   const [isKusamaTransferOpen, toggleKusamaTransfer] = useToggle();
   const [isGetTestUNQModalOpen, toggleGetTestUNQModal] = useToggle();
+  const [isGetKSMModalOpen, toggleGetKSMModal] = useToggle();
   const { queueAction } = useContext(StatusContext);
   const [major, rest] = formatBalance(fullBalance?.availableBalance);
 
@@ -48,17 +49,6 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
     },
     [queueAction]
   );
-
-  const handleGetKSMClickByRamp = useCallback(() => {
-    const RampModal = new RampInstantSDK({
-      hostAppName: 'Maker DAO',
-      hostLogoUrl: `${window.location.origin}/logos/logoForRamp.svg`,
-      swapAsset: 'KSM',
-      variant: 'auto'
-    });
-
-    RampModal.show();
-  }, []);
 
   const onCopyKusamaAccount = useCallback(() => {
     encodedKusamaAccount && copyAddress(encodedKusamaAccount);
@@ -266,8 +256,7 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
                 Send
               </Button>
               <Button
-                disabled={true}
-                onClick={handleGetKSMClickByRamp}
+                onClick={toggleGetKSMModal}
               >
                 Get
               </Button>
@@ -294,6 +283,12 @@ function NetworkWallet ({ account }: NftWalletProps): React.ReactElement {
         <GetTestUNQModal
           key='modal-transfer'
           onClose={toggleGetTestUNQModal}
+        />
+      )}
+      { isGetKSMModalOpen && (
+        <GetKSMModal
+          key='modal-transfer'
+          onClose={toggleGetKSMModal}
         />
       )}
     </div>

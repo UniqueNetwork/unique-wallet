@@ -168,7 +168,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                 inline='centered'
               />
             )}
-            { Object.keys(myTokens).length > 0 && (
+            { tokensCount > 0 && (
               <InfiniteScroll
                 hasMore={hasMore}
                 initialLoad={false}

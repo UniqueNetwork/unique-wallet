@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/app-accounts authors & contributors
+// Copyright 2017-2022 @polkadot/app-accounts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import './style.scss';
@@ -7,7 +7,7 @@ import React from 'react';
 
 import envConfig from '@polkadot/apps-config/envConfig';
 import { Modal } from '@polkadot/react-components';
-import { useApi, useNetworkInfo } from '@polkadot/react-hooks';
+import { useApi } from '@polkadot/react-hooks';
 
 interface Props {
   onClose: () => void;
@@ -15,7 +15,10 @@ interface Props {
 
 // ex: https://t.me/unique2faucet_opal_bot
 const getTelegramBotAddress = (telegramLink: string) => {
-  if (!telegramLink) return '';
+  if (!telegramLink) {
+    return '';
+  }
+
   const regExp = /https?:\/\/t.me\/(.+).*/g;
   const match = regExp.exec(telegramLink);
 
