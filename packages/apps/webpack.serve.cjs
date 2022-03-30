@@ -17,8 +17,7 @@ module.exports = merge(
       proxy: {
         '/v1/graphql/': {
           changeOrigin: true,
-          target: 'https://hasura-opal.unique.network'
-          // target: 'https://hasura-quartz.unique.network'
+          target: 'https://hasura-quartz.unique.network'
         }
       },
       static: path.resolve(__dirname, 'build')
