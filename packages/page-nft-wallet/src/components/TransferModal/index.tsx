@@ -124,7 +124,6 @@ function TransferModal ({ isKusama, onClose, senderId }: Props): React.ReactElem
     getAccountName();
   }, [getAccountName]);
 
-  // console.log('noFees', noFees, 'recipientId', recipientId, 'amount', amount?.toString(), 'recipientPhish', recipientPhish, 'maxTransfer', maxTransfer?.toString());
 
   return (
     <Modal
@@ -207,6 +206,7 @@ function TransferModal ({ isKusama, onClose, senderId }: Props): React.ReactElem
               onChange={setAmount}
               placeholder='Enter the amount'
               value={amount}
+              limitNumberDigits={16}
             />
             { transferFees && (
               <div className='fees-info'>
