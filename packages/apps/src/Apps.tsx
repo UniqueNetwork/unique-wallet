@@ -30,6 +30,7 @@ import MobileMenu from './MobileMenu';
 import MobileMenuHeader from './MobileMenuHeader';
 import ScrollToTop from './ScrollToTop';
 import WarmUp from './WarmUp';
+import Footer from "./Footer";
 
 export const PORTAL_ID = 'portals';
 
@@ -187,6 +188,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                     </main>
                   </Suspense>
                 )}
+                <Footer />
               </>
             </ErrorBoundary>
             <Status />
