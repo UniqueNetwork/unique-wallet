@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import { gql, useQuery } from '@apollo/client';
@@ -6,6 +6,8 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useCollections, useIsMountedRef } from '@polkadot/react-hooks';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+
+// import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 
 export type UserToken = {
   'collection_id': number;
@@ -37,6 +39,8 @@ const USER_COLLECTIONS_TOKENS = gql`
     }
   }
 `;
+
+// const normalizeSubstrate = (account?: string) => account ? encodeAddress(decodeAddress(account)) : undefined;
 
 /*
   Hook to get all collections user have tokens in

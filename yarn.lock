@@ -4188,19 +4188,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/api-contract@npm:^7.8.2-4":
-  version: 7.14.3
-  resolution: "@polkadot/api-contract@npm:7.14.3"
+"@polkadot/api-contract@npm:^7.13.1":
+  version: 7.15.1
+  resolution: "@polkadot/api-contract@npm:7.15.1"
   dependencies:
     "@babel/runtime": ^7.17.8
-    "@polkadot/api": 7.14.3
-    "@polkadot/types": 7.14.3
-    "@polkadot/types-codec": 7.14.3
-    "@polkadot/types-create": 7.14.3
+    "@polkadot/api": 7.15.1
+    "@polkadot/types": 7.15.1
+    "@polkadot/types-codec": 7.15.1
+    "@polkadot/types-create": 7.15.1
     "@polkadot/util": ^8.7.1
     "@polkadot/util-crypto": ^8.7.1
     rxjs: ^7.5.5
-  checksum: db8c1b9bfe037d1195daf3e59d356e4f0ac7b0ddcbd446f2d6ed73db5aff555351a2f25a1b7617e3e2f3ef48f5d96b1b15018dde37ab57b5dd7d5c703a9aa9c6
+  checksum: ffef9d79deec8c457d830b82e1992f1285e64d4eb10a09d9a90e1bbba281d3a0ff94587c6fa4958525c2314da97eaeb7f3fadf2a675a352a06917deaaa1a1c71
   languageName: node
   linkType: hard
 
@@ -4877,6 +4877,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@polkadot/types-codec@npm:7.15.1":
+  version: 7.15.1
+  resolution: "@polkadot/types-codec@npm:7.15.1"
+  dependencies:
+    "@babel/runtime": ^7.17.8
+    "@polkadot/util": ^8.7.1
+  checksum: 001178689b4d36a4c5b317c46aca177b183ba14b2f534df88995fd9755d936c73f7cbc0d0386f42c1c384e305a9394e80c95528e8d5de677005faa871efff763
+  languageName: node
+  linkType: hard
+
 "@polkadot/types-create@npm:7.14.3":
   version: 7.14.3
   resolution: "@polkadot/types-create@npm:7.14.3"
@@ -4885,6 +4895,17 @@ __metadata:
     "@polkadot/types-codec": 7.14.3
     "@polkadot/util": ^8.7.1
   checksum: 22bcf804f4d55de547e13029481124697d0373dfbdcec163950b719dfdbae84c9af9820047ad991924a7966d30b59dd139a4ec2101b9e7deffa48c8a33606571
+  languageName: node
+  linkType: hard
+
+"@polkadot/types-create@npm:7.15.1":
+  version: 7.15.1
+  resolution: "@polkadot/types-create@npm:7.15.1"
+  dependencies:
+    "@babel/runtime": ^7.17.8
+    "@polkadot/types-codec": 7.15.1
+    "@polkadot/util": ^8.7.1
+  checksum: 7a45db13c0f098b6fc83977ed2e16ff804082d5b3ead763e5b6f3bdc405e37f02d9042a97a175128819d6b0954ac3db8a1f05126491def920b1e737209af4d1b
   languageName: node
   linkType: hard
 
@@ -23126,7 +23147,7 @@ resolve@^2.0.0-next.3:
     "@babel/runtime": ^7.17.8
     "@crustio/crust-pin": ^1.0.0
     "@pinata/sdk": ^1.1.23
-    "@polkadot/api-contract": ^7.8.2-4
+    "@polkadot/api-contract": ^7.13.1
     "@polkadot/dev": ^0.65.101
     "@polkadot/ts": ^0.4.16
     "@ramp-network/ramp-instant-sdk": ^3.0.0

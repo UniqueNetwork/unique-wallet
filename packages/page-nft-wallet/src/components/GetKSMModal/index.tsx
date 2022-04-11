@@ -23,7 +23,7 @@ function GetKSMModal ({ onClose }: Props): React.ReactElement<Props> {
 
     const RampModal = new RampInstantSDK({
       containerNode,
-      hostApiKey: envConfig.rampApiKey ?? '',
+      hostApiKey: envConfig.rampApiKey as string ?? '',
       hostAppName: 'Unique Marketplace',
       hostLogoUrl: 'https://uniquescan.io/logos/unique.svg',
       swapAsset: 'KSM',
