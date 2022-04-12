@@ -25,7 +25,7 @@ export type UseGraphQlInterface = {
 };
 
 const USER_TOKENS = gql`
-  query Tokens($limit: Int!, $offset: Int!, $order: order_by!, $owner: String!, $collectionIds: [Int!]) {
+  query Tokens($limit: Int!, $offset: Int!, $order: order_by!, $owner: String!, $collectionIds: [bigint!]) {
      tokens(limit: $limit, where: {
         _and: [
           { owner: { _eq: $owner } }
