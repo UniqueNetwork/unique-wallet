@@ -64,6 +64,7 @@
     "@types/lodash": "^4.14.168",
     "@types/lodash.memoize": "^4.1.6",
     "@types/react-infinite-scroller": "^1.2.1",
+    "@unique-nft/types": "^0.4.0",
     "@xstate/react": "^1.1.0",
     "bignumber": "^1.1.0",
     "cypress": "^6.8.0",
