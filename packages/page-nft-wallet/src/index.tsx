@@ -108,14 +108,18 @@ function PageNftWallet ({ account, basePath, openPanel, setOpenPanel }: Props): 
           />
         </Route>
         <Route path={`${basePath}/nft`}>
-          <ApolloProvider client={client}>
-            <NftWallet
-              account={account}
-              collectionId={collectionId}
-              openPanel={openPanel}
-              setOpenPanel={setOpenPanel}
-            />
-          </ApolloProvider>
+          { account
+            ? (
+              <ApolloProvider client={client}>
+                <NftWallet
+                  account={account}
+                  collectionId={collectionId}
+                  openPanel={openPanel}
+                  setOpenPanel={setOpenPanel}
+                />
+              </ApolloProvider>
+            )
+            : null}
         </Route>
         <Route path={`${basePath}/tokens`}>
           <NetworkWallet

@@ -1,7 +1,9 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import { gql, useQuery } from '@apollo/client';
+
+import { normalizeSubstrate } from '@polkadot/react-hooks/utils';
 
 export type UserToken = {
   'collection_id': number;
@@ -49,12 +51,12 @@ const USER_TOKENS = gql`
   }
 `;
 
-export const useGraphQlTokens = (limit: number, offset: number, order: 'desc' | 'asc', collectionIds: string[], account: string | undefined): UseGraphQlInterface => {
+export const useGraphQlTokens = (limit: number, offset: number, order: 'desc' | 'asc', collectionIds: string[], account: string): UseGraphQlInterface => {
   // can be useLazyQuery
   const { data: userTokens, error: userTokensError, loading: userTokensLoading } = useQuery(USER_TOKENS, {
     fetchPolicy: 'network-only', // Used for first execution
     nextFetchPolicy: 'cache-first',
-    variables: { collectionIds, limit, offset, order, owner: account }
+    variables: { collectionIds, limit, offset, order, owner: normalizeSubstrate(account) }
   }) as unknown as { data: UserTokensWrapper, error: string, loading: boolean };
 
   return {

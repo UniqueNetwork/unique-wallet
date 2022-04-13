@@ -1,13 +1,16 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import BN from 'bn.js';
 import type { ContractPromise } from '@polkadot/api-contract';
 import type { AbiMessage } from '@polkadot/api-contract/types';
 import type { AccountId } from '@polkadot/types/interfaces';
+
+import BN from 'bn.js';
+
+import envConfig from '@polkadot/apps-config/envConfig';
 import { IKeyringPair } from '@polkadot/types/types';
 import { formatBalance } from '@polkadot/util';
-import envConfig from '@polkadot/apps-config/envConfig';
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 
 const { decimals, minPrice } = envConfig;
 
@@ -101,3 +104,5 @@ export function formatStrBalance (value: BN | undefined = new BN(0), incomeDecim
 
   return `${arr[0]}${arr[1] ? `.${arr[1].substr(0, decimals)}` : ''}`;
 }
+
+export const normalizeSubstrate = (account: string) => encodeAddress(decodeAddress(account));
