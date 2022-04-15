@@ -72,7 +72,7 @@ export function useToken (): UseTokenInterface {
   
       const variableData = (await api.rpc.unique.variableMetadata(collectionId, tokenId)).toJSON() as string;
       const constData: string = (await api.rpc.unique.constMetadata(collectionId, tokenId)).toJSON() as string;
-      const crossAccount = normalizeAccountId((await api.rpc.unique.tokenOwner(collectionId, tokenId)).toJSON() as string) as { Substrate: string };
+      const crossAccount = normalizeAccountId((await api.query.nonfungible.tokenData(collectionId, tokenId)).toJSON().owner as string) as { Substrate?: string, Ethereum?: string };
   
       tokenDetailsData = {
         constData,
