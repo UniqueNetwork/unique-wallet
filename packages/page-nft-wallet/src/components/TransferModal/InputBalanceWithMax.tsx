@@ -65,7 +65,7 @@ function InputBalanceWithMax ({ autoFocus, defaultValue: inDefault, isDisabled, 
 
   const onValueLocalChange = useCallback((val: string) => {
 
-    if(limitNumberDigits !== 0 && val.replace(/\D/g,'').length > limitNumberDigits) {
+    if (limitNumberDigits !== 0 && val.replace(/\D/g,'').length > limitNumberDigits) {
       return;
     }
 

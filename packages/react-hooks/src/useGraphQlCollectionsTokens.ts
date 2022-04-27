@@ -6,7 +6,6 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useCollections, useIsMountedRef } from '@polkadot/react-hooks';
 import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
-import { normalizeSubstrate } from '@polkadot/react-hooks/utils';
 
 export type UserToken = {
   'collection_id': number;
@@ -53,7 +52,7 @@ export const useGraphQlCollectionsTokens = (account: string): UseGraphQlInterfac
   const { data: userTokens, loading: userCollectionsLoading } = useQuery(USER_COLLECTIONS_TOKENS, {
     fetchPolicy: 'network-only', // Used for first execution
     nextFetchPolicy: 'cache-first',
-    variables: { owner: normalizeSubstrate(account) }
+    variables: { owner: account }
   }) as unknown as { data: UserTokensWrapper, error: string, loading: boolean };
 
   const initializeCollections = useCallback(async () => {
