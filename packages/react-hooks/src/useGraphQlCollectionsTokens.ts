@@ -43,7 +43,7 @@ const USER_COLLECTIONS_TOKENS = gql`
 /*
   Hook to get all collections user have tokens in
  */
-export const useGraphQlCollectionsTokens = (account: string): UseGraphQlInterface => {
+export const useGraphQlCollectionsTokens = (account: string | undefined): UseGraphQlInterface => {
   const [userCollections, setUserCollections] = useState<NftCollectionInterface[]>([]);
   const [userCollectionsIds, setUserCollectionsIds] = useState<string[]>([]);
   const mountedRef = useIsMountedRef();

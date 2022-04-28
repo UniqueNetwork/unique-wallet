@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import './styles.scss';
@@ -52,16 +52,17 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   const initialFilters = storageFilters && !equal(storageFilters, defaultFilters) ? storageFilters : defaultFilters;
   const [showCollectionsFilter, toggleCollectionsFilter] = useState<boolean>(true);
   const [filters, setFilters] = useState<Filters>(collectionId ? { ...initialFilters, collectionIds: [collectionId] } : initialFilters);
-  const [myTokens, setMyTokens] = useState<MyTokensListType>({});
+  const [myTokens, setMyTokens] = useState<MyTokensType[]>([]);
   const mountedRef = useIsMountedRef();
   const history = useHistory();
   const [page, setPage] = useState<number>(1);
   const { userCollections, userCollectionsIds, userCollectionsLoading } = useGraphQlCollectionsTokens(account);
   const { userTokens, userTokensLoading } = useGraphQlTokens(limit, (page - 1) * limit, filters.sort, filters.collectionIds?.length ? filters.collectionIds : userCollectionsIds, account);
-  const tokensCount = userTokens?.tokens_aggregate?.aggregate?.count || 0;
-  const hasMore = !!(tokensCount && Object.keys(myTokens).length < tokensCount);
   const currentFilter = useRef<Filters>(defaultFilters);
   const currentAccount = useRef<string>();
+  const tokensCountRef = useRef<number>();
+  const tokensCount = userTokens?.tokens_aggregate?.aggregate?.count || 0;
+  const hasMore = !!(tokensCountRef?.current && Object.keys(myTokens).length < tokensCountRef.current);
 
   const clearCheckedValues = useCallback(() => {
     mountedRef.current && setFilters((prevState) => {
@@ -101,20 +102,25 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
 
   const initializeTokens = useCallback(() => {
     if (account && !userTokensLoading && userTokens?.tokens) {
-      mountedRef.current && setMyTokens((prevState: MyTokensListType) => {
-        const myTokensList: MyTokensListType = { ...prevState };
+      mountedRef.current && setMyTokens((prevState: MyTokensType[]) => {
+        const myTokensList: MyTokensType[] = page === 1 ? [] : prevState;
 
         for (let j = 0; j < userTokens.tokens.length; j++) {
-          myTokensList[`${userTokens.tokens[j].collection_id}-${userTokens.tokens[j].token_id}`] = {
-            collectionId: userTokens.tokens[j].collection_id.toString(),
-            tokenId: userTokens.tokens[j].token_id.toString()
-          };
+          const collectionId = userTokens.tokens[j].collection_id.toString();
+          const tokenId = userTokens.tokens[j].token_id.toString();
+
+          if (myTokensList.findIndex((item) => item.collectionId === collectionId && item.tokenId === tokenId) === -1) {
+            myTokensList.push({
+              collectionId: userTokens.tokens[j].collection_id.toString(),
+              tokenId: userTokens.tokens[j].token_id.toString()
+            });
+          }
         }
 
         return myTokensList;
       });
     }
-  }, [account, mountedRef, userTokens, userTokensLoading]);
+  }, [account, mountedRef, page, userTokens, userTokensLoading]);
 
   const fetchScrolledData = useCallback(() => {
     !userTokensLoading && setPage((prevPage: number) => prevPage + 1);
@@ -127,7 +133,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   const refillTokens = useCallback(() => {
     if (mountedRef.current && (currentFilter.current !== filters || currentAccount.current !== account)) {
       setPage(1);
-      setMyTokens({});
+      setMyTokens([]);
       currentFilter.current = filters;
       currentAccount.current = account;
     }
@@ -138,6 +144,14 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
   useEffect(() => {
     refillTokens();
   }, [refillTokens]);
+
+  useEffect(() => {
+    const count = userTokens?.tokens_aggregate?.aggregate?.count;
+
+    if (userTokens?.tokens_aggregate?.aggregate?.count !== undefined) {
+      tokensCountRef.current = count;
+    }
+  }, [userTokens?.tokens_aggregate?.aggregate?.count]);
 
   return (
     <div className={`nft-wallet ${openPanel || ''}`}>
@@ -168,7 +182,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                 inline='centered'
               />
             )}
-            { tokensCount > 0 && (
+            { (!!tokensCountRef.current && tokensCountRef.current > 0) && (
               <InfiniteScroll
                 hasMore={hasMore}
                 initialLoad={false}
@@ -178,7 +192,7 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                 useWindow={true}
               >
                 <div className='tokens-list'>
-                  {Object.values(myTokens).map(({ collectionId, tokenId }: MyTokensType) => (
+                  {myTokens?.map(({ collectionId, tokenId }: MyTokensType) => (
                     <NftTokenCard
                       account={account}
                       collectionId={collectionId}
@@ -187,17 +201,10 @@ function NftWallet ({ account, collectionId, openPanel, setOpenPanel }: NftWalle
                       tokenId={tokenId}
                     />
                   ))}
-                  { userTokensLoading && (
-                    <Loader
-                      active
-                      className='load-info'
-                      inline='centered'
-                    />
-                  )}
                 </div>
               </InfiniteScroll>
             )}
-            {(!userTokensLoading && !tokensCount && !userCollectionsLoading) && (
+            {(!userTokensLoading && !tokensCountRef.current && !userCollectionsLoading) && (
               <div className='no-tokens'>
                 <img
                   alt='no tokens'

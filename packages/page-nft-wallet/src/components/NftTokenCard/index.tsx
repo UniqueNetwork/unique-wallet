@@ -1,9 +1,9 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import './styles.scss';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Image from 'semantic-ui-react/dist/commonjs/elements/Image';
 import Card from 'semantic-ui-react/dist/commonjs/views/Card';
 
@@ -17,12 +17,16 @@ interface Props {
 }
 
 const NftTokenCard = ({ account, collectionId, openDetailedInformationModal, tokenId }: Props): React.ReactElement<Props> => {
-  const { collectionInfo, tokenName, tokenUrl } = useSchema(account, collectionId, tokenId);
+  const { collectionInfo, getTokenDetails, tokenName, tokenUrl } = useSchema(account, collectionId, tokenId);
   const { collectionName16Decoder, hex2a } = useDecoder();
 
   const onOpenTokenPage = useCallback(() => {
     openDetailedInformationModal(collectionId, tokenId);
   }, [collectionId, openDetailedInformationModal, tokenId]);
+
+  useEffect(() => {
+    getTokenDetails();
+  }, [getTokenDetails]);
 
   return (
     <Card

@@ -49,7 +49,7 @@ const USER_TOKENS = gql`
   }
 `;
 
-export const useGraphQlTokens = (limit: number, offset: number, order: 'desc' | 'asc', collectionIds: string[], account: string): UseGraphQlInterface => {
+export const useGraphQlTokens = (limit: number, offset: number, order: 'desc' | 'asc', collectionIds: string[], account: string | undefined): UseGraphQlInterface => {
   // can be useLazyQuery
   const { data: userTokens, error: userTokensError, loading: userTokensLoading } = useQuery(USER_TOKENS, {
     fetchPolicy: 'network-only', // Used for first execution
