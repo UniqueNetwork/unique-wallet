@@ -58,7 +58,6 @@ export const useGraphQlCollectionsTokens = (account: string | undefined): UseGra
   const initializeCollections = useCallback(async () => {
     if (account && userTokens && userTokens.tokens) {
       const firstCollectionIds: number[] = [...new Set(userTokens.tokens.map((item: UserToken) => item.collection_id))];
-      // if we have no collections, presetCollections returns [Chelobricks, Substratpunks] as default with empty tokens list
       const firstCollections: NftCollectionInterface[] = await presetCollections(firstCollectionIds);
 
       if (firstCollections?.length && mountedRef.current) {

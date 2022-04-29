@@ -85,7 +85,7 @@ export function useCollections () {
 
   const presetCollections = useCallback(async (collectionIds: number[]): Promise<NftCollectionInterface[]> => {
     try {
-      const collections: Array<NftCollectionInterface> = []; // JSON.parse(localStorage.getItem('tokenCollections') || '[]') as NftCollectionInterface[];
+      const collections: Array<NftCollectionInterface> = [];
 
       const collectionIdsList = (collectionIds?.length ? collectionIds.map((item) => item.toString()) : []);
 
@@ -96,8 +96,6 @@ export function useCollections () {
           collections.push({ ...mintCollectionInfo, id: collectionIdsList[i] });
         }
       }
-
-      localStorage.setItem('tokenCollections', JSON.stringify(collections));
 
       return collections;
     } catch (e) {
