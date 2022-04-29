@@ -56,16 +56,21 @@ export const useGraphQlCollectionsTokens = (account: string | undefined): UseGra
   }) as unknown as { data: UserTokensWrapper, error: string, loading: boolean };
 
   const initializeCollections = useCallback(async () => {
-    if (account && userTokens && userTokens.tokens) {
-      const firstCollectionIds: number[] = [...new Set(userTokens.tokens.map((item: UserToken) => item.collection_id))];
-      const firstCollections: NftCollectionInterface[] = await presetCollections(firstCollectionIds);
+    if (account) {
+      if (userTokens && userTokens.tokens) {
+        const firstCollectionIds: number[] = [...new Set(userTokens.tokens.map((item: UserToken) => item.collection_id))];
+        const firstCollections: NftCollectionInterface[] = await presetCollections(firstCollectionIds);
 
-      if (firstCollections?.length && mountedRef.current) {
-        setUserCollections(firstCollections);
-        setUserCollectionsIds(firstCollections.map((collection) => collection.id));
+        if (firstCollections?.length) {
+          mountedRef.current && setUserCollections(firstCollections);
+          mountedRef.current && setUserCollectionsIds(firstCollections.map((collection) => collection.id));
+        } else {
+          mountedRef.current && setUserCollections([]);
+          mountedRef.current && setUserCollectionsIds([]);
+        }
       } else {
-        setUserCollections([]);
-        setUserCollectionsIds([]);
+        mountedRef.current && setUserCollections([]);
+        mountedRef.current && setUserCollectionsIds([]);
       }
     }
   }, [account, mountedRef, presetCollections, userTokens]);
