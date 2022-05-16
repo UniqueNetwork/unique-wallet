@@ -100,15 +100,14 @@ export const useMetadata = (): UseMetadataInterface => {
   }, [hex2a, setUnique, tokenImageUrl]);
 
   const getCollectionCoverImageUrl = useCallback(async (collectionInfo: NftCollectionInterface): Promise<string> => {
-    if (collectionInfo?.variableOnChainSchema && hex2a(collectionInfo?.variableOnChainSchema)) {
-      const collectionSchema = getCollectionOnChainSchema(collectionInfo);
-      const image = collectionSchema?.variableSchema?.collectionCover as string;
+    if (collectionInfo?.properties && hex2a(collectionInfo?.properties.coverImageURL)) {
+      const image = hex2a(collectionInfo?.properties.coverImageURL);
 
       return `${ipfsGateway}/${image}`;
     } else {
       return await getTokenImageUrl(collectionInfo, '1');
     }
-  }, [getCollectionOnChainSchema, getTokenImageUrl, hex2a]);
+  }, [getTokenImageUrl, hex2a]);
 
   const getAndParseOffchainSchemaMetadata = useCallback(async (collectionInfo: NftCollectionInterface) => {
     try {
@@ -131,17 +130,15 @@ export const useMetadata = (): UseMetadataInterface => {
     };
   }, [hex2a]);
 
-  const getOnChainSchema = useCallback((collectionInf: NftCollectionInterface): { attributesConst: string, attributesVar: string } => {
+  const getOnChainSchema = useCallback((collectionInf: NftCollectionInterface): { attributesConst: string } => {
     if (collectionInf) {
       return {
         attributesConst: hex2a(collectionInf.constOnChainSchema),
-        attributesVar: hex2a(collectionInf.variableOnChainSchema)
       };
     }
 
     return {
-      attributesConst: '',
-      attributesVar: ''
+      attributesConst: ''
     };
   }, [hex2a]);
 
@@ -165,7 +162,6 @@ export const useMetadata = (): UseMetadataInterface => {
 
     return {
       ...decodeStruct({ attr: onChainSchema.attributesConst, data: tokenDetails?.constData }),
-      ...decodeStruct({ attr: onChainSchema.attributesVar, data: tokenDetails?.variableData })
     };
   }, [getOnChainSchema, getTokenDetails, decodeStruct]);
 

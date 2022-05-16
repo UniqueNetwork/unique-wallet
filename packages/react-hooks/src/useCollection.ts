@@ -12,6 +12,10 @@ import { strToUTF16 } from '@polkadot/react-hooks/utils';
 
 export type SchemaVersionTypes = 'Custom' | 'ImageURL' | 'TokenURI' | 'Unique';
 
+export interface NftCollectionProperties {
+  coverImageURL: string;
+}
+
 export interface NftCollectionInterface {
   access?: 'Normal' | 'WhiteList'
   id: string;
@@ -44,8 +48,9 @@ export interface NftCollectionInterface {
     ownerCanTransfer: boolean;
     ownerCanDestroy: boolean;
   },
-  variableOnChainSchema: string;
   constOnChainSchema: string;
+  properties: NftCollectionProperties; // Record<string, string>;
+  tokenPropertyPermissions: Record<string, 'None' | 'AdminConst' | 'ItemOwnerConst' | 'ItemOwner' | 'ItemOwnerOrAdmin' | 'Admin'>;
 }
 
 interface TransactionCallBacks {
@@ -91,10 +96,18 @@ export function useCollection () {
       accountId: account && account.toString(),
       extrinsic: transaction,
       isUnsigned: false,
-      txFailedCb: () => { callBacks?.onFailed && callBacks.onFailed(); console.log('create collection failed'); },
-      txStartCb: () => { callBacks?.onStart && callBacks.onStart(); console.log('create collection start'); },
-      txSuccessCb: () => { callBacks?.onSuccess && callBacks.onSuccess(); console.log('create collection success'); },
-      txUpdateCb: () => { callBacks?.onUpdate && callBacks.onUpdate(); console.log('create collection update'); }
+      txFailedCb: () => {
+        callBacks?.onFailed && callBacks.onFailed(); console.log('create collection failed');
+      },
+      txStartCb: () => {
+        callBacks?.onStart && callBacks.onStart(); console.log('create collection start');
+      },
+      txSuccessCb: () => {
+        callBacks?.onSuccess && callBacks.onSuccess(); console.log('create collection success');
+      },
+      txUpdateCb: () => {
+        callBacks?.onUpdate && callBacks.onUpdate(); console.log('create collection update');
+      }
     });
   }, [api, queueExtrinsic]);
 
@@ -105,10 +118,18 @@ export function useCollection () {
       accountId: account && account.toString(),
       extrinsic: transaction,
       isUnsigned: false,
-      txFailedCb: () => { console.log('set collection sponsor fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('set collection sponsor start'); },
-      txSuccessCb: () => { console.log('set collection sponsor success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('set collection sponsor update'); }
+      txFailedCb: () => {
+        console.log('set collection sponsor fail'); errorCallback && errorCallback();
+      },
+      txStartCb: () => {
+        console.log('set collection sponsor start');
+      },
+      txSuccessCb: () => {
+        console.log('set collection sponsor success'); successCallback && successCallback();
+      },
+      txUpdateCb: () => {
+        console.log('set collection sponsor update');
+      }
     });
   }, [api, queueExtrinsic]);
 
@@ -119,10 +140,18 @@ export function useCollection () {
       accountId: account && account.toString(),
       extrinsic: transaction,
       isUnsigned: false,
-      txFailedCb: () => { console.log('remove collection sponsor fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('remove collection sponsor start'); },
-      txSuccessCb: () => { console.log('remove collection sponsor success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('remove collection sponsor update'); }
+      txFailedCb: () => {
+        console.log('remove collection sponsor fail'); errorCallback && errorCallback();
+      },
+      txStartCb: () => {
+        console.log('remove collection sponsor start');
+      },
+      txSuccessCb: () => {
+        console.log('remove collection sponsor success'); successCallback && successCallback();
+      },
+      txUpdateCb: () => {
+        console.log('remove collection sponsor update');
+      }
     });
   }, [api, queueExtrinsic]);
 
@@ -133,10 +162,18 @@ export function useCollection () {
       accountId: account && account.toString(),
       extrinsic: transaction,
       isUnsigned: false,
-      txFailedCb: () => { console.log('confirm sponsorship fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('confirm sponsorship start'); },
-      txSuccessCb: () => { console.log('confirm sponsorship success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('confirm sponsorship update'); }
+      txFailedCb: () => {
+        console.log('confirm sponsorship fail'); errorCallback && errorCallback();
+      },
+      txStartCb: () => {
+        console.log('confirm sponsorship start');
+      },
+      txSuccessCb: () => {
+        console.log('confirm sponsorship success'); successCallback && successCallback();
+      },
+      txUpdateCb: () => {
+        console.log('confirm sponsorship update');
+      }
     });
   }, [api, queueExtrinsic]);
 
@@ -161,10 +198,18 @@ export function useCollection () {
       accountId: account && account.toString(),
       extrinsic: transaction,
       isUnsigned: false,
-      txFailedCb: () => { console.log('set schema version fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('set schema version  start'); },
-      txSuccessCb: () => { console.log('set schema version  success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('set schema version  update'); }
+      txFailedCb: () => {
+        console.log('set schema version fail'); errorCallback && errorCallback();
+      },
+      txStartCb: () => {
+        console.log('set schema version  start');
+      },
+      txSuccessCb: () => {
+        console.log('set schema version  success'); successCallback && successCallback();
+      },
+      txUpdateCb: () => {
+        console.log('set schema version  update');
+      }
     });
   }, [api, queueExtrinsic]);
 
@@ -177,10 +222,18 @@ export function useCollection () {
       accountId: account && account.toString(),
       extrinsic: transaction,
       isUnsigned: false,
-      txFailedCb: () => { console.log('set offChain schema fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('set offChain schema start'); },
-      txSuccessCb: () => { console.log('set offChain schema success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('set offChain schema update'); }
+      txFailedCb: () => {
+        console.log('set offChain schema fail'); errorCallback && errorCallback();
+      },
+      txStartCb: () => {
+        console.log('set offChain schema start');
+      },
+      txSuccessCb: () => {
+        console.log('set offChain schema success'); successCallback && successCallback();
+      },
+      txUpdateCb: () => {
+        console.log('set offChain schema update');
+      }
     });
   }, [api, queueExtrinsic]);
 
@@ -191,10 +244,18 @@ export function useCollection () {
       accountId: account && account.toString(),
       extrinsic: transaction,
       isUnsigned: false,
-      txFailedCb: () => { console.log('add collection admin fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('add collection admin start'); },
-      txSuccessCb: () => { console.log('add collection admin success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('add collection admin update'); }
+      txFailedCb: () => {
+        console.log('add collection admin fail'); errorCallback && errorCallback();
+      },
+      txStartCb: () => {
+        console.log('add collection admin start');
+      },
+      txSuccessCb: () => {
+        console.log('add collection admin success'); successCallback && successCallback();
+      },
+      txUpdateCb: () => {
+        console.log('add collection admin update');
+      }
     });
   }, [api, queueExtrinsic]);
 
@@ -205,10 +266,18 @@ export function useCollection () {
       accountId: account && account.toString(),
       extrinsic: transaction,
       isUnsigned: false,
-      txFailedCb: () => { console.log('remove collection admin fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('remove collection admin start'); },
-      txSuccessCb: () => { console.log('remove collection admin success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('remove collection admin update'); }
+      txFailedCb: () => {
+        console.log('remove collection admin fail'); errorCallback && errorCallback();
+      },
+      txStartCb: () => {
+        console.log('remove collection admin start');
+      },
+      txSuccessCb: () => {
+        console.log('remove collection admin success'); successCallback && successCallback();
+      },
+      txUpdateCb: () => {
+        console.log('remove collection admin update');
+      }
     });
   }, [api, queueExtrinsic]);
 
@@ -219,24 +288,18 @@ export function useCollection () {
       accountId: account && account.toString(),
       extrinsic: transaction,
       isUnsigned: false,
-      txFailedCb: () => { console.log('set collection constOnChain fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('set collection constOnChain start'); },
-      txSuccessCb: () => { console.log('set collection constOnChain success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('set collection constOnChain update'); }
-    });
-  }, [api, queueExtrinsic]);
-
-  const saveVariableOnChainSchema = useCallback(({ account, collectionId, errorCallback, schema, successCallback }: { account: string, collectionId: string, schema: string, successCallback?: () => void, errorCallback?: () => void }) => {
-    const transaction = api.tx.nft.setVariableOnChainSchema(collectionId, schema);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { console.log('set collection varOnChain fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('set collection varOnChain start'); },
-      txSuccessCb: () => { console.log('set collection varOnChain success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('set collection varOnChain update'); }
+      txFailedCb: () => {
+        console.log('set collection constOnChain fail'); errorCallback && errorCallback();
+      },
+      txStartCb: () => {
+        console.log('set collection constOnChain start');
+      },
+      txSuccessCb: () => {
+        console.log('set collection constOnChain success'); successCallback && successCallback();
+      },
+      txUpdateCb: () => {
+        console.log('set collection constOnChain update');
+      }
     });
   }, [api, queueExtrinsic]);
 
@@ -259,25 +322,18 @@ export function useCollection () {
     return {};
   }, [api]);
 
-  const getCollectionOnChainSchema = useCallback((collectionInfo: NftCollectionInterface): { constSchema: ProtobufAttributeType | undefined, variableSchema: { collectionCover: string } | undefined } => {
+  const getCollectionOnChainSchema = useCallback((collectionInfo: NftCollectionInterface): { constSchema: ProtobufAttributeType | undefined } => {
     const result: {
       constSchema: ProtobufAttributeType | undefined,
-      variableSchema: { collectionCover: string } | undefined,
     } = {
-      constSchema: undefined,
-      variableSchema: undefined
+      constSchema: undefined
     };
 
     try {
       const constSchema = hex2a(collectionInfo.constOnChainSchema);
-      const varSchema = hex2a(collectionInfo.variableOnChainSchema);
 
       if (constSchema && constSchema.length) {
         result.constSchema = JSON.parse(constSchema) as ProtobufAttributeType;
-      }
-
-      if (varSchema && varSchema.length) {
-        result.variableSchema = JSON.parse(varSchema) as { collectionCover: string } | undefined;
       }
 
       return result;
@@ -315,7 +371,6 @@ export function useCollection () {
     removeCollectionAdmin,
     removeCollectionSponsor,
     saveConstOnChainSchema,
-    saveVariableOnChainSchema,
     setCollectionSponsor,
     setOffChainSchema,
     setSchemaVersion
