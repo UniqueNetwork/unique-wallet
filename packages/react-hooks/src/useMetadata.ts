@@ -100,8 +100,8 @@ export const useMetadata = (): UseMetadataInterface => {
   }, [hex2a, setUnique, tokenImageUrl]);
 
   const getCollectionCoverImageUrl = useCallback(async (collectionInfo: NftCollectionInterface): Promise<string> => {
-    if (collectionInfo?.properties && hex2a(collectionInfo?.properties.coverImageURL)) {
-      const image = hex2a(collectionInfo?.properties.coverImageURL);
+    if (collectionInfo?.properties) {
+      const image = hex2a(collectionInfo?.properties.coverImageURL) ?? '';
 
       return `${ipfsGateway}/${image}`;
     } else {
