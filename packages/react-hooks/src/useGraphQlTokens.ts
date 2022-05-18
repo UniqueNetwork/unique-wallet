@@ -28,17 +28,24 @@ const USER_TOKENS = gql`
   query Tokens($limit: Int!, $offset: Int!, $order: order_by!, $owner: String!, $collectionIds: [bigint!]) {
      tokens(limit: $limit, where: {
         _and: [
-          { owner: { _eq: $owner } }
+          _or: [
+            { owner: { _eq: $owner } },
+            { owner_normalized: { _eq: $owner } }
+          ]
           { collection_id: {_in: $collectionIds }}
         ]
       }, order_by: { token_id: $order }, offset: $offset) {
       collection_id
       owner
+      owner_normalized
       token_id
     }
     tokens_aggregate( where: {
         _and: [
-          { owner: { _eq: $owner } }
+         _or: [
+            { owner: { _eq: $owner } },
+            { owner_normalized: { _eq: $owner } }
+          ]
           { collection_id: {_in: $collectionIds }}
         ]
       }) {

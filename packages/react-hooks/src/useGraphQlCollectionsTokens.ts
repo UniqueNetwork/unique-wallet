@@ -30,9 +30,14 @@ export type UseGraphQlInterface = {
 
 const USER_COLLECTIONS_TOKENS = gql`
   query Tokens($owner: String!) {
-     tokens(distinct_on: [collection_id], where: { owner: { _eq: $owner } }, order_by: { collection_id: desc }) {
+     tokens(distinct_on: [collection_id], where: { _or: [
+          { owner: { _eq: $owner } },
+          { owner_normalized: { _eq: $owner } }
+        ]
+      }, order_by: { collection_id: desc }) {
       collection_id
       owner
+      owner_normalized
       token_id
     }
   }
