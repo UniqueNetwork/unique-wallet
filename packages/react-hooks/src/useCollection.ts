@@ -60,7 +60,7 @@ export interface NftCollectionInterface {
     ownerCanDestroy: boolean;
   },
   constOnChainSchema: string;
-  properties: NftCollectionProperty[];
+  properties: [NftCollectionProperty];
   tokenPropertyPermissions: NftCollectionPropertyPermission;
 }
 
