@@ -63,5 +63,3 @@ export const useGraphQlTokens = (limit: number, offset: number, order: 'desc' | 
     userTokensLoading
   };
 };
-
-export default useGraphQlTokens;

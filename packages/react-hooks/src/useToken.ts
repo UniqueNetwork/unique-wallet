@@ -11,7 +11,7 @@ import { normalizeAccountId } from './utils';
 export interface TokenDetailsInterface {
   owner?: { Ethereum?: string, Substrate?: string };
   constData?: string;
-  properties?: Record<string, string>;
+  properties?: Record<string, string>[];
 }
 
 interface UseTokenInterface {

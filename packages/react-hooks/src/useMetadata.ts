@@ -13,14 +13,12 @@ import { useDecoder } from '@polkadot/react-hooks/useDecoder';
 import { AttributesDecoded } from '@polkadot/react-hooks/useSchema';
 import { useToken } from '@polkadot/react-hooks/useToken';
 
-import { useCollection } from '.';
-
 const { ipfsGateway } = envConfig;
 
 interface UseMetadataInterface {
   decodeStruct: ({ attr, data }: { attr?: any, data?: string }) => AttributesDecoded;
   getAndParseOffchainSchemaMetadata: (collectionInfo: NftCollectionInterface) => Promise<{ metadata: string, metadataJson: MetadataJsonType }>
-  getOnChainSchema: (collectionInfo: NftCollectionInterface) => { attributesConst: string, attributesVar: string };
+  getOnChainSchema: (collectionInfo: NftCollectionInterface) => { attributesConst: string };
   getTokenAttributes: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<AttributesDecoded>;
   getTokenImageUrl: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<string>;
   getCollectionCoverImageUrl: (collectionInfo: NftCollectionInterface) => Promise<string>;
@@ -38,7 +36,6 @@ export type MetadataJsonType = {
 export const useMetadata = (): UseMetadataInterface => {
   const { hex2a } = useDecoder();
   const { getDetailedTokenInfo } = useToken();
-  const { getCollectionOnChainSchema } = useCollection();
 
   const decodeStruct = useCallback(({ attr, data }: { attr?: string, data?: string }): AttributesDecoded => {
     if (attr && data) {
@@ -100,14 +97,14 @@ export const useMetadata = (): UseMetadataInterface => {
   }, [hex2a, setUnique, tokenImageUrl]);
 
   const getCollectionCoverImageUrl = useCallback(async (collectionInfo: NftCollectionInterface): Promise<string> => {
-    if (collectionInfo?.properties) {
-      const image = hex2a(collectionInfo?.properties.coverImageURL) ?? '';
+    const image = collectionInfo?.properties?.find((prop) => prop.coverImageURL)?.coverImageURL;
 
+    if (image) {
       return `${ipfsGateway}/${image}`;
     } else {
       return await getTokenImageUrl(collectionInfo, '1');
     }
-  }, [getTokenImageUrl, hex2a]);
+  }, [getTokenImageUrl]);
 
   const getAndParseOffchainSchemaMetadata = useCallback(async (collectionInfo: NftCollectionInterface) => {
     try {
@@ -133,7 +130,7 @@ export const useMetadata = (): UseMetadataInterface => {
   const getOnChainSchema = useCallback((collectionInf: NftCollectionInterface): { attributesConst: string } => {
     if (collectionInf) {
       return {
-        attributesConst: hex2a(collectionInf.constOnChainSchema),
+        attributesConst: hex2a(collectionInf.constOnChainSchema)
       };
     }
 
@@ -161,7 +158,7 @@ export const useMetadata = (): UseMetadataInterface => {
     const tokenDetails = await getTokenDetails(collectionInfo, tokenId);
 
     return {
-      ...decodeStruct({ attr: onChainSchema.attributesConst, data: tokenDetails?.constData }),
+      ...decodeStruct({ attr: onChainSchema.attributesConst, data: tokenDetails?.constData })
     };
   }, [getOnChainSchema, getTokenDetails, decodeStruct]);
 

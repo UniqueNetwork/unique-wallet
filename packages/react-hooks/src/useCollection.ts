@@ -12,8 +12,19 @@ import { strToUTF16 } from '@polkadot/react-hooks/utils';
 
 export type SchemaVersionTypes = 'Custom' | 'ImageURL' | 'TokenURI' | 'Unique';
 
-export interface NftCollectionProperties {
-  coverImageURL: string;
+// Record<string, string>;
+export interface NftCollectionProperty {
+  coverImageURL: string | null;
+}
+
+// Record<string, 'None' | 'AdminConst' | 'ItemOwnerConst' | 'ItemOwner' | 'ItemOwnerOrAdmin' | 'Admin'>
+export interface NftCollectionPropertyPermission {
+  key: 'image';
+  permission: {
+    mutable: false;
+    collectionAdmin: true;
+    tokenOwner: false;
+  }
 }
 
 export interface NftCollectionInterface {
@@ -49,8 +60,8 @@ export interface NftCollectionInterface {
     ownerCanDestroy: boolean;
   },
   constOnChainSchema: string;
-  properties: NftCollectionProperties; // Record<string, string>;
-  tokenPropertyPermissions: Record<string, 'None' | 'AdminConst' | 'ItemOwnerConst' | 'ItemOwner' | 'ItemOwnerOrAdmin' | 'Admin'>;
+  properties: NftCollectionProperty[];
+  tokenPropertyPermissions: NftCollectionPropertyPermission;
 }
 
 interface TransactionCallBacks {

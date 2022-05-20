@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
@@ -6,9 +6,9 @@ import type { ErrorType } from '@polkadot/react-hooks/useFetch';
 import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
 
 import BN from 'bn.js';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { useApi, useCollection, useIsMountedRef /*, useFetch */ } from '@polkadot/react-hooks';
+import { useApi, useCollection, useIsMountedRef } from '@polkadot/react-hooks';
 
 export type MetadataType = {
   metadata?: string;
@@ -50,7 +50,10 @@ export function useCollections () {
 
     try {
       mountedRef.current && setCollectionsLoading(true);
-      const createdCollectionCount = (await api.query.nft.createdCollectionCount() as unknown as BN).toNumber();
+      const createdCollectionCount = (await api.rpc.unique.collectionStats() as unknown as { created: BN }).created.toNumber();
+
+      console.log('createdCollectionCount', createdCollectionCount);
+
       const destroyedCollectionCount = (await api.query.nft.destroyedCollectionCount() as unknown as BN).toNumber();
       const collectionsCount = createdCollectionCount - destroyedCollectionCount;
       const collections: Array<NftCollectionInterface> = [];
@@ -92,6 +95,8 @@ export function useCollections () {
       for (let i = 0; i < collectionIdsList.length; i++) {
         const mintCollectionInfo = await getDetailedCollectionInfo(collectionIdsList[i]) as unknown as NftCollectionInterface;
 
+        console.log('mintCollectionInfo', mintCollectionInfo);
+
         if (mintCollectionInfo && mintCollectionInfo.owner && mintCollectionInfo.owner.toString() !== '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM' && !collections.find((collection) => collection.id === collectionIdsList[i])) {
           collections.push({ ...mintCollectionInfo, id: collectionIdsList[i] });
         }
@@ -104,6 +109,10 @@ export function useCollections () {
       return [];
     }
   }, [getDetailedCollectionInfo]);
+
+  useEffect(() => {
+    presetCollections([1, 2, 3]);
+  }, [presetCollections]);
 
   return {
     collectionsLoading,
