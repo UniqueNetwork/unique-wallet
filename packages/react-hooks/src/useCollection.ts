@@ -82,9 +82,9 @@ export function useCollection () {
     }
 
     try {
-      return await api.query.nft.itemListIndex(collectionId);
+      return ((await api.rpc.unique.lastTokenId(collectionId)) as unknown as BN).toNumber();
     } catch (e) {
-      console.log('getTokensOfCollection error', e);
+      console.log('getCollectionTokensCount error', e);
     }
 
     return 0;
@@ -92,7 +92,7 @@ export function useCollection () {
 
   const getCreatedCollectionCount = useCallback(async () => {
     try {
-      return (await api.rpc.unique.collectionStats()).created.toNumber();
+      return (await api.rpc.unique.collectionStats() as unknown as { created: BN }).created.toNumber();
     } catch (e) {
       console.log('getCreatedCollectionCount error', e);
     }
@@ -355,20 +355,6 @@ export function useCollection () {
     return result;
   }, [hex2a]);
 
-  const getTokensOfCollection = useCallback(async (collectionId: string, ownerId: string) => {
-    if (!api || !collectionId || !ownerId) {
-      return [];
-    }
-
-    try {
-      return await api.query.unique.accountTokens(collectionId, { Substrate: ownerId });
-    } catch (e) {
-      console.log('getTokensOfCollection error', e);
-    }
-
-    return [];
-  }, [api]);
-
   return {
     addCollectionAdmin,
     confirmSponsorship,
@@ -378,7 +364,6 @@ export function useCollection () {
     getCollectionTokensCount,
     getCreatedCollectionCount,
     getDetailedCollectionInfo,
-    getTokensOfCollection,
     removeCollectionAdmin,
     removeCollectionSponsor,
     saveConstOnChainSchema,

@@ -29,20 +29,6 @@ export function useCollections () {
   const [collectionsLoading, setCollectionsLoading] = useState<boolean>(false);
   const { getDetailedCollectionInfo } = useCollection();
 
-  const getTokensOfCollection = useCallback(async (collectionId: string, ownerId: string) => {
-    if (!api || !collectionId || !ownerId) {
-      return [];
-    }
-
-    try {
-      return (await api.query.nft.addressTokens(collectionId, ownerId)).toJSON();
-    } catch (e) {
-      console.log('getTokensOfCollection error', e);
-    }
-
-    return [];
-  }, [api]);
-
   const presetTokensCollections = useCallback(async (): Promise<NftCollectionInterface[]> => {
     if (!api) {
       return [];
@@ -54,7 +40,7 @@ export function useCollections () {
 
       console.log('createdCollectionCount', createdCollectionCount);
 
-      const destroyedCollectionCount = (await api.query.nft.destroyedCollectionCount() as unknown as BN).toNumber();
+      const destroyedCollectionCount = (await api.rpc.unique.collectionStats() as unknown as { destroyed: BN }).destroyed.toNumber();
       const collectionsCount = createdCollectionCount - destroyedCollectionCount;
       const collections: Array<NftCollectionInterface> = [];
 
@@ -78,13 +64,13 @@ export function useCollections () {
 
   const getCollectionWithTokenCount = useCallback(async (collectionId: string): Promise<CollectionWithTokensCount> => {
     const info = (await getDetailedCollectionInfo(collectionId)) as unknown as NftCollectionInterface;
-    const tokenCount = ((await api.query.nft.itemListIndex(collectionId)) as unknown as BN).toNumber();
+    const tokenCount = ((await api.rpc.unique.lastTokenId(collectionId)) as unknown as BN).toNumber();
 
     return {
       info,
       tokenCount
     };
-  }, [api.query.nft, getDetailedCollectionInfo]);
+  }, [api.rpc.unique, getDetailedCollectionInfo]);
 
   const presetCollections = useCallback(async (collectionIds: number[]): Promise<NftCollectionInterface[]> => {
     try {
@@ -111,7 +97,7 @@ export function useCollections () {
   }, [getDetailedCollectionInfo]);
 
   useEffect(() => {
-    presetCollections([1, 2, 3]);
+    void presetCollections([1, 2, 3]);
   }, [presetCollections]);
 
   return {
@@ -119,7 +105,6 @@ export function useCollections () {
     error,
     getCollectionWithTokenCount,
     getDetailedCollectionInfo,
-    getTokensOfCollection,
     presetCollections,
     presetTokensCollections
   };
