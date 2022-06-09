@@ -25,7 +25,7 @@ function GetKSMModal ({ onClose }: Props): React.ReactElement<Props> {
       containerNode,
       hostApiKey: envConfig.rampApiKey as string ?? '',
       hostAppName: 'Unique Marketplace',
-      hostLogoUrl: 'https://uniquescan.io/logos/unique.svg',
+      hostLogoUrl: 'https://wallet.unique.network/logos/unique_logo.svg',
       swapAsset: 'KSM',
       variant: 'embedded-mobile'
     });

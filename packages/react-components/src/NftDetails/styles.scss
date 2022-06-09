@@ -29,20 +29,19 @@
     margin-top: 40px;
 
     &--row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-column-gap: calc(var(--gap) * 2);
+      display: flex;
+      align-items: start;
 
       &--image {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        flex: 1 1 0px;
+        margin-right: 40px;
         background-color: var(--card-background);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         border-radius: 4px;
       }
 
       &--attributes {
+        flex: 1 1 0px;
 
         &--block {
           padding: calc(var(--gap) * 2);
