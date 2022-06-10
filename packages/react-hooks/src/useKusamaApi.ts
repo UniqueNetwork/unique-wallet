@@ -41,10 +41,18 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
         extrinsic: api.tx.balances
           .transfer(recipient, value),
         isUnsigned: false,
-        txFailedCb: () => { onFail('SEND_MONEY_FAIL'); },
-        txStartCb: () => { onSuccess('SEND_MONEY_SUCCESS'); },
-        txSuccessCb: () => { console.log('success'); },
-        txUpdateCb: () => { console.log('update'); }
+        txFailedCb: () => {
+          onFail('SEND_MONEY_FAIL');
+        },
+        txStartCb: () => {
+          onSuccess('SEND_MONEY_SUCCESS');
+        },
+        txSuccessCb: () => {
+          console.log('success');
+        },
+        txUpdateCb: () => {
+          console.log('update');
+        }
       });
     }
   }, [api, encodedKusamaAccount, queueExtrinsic]);
@@ -56,7 +64,7 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
       return transferFee.partialFee;
     }
 
-return null;
+    return null;
   }, [encodedKusamaAccount, api]);
 
   const initKusamaApi = useCallback(() => {
