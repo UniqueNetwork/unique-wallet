@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import BN from 'bn.js';
@@ -54,7 +54,9 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
       const transferFee = await api.tx.balances.transfer(recipient, value).paymentInfo(encodedKusamaAccount) as { partialFee: BN };
 
       return transferFee.partialFee;
-    } else return null;
+    }
+
+return null;
   }, [encodedKusamaAccount, api]);
 
   const initKusamaApi = useCallback(() => {
