@@ -4,62 +4,58 @@
 import { useCallback } from 'react';
 
 import { useApi } from '@polkadot/react-hooks/useApi';
-import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+import { useCollection } from '@polkadot/react-hooks/useCollection';
+import { useMetadata } from '@polkadot/react-hooks/useMetadata';
 
-import { normalizeAccountId } from './utils';
-
-export interface TokenDetailsInterface {
-  owner?: { Ethereum?: string, Substrate?: string };
-  constData?: string;
-  properties?: Record<string, string>[];
-}
+import { AttributesDecoded, NftCollectionInterface, TokenDetailsInterface } from './nftTypes';
 
 interface UseTokenInterface {
-  getDetailedTokenInfo: (collectionId: string, tokenId: string) => Promise<TokenDetailsInterface>
-  getTokenInfo: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<TokenDetailsInterface>;
+  getDetailedTokenInfo: (collectionId: string, tokenId: string) => Promise<TokenDetailsInterface | null>
+  getTokenAttributes: (collectionInfo: NftCollectionInterface, tokenId: string) => Promise<AttributesDecoded>;
 }
 
 export function useToken (): UseTokenInterface {
   const { api } = useApi();
+  const { getCollectionOnChainSchema } = useCollection();
+  const { decodeStruct } = useMetadata();
 
-  const getDetailedTokenInfo = useCallback(async (collectionId: string, tokenId: string): Promise<TokenDetailsInterface> => {
+  const getTokenPropertyValueByKey = useCallback((tokenInfo: TokenDetailsInterface, key: string) => {
+    return tokenInfo?.properties.find((property) => property.key === key)?.value;
+  }, []);
+
+  const getDetailedTokenInfo = useCallback(async (collectionId: string, tokenId: string): Promise<TokenDetailsInterface | null> => {
     if (!api) {
-      return {};
+      return null;
     }
 
     try {
-      let tokenDetailsData: TokenDetailsInterface = {};
-
-      const constData: string = (await api.rpc.unique.constMetadata(collectionId, tokenId)).toJSON() as string;
-      const crossAccount = normalizeAccountId((await api.query.nonfungible.tokenData(collectionId, tokenId)).toJSON().owner as string) as { Substrate?: string, Ethereum?: string };
-
-      tokenDetailsData = {
-        constData,
-        owner: crossAccount,
-      };
-
-      return tokenDetailsData;
+      return (await api.rpc.unique.tokenData(collectionId, tokenId)).toHuman() as TokenDetailsInterface;
     } catch (e) {
       console.log('getDetailedTokenInfo error', e);
 
-      return {};
+      return null;
     }
   }, [api]);
 
-  const getTokenInfo = useCallback(async (collectionInfo: NftCollectionInterface, tokenId: string): Promise<TokenDetailsInterface> => {
-    let tokenDetailsData: TokenDetailsInterface = {};
+  const getTokenAttributes = useCallback(async (collectionInfo: NftCollectionInterface, tokenId: string): Promise<AttributesDecoded> => {
+    const onChainSchema = getCollectionOnChainSchema(collectionInfo);
+    const tokenDetails = await getDetailedTokenInfo(collectionInfo.id, tokenId);
 
-    if (tokenId && collectionInfo) {
-      if (Object.prototype.hasOwnProperty.call(collectionInfo.mode, 'nft')) {
-        tokenDetailsData = await getDetailedTokenInfo(collectionInfo.id, tokenId);
-      }
+    if (tokenDetails) {
+      const tokenConstData = getTokenPropertyValueByKey(tokenDetails, '_old_constData');
+
+      console.log('onChainSchema', onChainSchema, 'tokenDetails', tokenDetails, 'tokenConstData', tokenConstData);
+
+      return {
+        ...decodeStruct({ attr: onChainSchema.constSchema, data: tokenConstData })
+      };
     }
 
-    return tokenDetailsData;
-  }, [getDetailedTokenInfo]);
+    return {};
+  }, [decodeStruct, getCollectionOnChainSchema, getDetailedTokenInfo, getTokenPropertyValueByKey]);
 
   return {
     getDetailedTokenInfo,
-    getTokenInfo
+    getTokenAttributes
   };
 }

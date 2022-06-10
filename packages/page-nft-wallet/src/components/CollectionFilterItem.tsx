@@ -1,11 +1,10 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import React, { memo, useCallback } from 'react';
 
 import { CollectionImagesType } from '@polkadot/app-nft-wallet/components/CollectionFilter';
-import { useDecoder } from '@polkadot/react-hooks';
-import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+import { NftCollectionInterface, useDecoder } from '@polkadot/react-hooks';
 
 import collectionIcon from '../images/collectionIcon.svg';
 

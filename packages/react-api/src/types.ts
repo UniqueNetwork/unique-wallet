@@ -19,7 +19,6 @@ export interface ApiState {
   apiDefaultTxSudo: SubmittableExtrinsicFunction;
   hasInjectedAccounts: boolean;
   isApiReady: boolean;
-  isKusamaApiReady: boolean;
   isDevelopment: boolean;
   isEthereum: boolean;
   systemChain: string;

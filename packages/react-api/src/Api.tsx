@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/react-api authors & contributors
+// Copyright 2017-2022 @polkadot/react-api authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type BN from 'bn.js';
@@ -7,30 +7,25 @@ import type { ChainProperties, ChainType } from '@polkadot/types/interfaces';
 import type { KeyringStore } from '@polkadot/ui-keyring/types';
 import type { ApiProps, ApiState } from './types';
 
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import store from 'store';
 
 import { ApiPromise } from '@polkadot/api/promise';
 import { deriveMapCache, setDeriveCache } from '@polkadot/api-derive/util';
 import { ethereumChains, typesBundle, typesChain } from '@polkadot/apps-config';
-import envConfig from '@polkadot/apps-config/envConfig';
 import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
 import { TokenUnit } from '@polkadot/react-components/InputNumber';
 import { StatusContext } from '@polkadot/react-components/Status';
 import ApiSigner from '@polkadot/react-signer/signers/ApiSigner';
 import { WsProvider } from '@polkadot/rpc-provider';
-import { TypeRegistry } from '@polkadot/types/create';
 import { keyring } from '@polkadot/ui-keyring';
 import { settings } from '@polkadot/ui-settings';
 import { formatBalance, isTestChain } from '@polkadot/util';
 import { defaults as addressDefaults } from '@polkadot/util-crypto/address/defaults';
 
 import ApiContext from './ApiContext';
+import registry from './typeRegistry';
 import { decodeUrlTypes } from './urlTypes';
-
-const { kusamaApiUrl } = envConfig;
-const registry = new TypeRegistry();
-const kusamaRegistry = new TypeRegistry();
 
 interface Props {
   children: React.ReactNode;
@@ -61,9 +56,8 @@ export const DEFAULT_SS58 = registry.createType('u32', addressDefaults.prefix);
 export const DEFAULT_AUX = ['Aux1', 'Aux2', 'Aux3', 'Aux4', 'Aux5', 'Aux6', 'Aux7', 'Aux8', 'Aux9'];
 
 let api: ApiPromise;
-let kusamaApi: ApiPromise;
 
-export { api, kusamaApi };
+export { api };
 
 function isKeyringLoaded () {
   try {
@@ -81,22 +75,6 @@ function getDevTypes (): Record<string, Record<string, string>> {
 
   return types;
 }
-
-const collectionParam = { name: 'collection', type: 'UpDataStructsCollectionId' };
-
-type RpcParam = {
-  name: string;
-  type: string;
-  isOptional?: true;
-};
-
-const atParam = { isOptional: true, name: 'at', type: 'Hash' };
-
-const fun = (description: string, params: RpcParam[], type: string) => ({
-  description,
-  params: [...params, atParam],
-  type
-});
 
 async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]>): Promise<InjectedAccountExt[]> {
   try {
@@ -200,42 +178,15 @@ async function loadOnReady (api: ApiPromise, injectedPromise: Promise<InjectedEx
 function Api ({ children, store, url }: Props): React.ReactElement<Props> | null {
   const { queuePayload, queueSetTxStatus } = useContext(StatusContext);
   const [state, setState] = useState<ApiState>({ hasInjectedAccounts: false, isApiReady: false } as unknown as ApiState);
-
   const [isApiConnected, setIsApiConnected] = useState(false);
   const [isApiInitialized, setIsApiInitialized] = useState(false);
   const [apiError, setApiError] = useState<null | string>(null);
-
-  const [isKusamaApiConnected, setIsKusamaApiConnected] = useState(false);
-  const [isKusamaApiInitialized, setIsKusamaApiInitialized] = useState(false);
-  const [kusamaApiError, setIsKusamaApiError] = useState<null | string>(null);
-
   const [extensions, setExtensions] = useState<InjectedExtension[] | undefined>();
 
   const value = useMemo<ApiProps>(
-    () => ({ ...state, api, apiError, extensions, isApiConnected, isApiInitialized, isKusamaApiConnected, isKusamaApiInitialized, isWaitingInjected: !extensions, kusamaApi, kusamaApiError }),
-    [apiError, extensions, isApiConnected, isApiInitialized, isKusamaApiConnected, isKusamaApiInitialized, kusamaApiError, state]
+    () => ({ ...state, api, apiError, extensions, isApiConnected, isApiInitialized, isWaitingInjected: !extensions }),
+    [apiError, extensions, isApiConnected, isApiInitialized, state]
   );
-
-  const initKusamaApi = useCallback(() => {
-    const provider = new WsProvider(kusamaApiUrl);
-    const signer = new ApiSigner(registry, queuePayload, queueSetTxStatus);
-    const types = getDevTypes();
-
-    kusamaApi = new ApiPromise({ provider, registry: kusamaRegistry, signer, types, typesBundle, typesChain });
-
-    kusamaApi.on('connected', () => setIsKusamaApiConnected(true));
-    kusamaApi.on('disconnected', () => setIsKusamaApiConnected(false));
-    kusamaApi.on('error', (error: Error) => setIsKusamaApiError(error.message));
-    kusamaApi.on('ready', (): void => {
-      setState((prevState) => ({
-        isKusamaApiReady: true,
-        ...prevState
-      }));
-    });
-
-    setIsKusamaApiInitialized(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // initial initialization
   useEffect((): void => {
@@ -259,16 +210,14 @@ function Api ({ children, store, url }: Props): React.ReactElement<Props> | null
     api.on('ready', (): void => {
       const injectedPromise = web3Enable('polkadot-js/apps');
 
+      console.log('ready!');
+
       injectedPromise
         .then(setExtensions)
         .catch(console.error);
 
       loadOnReady(api, injectedPromise, store, types)
-        .then((st) => {
-          setState(st);
-
-          initKusamaApi();
-        })
+        .then(setState)
         .catch((error): void => {
           console.error(error);
 
@@ -277,7 +226,7 @@ function Api ({ children, store, url }: Props): React.ReactElement<Props> | null
     });
 
     setIsApiInitialized(true);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!value.isApiInitialized) {

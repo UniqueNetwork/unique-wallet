@@ -1,6 +1,7 @@
-// Copyright 2017-2021 @polkadot/react-hooks authors & contributors
+// Copyright 2017-2022 @polkadot/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+export * from './nftTypes';
 export { useAccountInfo } from './useAccountInfo';
 export { useAccounts } from './useAccounts';
 export { useAddresses } from './useAddresses';
@@ -12,6 +13,7 @@ export { useBlockTime } from './useBlockTime';
 export { useCacheKey } from './useCacheKey';
 export { useCall } from './useCall';
 export { useCollection } from './useCollection';
+export { useCollectionCover } from './useCollectionCover';
 export { useCollections } from './useCollections';
 export { useDecoder } from './useDecoder';
 export { useFetch } from './useFetch';

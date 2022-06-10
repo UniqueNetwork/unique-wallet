@@ -1,9 +1,9 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import './styles.scss';
 
-import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+import type { NftCollectionInterface } from '@polkadot/react-hooks';
 
 import React, { useCallback, useContext, useState } from 'react';
 import Form from 'semantic-ui-react/dist/commonjs/collections/Form/Form';
@@ -38,8 +38,12 @@ function TransferModal ({ account, closeModal, collection, tokenId, updateTokens
       accountId: account && account.toString(),
       extrinsic: api.tx.unique.transfer({ Substrate: recipient }, collection.id, tokenId, 1),
       isUnsigned: false,
-      txStartCb: () => { closeModal(); },
-      txSuccessCb: () => { updateTokens(collection.id); }
+      txStartCb: () => {
+        closeModal();
+      },
+      txSuccessCb: () => {
+        updateTokens(collection.id);
+      }
     });
   }, [account, api, closeModal, collection, recipient, tokenId, updateTokens, queueExtrinsic]);
 
