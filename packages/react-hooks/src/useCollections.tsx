@@ -5,7 +5,7 @@ import type { ErrorType } from '@polkadot/react-hooks/useFetch';
 import type { NftCollectionInterface, TokenDetailsInterface } from './nftTypes';
 
 import BN from 'bn.js';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useApi, useCollection, useIsMountedRef } from '@polkadot/react-hooks';
 
@@ -94,10 +94,6 @@ export function useCollections () {
       return [];
     }
   }, [getDetailedCollectionInfo]);
-
-  useEffect(() => {
-    void presetCollections([1, 2, 3]);
-  }, [presetCollections]);
 
   return {
     collectionsLoading,

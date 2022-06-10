@@ -13,21 +13,23 @@ export function useCollectionCover (collectionInfo: NftCollectionInterface | und
   const { getCollectionPropertyValueByKey } = useCollection();
 
   const fillCollectionCover = useCallback(() => {
+    if (!collectionInfo) {
+      return;
+    }
+
     try {
-      if (collectionInfo) {
-        const coverImgObj = getCollectionPropertyValueByKey(collectionInfo, '_old_variableOnChainSchema');
+      const coverImgObj = getCollectionPropertyValueByKey(collectionInfo, '_old_variableOnChainSchema');
 
-        if (!coverImgObj) {
-          return;
-        }
+      if (!coverImgObj) {
+        return;
+      }
 
-        const coverImgJson = JSON.parse(coverImgObj) as { collectionCover: string };
+      const coverImgJson = JSON.parse(coverImgObj) as { collectionCover: string };
 
-        if (coverImgJson?.collectionCover) {
-          setImgUrl(`${ipfsGateway}/${coverImgJson?.collectionCover}`);
-        } else {
-          console.log('onChainSchema is empty');
-        }
+      if (coverImgJson?.collectionCover) {
+        setImgUrl(`${ipfsGateway}/${coverImgJson?.collectionCover}`);
+      } else {
+        console.log('onChainSchema is empty');
       }
     } catch (e) {
       console.log('fillCollectionCover error', e);
