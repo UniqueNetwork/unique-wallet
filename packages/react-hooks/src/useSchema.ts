@@ -1,28 +1,22 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
-import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
+import type { AttributesDecoded, NftCollectionInterface, TokenDetailsInterface } from './nftTypes';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import envConfig from '@polkadot/apps-config/envConfig';
-import { useIsMountedRef, useMetadata, useToken } from '@polkadot/react-hooks';
-import { useCollection } from '@polkadot/react-hooks/useCollection';
+import { useCollection, useIsMountedRef, useToken } from '@polkadot/react-hooks';
 
 const { ipfsGateway } = envConfig;
-
-export type AttributesDecoded = {
-  [key: string]: string | string[],
-}
 
 interface UseSchemaInterface {
   attributes?: AttributesDecoded;
   attributesConst?: string;
   attributesVar?: string;
   collectionInfo?: NftCollectionInterface;
-  getCollectionInfo: () => void;
-  getTokenDetails: () => void;
+  getCollectionInfo: () => Promise<void>;
+  getTokenDetails: () => Promise<void>;
   tokenDetails?: TokenDetailsInterface;
   tokenName: { name: string, value: string } | null;
   tokenUrl: string;
@@ -36,11 +30,11 @@ export function useSchema (account: string | undefined, collectionId: string, to
   const [tokenUrl, setTokenUrl] = useState<string>('');
   const [attributes, setAttributes] = useState<AttributesDecoded>();
   const [tokenDetails, setTokenDetails] = useState<TokenDetailsInterface>();
-  const { getTokenInfo } = useToken();
-  const { getDetailedCollectionInfo } = useCollection();
+  const { getDetailedTokenInfo } = useToken();
+  const { getCollectionPropertyValueByKey, getDetailedCollectionInfo, getTokenImageUrl } = useCollection();
   const mountedRef = useIsMountedRef();
   const cleanup = useRef<boolean>(false);
-  const { getTokenAttributes, getTokenImageUrl } = useMetadata();
+  const { getTokenAttributes } = useToken();
 
   const tokenName = useMemo(() => {
     if (attributes) {
@@ -72,16 +66,16 @@ export function useSchema (account: string | undefined, collectionId: string, to
   }, [collectionId, getDetailedCollectionInfo]);
 
   const getTokenDetails = useCallback(async () => {
-    if (tokenId && collectionInfo) {
-      const tokenDetailsData = await getTokenInfo(collectionInfo, tokenId.toString());
+    if (tokenId && collectionId) {
+      const tokenDetailsData = await getDetailedTokenInfo(collectionId, tokenId.toString());
 
-      if (cleanup.current) {
+      if (cleanup.current || !tokenDetailsData) {
         return;
       }
 
       setTokenDetails(tokenDetailsData);
     }
-  }, [collectionInfo, getTokenInfo, tokenId]);
+  }, [collectionId, getDetailedTokenInfo, tokenId]);
 
   const mergeTokenAttributes = useCallback(async () => {
     if (collectionInfo && tokenId) {
@@ -99,7 +93,9 @@ export function useSchema (account: string | undefined, collectionId: string, to
     let tokenImageUrl: string;
     let ipfsJson: IpfsJsonType;
 
-    if (collectionInf.schemaVersion === 'Unique' && attributes?.ipfsJson) {
+    const schemaVersion = getCollectionPropertyValueByKey(collectionInf, '_old_schemaVersion');
+
+    if (schemaVersion === 'Unique' && attributes?.ipfsJson) {
       try {
         ipfsJson = JSON.parse(attributes.ipfsJson as string) as IpfsJsonType;
         tokenImageUrl = `${ipfsGateway}/${ipfsJson?.ipfs}`;
@@ -113,7 +109,7 @@ export function useSchema (account: string | undefined, collectionId: string, to
     }
 
     mountedRef.current && setTokenUrl(tokenImageUrl);
-  }, [attributes, getTokenImageUrl, mountedRef]);
+  }, [attributes?.ipfsJson, getCollectionPropertyValueByKey, getTokenImageUrl, mountedRef]);
 
   useEffect(() => {
     if (collectionInfo) {

@@ -1,63 +1,20 @@
 // Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import BN from 'bn.js';
-import { useCallback, useContext } from 'react';
+import type { NftCollectionInterface } from './nftTypes';
 
-import { StatusContext } from '@polkadot/react-components';
+import BN from 'bn.js';
+import { useCallback } from 'react';
+
+import envConfig from '@polkadot/apps-config/envConfig';
 import { ProtobufAttributeType } from '@polkadot/react-components/util/protobufUtils';
 import { useApi } from '@polkadot/react-hooks/useApi';
 import { useDecoder } from '@polkadot/react-hooks/useDecoder';
-import { strToUTF16 } from '@polkadot/react-hooks/utils';
 
-export type SchemaVersionTypes = 'Custom' | 'ImageURL' | 'TokenURI' | 'Unique';
-
-export interface NftCollectionInterface {
-  access?: 'Normal' | 'WhiteList'
-  id: string;
-  decimalPoints: BN | number;
-  description: number[];
-  tokenPrefix: string;
-  mintMode?: boolean;
-  mode: {
-    nft: null;
-    fungible: null;
-    reFungible: null;
-    invalid: null;
-  };
-  name: number[];
-  offchainSchema: string;
-  owner?: string;
-  schemaVersion: SchemaVersionTypes;
-  sponsorship: {
-    confirmed?: string;
-    disabled?: string | null;
-    unconfirmed?: string | null;
-  };
-  limits?: {
-    accountTokenOwnershipLimit: string;
-    sponsoredDataSize: string;
-    sponsoredDataRateLimit: string;
-    sponsoredMintSize: string;
-    tokenLimit: string;
-    sponsorTimeout: string;
-    ownerCanTransfer: boolean;
-    ownerCanDestroy: boolean;
-  },
-  variableOnChainSchema: string;
-  constOnChainSchema: string;
-}
-
-interface TransactionCallBacks {
-  onFailed?: () => void;
-  onStart?: () => void;
-  onSuccess?: () => void;
-  onUpdate?: () => void;
-}
+const { ipfsGateway } = envConfig;
 
 export function useCollection () {
   const { api } = useApi();
-  const { queueExtrinsic } = useContext(StatusContext);
   const { hex2a } = useDecoder();
 
   const getCollectionTokensCount = useCallback(async (collectionId: string) => {
@@ -66,9 +23,9 @@ export function useCollection () {
     }
 
     try {
-      return await api.query.nft.itemListIndex(collectionId);
+      return ((await api.rpc.unique.lastTokenId(collectionId)) as unknown as BN).toNumber();
     } catch (e) {
-      console.log('getTokensOfCollection error', e);
+      console.log('getCollectionTokensCount error', e);
     }
 
     return 0;
@@ -76,7 +33,7 @@ export function useCollection () {
 
   const getCreatedCollectionCount = useCallback(async () => {
     try {
-      return (await api.rpc.unique.collectionStats()).created.toNumber();
+      return (await api.rpc.unique.collectionStats() as unknown as { created: BN }).created.toNumber();
     } catch (e) {
       console.log('getCreatedCollectionCount error', e);
     }
@@ -84,169 +41,13 @@ export function useCollection () {
     return 0;
   }, [api]);
 
-  const createCollection = useCallback((account: string, { description, modeprm, name, tokenPrefix }: { name: string, description: string, tokenPrefix: string, modeprm: { nft?: null, fungible?: null, refungible?: null, invalid?: null }}, callBacks?: TransactionCallBacks) => {
-    const transaction = api.tx.nft.createCollection(strToUTF16(name), strToUTF16(description), strToUTF16(tokenPrefix), modeprm);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { callBacks?.onFailed && callBacks.onFailed(); console.log('create collection failed'); },
-      txStartCb: () => { callBacks?.onStart && callBacks.onStart(); console.log('create collection start'); },
-      txSuccessCb: () => { callBacks?.onSuccess && callBacks.onSuccess(); console.log('create collection success'); },
-      txUpdateCb: () => { callBacks?.onUpdate && callBacks.onUpdate(); console.log('create collection update'); }
-    });
-  }, [api, queueExtrinsic]);
-
-  const setCollectionSponsor = useCallback(({ account, collectionId, errorCallback, newSponsor, successCallback }: { account: string, collectionId: string, newSponsor: string, successCallback?: () => void, errorCallback?: () => void }) => {
-    const transaction = api.tx.nft.setCollectionSponsor(collectionId, newSponsor);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { console.log('set collection sponsor fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('set collection sponsor start'); },
-      txSuccessCb: () => { console.log('set collection sponsor success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('set collection sponsor update'); }
-    });
-  }, [api, queueExtrinsic]);
-
-  const removeCollectionSponsor = useCallback(({ account, collectionId, errorCallback, successCallback }: { account: string, collectionId: string, successCallback?: () => void, errorCallback?: () => void }) => {
-    const transaction = api.tx.nft.removeCollectionSponsor(collectionId);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { console.log('remove collection sponsor fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('remove collection sponsor start'); },
-      txSuccessCb: () => { console.log('remove collection sponsor success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('remove collection sponsor update'); }
-    });
-  }, [api, queueExtrinsic]);
-
-  const confirmSponsorship = useCallback(({ account, collectionId, errorCallback, successCallback }: { account: string, collectionId: string, successCallback?: () => void, errorCallback?: () => void }) => {
-    const transaction = api.tx.nft.confirmSponsorship(collectionId);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { console.log('confirm sponsorship fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('confirm sponsorship start'); },
-      txSuccessCb: () => { console.log('confirm sponsorship success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('confirm sponsorship update'); }
-    });
-  }, [api, queueExtrinsic]);
-
-  const getCollectionAdminList = useCallback(async (collectionId: string) => {
-    if (!api || !collectionId) {
-      return [];
-    }
-
-    try {
-      return (await api.rpc.unique.adminlist(collectionId)).toHuman() as string[];
-    } catch (e) {
-      console.log('getCollectionAdminList error', e);
-    }
-
-    return [];
-  }, [api]);
-
-  const setSchemaVersion = useCallback(({ account, collectionId, errorCallback, schemaVersion, successCallback }: { account: string, schemaVersion: SchemaVersionTypes, collectionId: string, successCallback?: () => void, errorCallback?: () => void }) => {
-    const transaction = api.tx.nft.setSchemaVersion(collectionId, schemaVersion);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { console.log('set schema version fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('set schema version  start'); },
-      txSuccessCb: () => { console.log('set schema version  success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('set schema version  update'); }
-    });
-  }, [api, queueExtrinsic]);
-
-  const setOffChainSchema = useCallback(({ account, collectionId, errorCallback, schema, successCallback }: { account: string, schema: string, collectionId: string, successCallback?: () => void, errorCallback?: () => void }) => {
-    const transaction = api.tx.nft.setOffchainSchema(collectionId, schema);
-
-    console.log('schema!!!', schema);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { console.log('set offChain schema fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('set offChain schema start'); },
-      txSuccessCb: () => { console.log('set offChain schema success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('set offChain schema update'); }
-    });
-  }, [api, queueExtrinsic]);
-
-  const addCollectionAdmin = useCallback(({ account, collectionId, errorCallback, newAdminAddress, successCallback }: { account: string, collectionId: string, newAdminAddress: string, successCallback?: () => void, errorCallback?: () => void }) => {
-    const transaction = api.tx.nft.addCollectionAdmin(collectionId, newAdminAddress);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { console.log('add collection admin fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('add collection admin start'); },
-      txSuccessCb: () => { console.log('add collection admin success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('add collection admin update'); }
-    });
-  }, [api, queueExtrinsic]);
-
-  const removeCollectionAdmin = useCallback(({ account, adminAddress, collectionId, errorCallback, successCallback }: { account: string, collectionId: string, adminAddress: string, successCallback?: () => void, errorCallback?: () => void }) => {
-    const transaction = api.tx.nft.removeCollectionAdmin(collectionId, adminAddress);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { console.log('remove collection admin fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('remove collection admin start'); },
-      txSuccessCb: () => { console.log('remove collection admin success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('remove collection admin update'); }
-    });
-  }, [api, queueExtrinsic]);
-
-  const saveConstOnChainSchema = useCallback(({ account, collectionId, errorCallback, schema, successCallback }: { account: string, collectionId: string, schema: string, successCallback?: () => void, errorCallback?: () => void }) => {
-    const transaction = api.tx.nft.setConstOnChainSchema(collectionId, schema);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { console.log('set collection constOnChain fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('set collection constOnChain start'); },
-      txSuccessCb: () => { console.log('set collection constOnChain success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('set collection constOnChain update'); }
-    });
-  }, [api, queueExtrinsic]);
-
-  const saveVariableOnChainSchema = useCallback(({ account, collectionId, errorCallback, schema, successCallback }: { account: string, collectionId: string, schema: string, successCallback?: () => void, errorCallback?: () => void }) => {
-    const transaction = api.tx.nft.setVariableOnChainSchema(collectionId, schema);
-
-    queueExtrinsic({
-      accountId: account && account.toString(),
-      extrinsic: transaction,
-      isUnsigned: false,
-      txFailedCb: () => { console.log('set collection varOnChain fail'); errorCallback && errorCallback(); },
-      txStartCb: () => { console.log('set collection varOnChain start'); },
-      txSuccessCb: () => { console.log('set collection varOnChain success'); successCallback && successCallback(); },
-      txUpdateCb: () => { console.log('set collection varOnChain update'); }
-    });
-  }, [api, queueExtrinsic]);
-
   const getDetailedCollectionInfo = useCallback(async (collectionId: string) => {
     if (!api) {
       return null;
     }
 
     try {
-      const collectionInfo = (await api.rpc.unique.collectionById(collectionId)).toJSON() as unknown as NftCollectionInterface | null;
+      const collectionInfo = (await api.rpc.unique.collectionById(collectionId)).toHuman() as unknown as NftCollectionInterface | null;
 
       return {
         ...collectionInfo,
@@ -259,18 +60,22 @@ export function useCollection () {
     return {};
   }, [api]);
 
+  const getCollectionPropertyValueByKey = useCallback((collectionInfo: NftCollectionInterface, key: string) => {
+    return collectionInfo?.properties.find((property) => property.key === key)?.value;
+  }, []);
+
   const getCollectionOnChainSchema = useCallback((collectionInfo: NftCollectionInterface): { constSchema: ProtobufAttributeType | undefined, variableSchema: { collectionCover: string } | undefined } => {
     const result: {
       constSchema: ProtobufAttributeType | undefined,
-      variableSchema: { collectionCover: string } | undefined,
+      variableSchema: { collectionCover: string } | undefined
     } = {
       constSchema: undefined,
       variableSchema: undefined
     };
 
     try {
-      const constSchema = hex2a(collectionInfo.constOnChainSchema);
-      const varSchema = hex2a(collectionInfo.variableOnChainSchema);
+      const constSchema = getCollectionPropertyValueByKey(collectionInfo, '_old_constOnChainSchema');
+      const varSchema = getCollectionPropertyValueByKey(collectionInfo, '_old_variableOnChainSchema');
 
       if (constSchema && constSchema.length) {
         result.constSchema = JSON.parse(constSchema) as ProtobufAttributeType;
@@ -280,44 +85,58 @@ export function useCollection () {
         result.variableSchema = JSON.parse(varSchema) as { collectionCover: string } | undefined;
       }
 
+      console.log('result', result);
+
       return result;
     } catch (e) {
       console.log('getCollectionOnChainSchema error');
     }
 
     return result;
-  }, [hex2a]);
+  }, [getCollectionPropertyValueByKey]);
 
-  const getTokensOfCollection = useCallback(async (collectionId: string, ownerId: string) => {
-    if (!api || !collectionId || !ownerId) {
-      return [];
+  const tokenImageUrl = useCallback((urlString: string, tokenId: string): string => {
+    if (urlString.indexOf('{id}') !== -1) {
+      return urlString.replace('{id}', tokenId);
     }
 
-    try {
-      return await api.query.unique.accountTokens(collectionId, { Substrate: ownerId });
-    } catch (e) {
-      console.log('getTokensOfCollection error', e);
+    return urlString;
+  }, []);
+
+  const getTokenImageUrl = useCallback((collectionInfo: NftCollectionInterface, tokenId: string) => {
+    if (collectionInfo) {
+      const offchainSchema = getCollectionPropertyValueByKey(collectionInfo, '_old_offchainSchema');
+      const schemaVersion = getCollectionPropertyValueByKey(collectionInfo, '_old_schemaVersion');
+
+      if (offchainSchema && (schemaVersion === 'ImageURL' || schemaVersion === 'TokenURI')) {
+        return tokenImageUrl(hex2a(offchainSchema), tokenId);
+      }
     }
 
-    return [];
-  }, [api]);
+    return '';
+  }, [getCollectionPropertyValueByKey, hex2a, tokenImageUrl]);
+
+  const getCollectionCoverImageUrl = useCallback((collectionInfo: NftCollectionInterface): string => {
+    const coverImgObj = getCollectionPropertyValueByKey(collectionInfo, '_old_variableOnChainSchema');
+
+    if (coverImgObj) {
+      const coverImgJson = JSON.parse(coverImgObj) as { collectionCover: string };
+
+      if (coverImgJson?.collectionCover) {
+        return `${ipfsGateway}/${coverImgJson?.collectionCover}`;
+      }
+    }
+
+    return getTokenImageUrl(collectionInfo, '1');
+  }, [getCollectionPropertyValueByKey, getTokenImageUrl]);
 
   return {
-    addCollectionAdmin,
-    confirmSponsorship,
-    createCollection,
-    getCollectionAdminList,
+    getCollectionCoverImageUrl,
     getCollectionOnChainSchema,
+    getCollectionPropertyValueByKey,
     getCollectionTokensCount,
     getCreatedCollectionCount,
     getDetailedCollectionInfo,
-    getTokensOfCollection,
-    removeCollectionAdmin,
-    removeCollectionSponsor,
-    saveConstOnChainSchema,
-    saveVariableOnChainSchema,
-    setCollectionSponsor,
-    setOffChainSchema,
-    setSchemaVersion
+    getTokenImageUrl
   };
 }

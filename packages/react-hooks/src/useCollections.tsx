@@ -1,14 +1,13 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
 import type { ErrorType } from '@polkadot/react-hooks/useFetch';
-import type { TokenDetailsInterface } from '@polkadot/react-hooks/useToken';
+import type { NftCollectionInterface, TokenDetailsInterface } from './nftTypes';
 
 import BN from 'bn.js';
 import { useCallback, useState } from 'react';
 
-import { useApi, useCollection, useIsMountedRef /*, useFetch */ } from '@polkadot/react-hooks';
+import { useApi, useCollection, useIsMountedRef } from '@polkadot/react-hooks';
 
 export type MetadataType = {
   metadata?: string;
@@ -29,20 +28,6 @@ export function useCollections () {
   const [collectionsLoading, setCollectionsLoading] = useState<boolean>(false);
   const { getDetailedCollectionInfo } = useCollection();
 
-  const getTokensOfCollection = useCallback(async (collectionId: string, ownerId: string) => {
-    if (!api || !collectionId || !ownerId) {
-      return [];
-    }
-
-    try {
-      return (await api.query.nft.addressTokens(collectionId, ownerId)).toJSON();
-    } catch (e) {
-      console.log('getTokensOfCollection error', e);
-    }
-
-    return [];
-  }, [api]);
-
   const presetTokensCollections = useCallback(async (): Promise<NftCollectionInterface[]> => {
     if (!api) {
       return [];
@@ -50,8 +35,11 @@ export function useCollections () {
 
     try {
       mountedRef.current && setCollectionsLoading(true);
-      const createdCollectionCount = (await api.query.nft.createdCollectionCount() as unknown as BN).toNumber();
-      const destroyedCollectionCount = (await api.query.nft.destroyedCollectionCount() as unknown as BN).toNumber();
+      const createdCollectionCount = (await api.rpc.unique.collectionStats() as unknown as { created: BN }).created.toNumber();
+
+      console.log('createdCollectionCount', createdCollectionCount);
+
+      const destroyedCollectionCount = (await api.rpc.unique.collectionStats() as unknown as { destroyed: BN }).destroyed.toNumber();
       const collectionsCount = createdCollectionCount - destroyedCollectionCount;
       const collections: Array<NftCollectionInterface> = [];
 
@@ -75,13 +63,13 @@ export function useCollections () {
 
   const getCollectionWithTokenCount = useCallback(async (collectionId: string): Promise<CollectionWithTokensCount> => {
     const info = (await getDetailedCollectionInfo(collectionId)) as unknown as NftCollectionInterface;
-    const tokenCount = ((await api.query.nft.itemListIndex(collectionId)) as unknown as BN).toNumber();
+    const tokenCount = ((await api.rpc.unique.lastTokenId(collectionId)) as unknown as BN).toNumber();
 
     return {
       info,
       tokenCount
     };
-  }, [api.query.nft, getDetailedCollectionInfo]);
+  }, [api.rpc.unique, getDetailedCollectionInfo]);
 
   const presetCollections = useCallback(async (collectionIds: number[]): Promise<NftCollectionInterface[]> => {
     try {
@@ -91,6 +79,8 @@ export function useCollections () {
 
       for (let i = 0; i < collectionIdsList.length; i++) {
         const mintCollectionInfo = await getDetailedCollectionInfo(collectionIdsList[i]) as unknown as NftCollectionInterface;
+
+        console.log('mintCollectionInfo', mintCollectionInfo);
 
         if (mintCollectionInfo && mintCollectionInfo.owner && mintCollectionInfo.owner.toString() !== '5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM' && !collections.find((collection) => collection.id === collectionIdsList[i])) {
           collections.push({ ...mintCollectionInfo, id: collectionIdsList[i] });
@@ -110,7 +100,6 @@ export function useCollections () {
     error,
     getCollectionWithTokenCount,
     getDetailedCollectionInfo,
-    getTokensOfCollection,
     presetCollections,
     presetTokensCollections
   };

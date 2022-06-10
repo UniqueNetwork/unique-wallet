@@ -4,8 +4,7 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import Loader from 'semantic-ui-react/dist/commonjs/elements/Loader';
 
-import { useMetadata } from '@polkadot/react-hooks';
-import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+import { NftCollectionInterface, useCollection } from '@polkadot/react-hooks';
 
 import CollectionFilterItem from './CollectionFilterItem';
 
@@ -24,16 +23,16 @@ interface Props {
 function CollectionFilter (props: Props): React.ReactElement<Props> {
   const { clearCheckedValues, collections, collectionsLoading, filterCurrent, isShowCollection, selectedCollections, setIsShowCollection } = props;
 
-  const { getCollectionCoverImageUrl } = useMetadata();
+  const { getCollectionCoverImageUrl } = useCollection();
   const [images, setImages] = useState <CollectionImagesType>({});
 
   const updateImageUrl = useCallback(() => {
     collections.forEach((collection: NftCollectionInterface) => {
-      void getCollectionCoverImageUrl(collection).then((res) => {
-        if (res) {
-          setImages((prev) => ({ ...prev, [collection.id]: res }));
-        }
-      });
+      const res = getCollectionCoverImageUrl(collection);
+
+      if (res) {
+        setImages((prev) => ({ ...prev, [collection.id]: res }));
+      }
     });
   }, [collections, getCollectionCoverImageUrl]);
 

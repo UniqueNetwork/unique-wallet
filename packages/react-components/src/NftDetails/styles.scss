@@ -38,6 +38,9 @@
         background-color: var(--card-background);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         border-radius: 4px;
+
+        min-height: 536px;
+        padding: calc(var(--gap) * 2);
       }
 
       &--attributes {

@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import BN from 'bn.js';
@@ -41,10 +41,18 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
         extrinsic: api.tx.balances
           .transfer(recipient, value),
         isUnsigned: false,
-        txFailedCb: () => { onFail('SEND_MONEY_FAIL'); },
-        txStartCb: () => { onSuccess('SEND_MONEY_SUCCESS'); },
-        txSuccessCb: () => { console.log('success'); },
-        txUpdateCb: () => { console.log('update'); }
+        txFailedCb: () => {
+          onFail('SEND_MONEY_FAIL');
+        },
+        txStartCb: () => {
+          onSuccess('SEND_MONEY_SUCCESS');
+        },
+        txSuccessCb: () => {
+          console.log('success');
+        },
+        txUpdateCb: () => {
+          console.log('update');
+        }
       });
     }
   }, [api, encodedKusamaAccount, queueExtrinsic]);
@@ -54,7 +62,9 @@ export const useKusamaApi = (account?: string): UseKusamaApiInterface => {
       const transferFee = await api.tx.balances.transfer(recipient, value).paymentInfo(encodedKusamaAccount) as { partialFee: BN };
 
       return transferFee.partialFee;
-    } else return null;
+    }
+
+    return null;
   }, [encodedKusamaAccount, api]);
 
   const initKusamaApi = useCallback(() => {

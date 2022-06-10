@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/apps, UseTech authors & contributors
+// Copyright 2017-2022 @polkadot/apps, UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import './styles.scss';
@@ -6,8 +6,7 @@ import './styles.scss';
 import React, { memo, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { useDecoder } from '@polkadot/react-hooks';
-import { NftCollectionInterface } from '@polkadot/react-hooks/useCollection';
+import { NftCollectionInterface, useDecoder } from '@polkadot/react-hooks';
 
 import breadcrumbArrow from './breadcrumbArrow.svg';
 
@@ -18,7 +17,7 @@ interface Props {
 }
 
 function Breadcrumbs ({ collectionInfo, setCollectionId, tokenId }: Props): React.ReactElement<Props> {
-  const { collectionName16Decoder, hex2a } = useDecoder();
+  const { collectionName16Decoder } = useDecoder();
 
   const handleCollectionNameClick = useCallback(() => {
     collectionInfo && collectionInfo.id && setCollectionId(collectionInfo.id);
@@ -71,7 +70,7 @@ function Breadcrumbs ({ collectionInfo, setCollectionId, tokenId }: Props): Reac
           </div>
           { tokenId && (
             <div className='unique-breadcrumbs--path'>
-              {collectionInfo && <span>{hex2a(collectionInfo.tokenPrefix)}</span>} #{tokenId}
+              {collectionInfo && <span>{collectionInfo.tokenPrefix}</span>} #{tokenId}
             </div>
           )}
         </>

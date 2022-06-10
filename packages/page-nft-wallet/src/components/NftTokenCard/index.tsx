@@ -18,14 +18,14 @@ interface Props {
 
 const NftTokenCard = ({ account, collectionId, openDetailedInformationModal, tokenId }: Props): React.ReactElement<Props> => {
   const { collectionInfo, getTokenDetails, tokenName, tokenUrl } = useSchema(account, collectionId, tokenId);
-  const { collectionName16Decoder, hex2a } = useDecoder();
+  const { collectionName16Decoder } = useDecoder();
 
   const onOpenTokenPage = useCallback(() => {
     openDetailedInformationModal(collectionId, tokenId);
   }, [collectionId, openDetailedInformationModal, tokenId]);
 
   useEffect(() => {
-    getTokenDetails();
+    void getTokenDetails();
   }, [getTokenDetails]);
 
   return (
@@ -45,8 +45,8 @@ const NftTokenCard = ({ account, collectionId, openDetailedInformationModal, tok
         <Card.Content>
           <Card.Description>
             <div className='card-name'>
-              <div className='card-name__title'>{hex2a(collectionInfo.tokenPrefix)} {`#${tokenId}`} {tokenName?.value}</div>
-              <div className='card-name__field'>{ collectionName16Decoder(collectionInfo.name)}</div>
+              <div className='card-name__title'>{collectionInfo.tokenPrefix} {`#${tokenId}`} {tokenName?.value}</div>
+              <div className='card-name__field'>{collectionName16Decoder(collectionInfo.name)}</div>
             </div>
           </Card.Description>
         </Card.Content>

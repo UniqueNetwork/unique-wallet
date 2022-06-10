@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @polkadot/react-api authors & contributors
+// Copyright 2017-2022 @polkadot/react-api authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type BN from 'bn.js';
@@ -81,46 +81,6 @@ function getDevTypes (): Record<string, Record<string, string>> {
 
   return types;
 }
-
-const collectionParam = { name: 'collection', type: 'UpDataStructsCollectionId' };
-
-type RpcParam = {
-  name: string;
-  type: string;
-  isOptional?: true;
-};
-
-const atParam = { isOptional: true, name: 'at', type: 'Hash' };
-
-const fun = (description: string, params: RpcParam[], type: string) => ({
-  description,
-  params: [...params, atParam],
-  type
-});
-
-const CROSS_ACCOUNT_ID_TYPE = 'PalletCommonAccountBasicCrossAccountIdRepr';
-const TOKEN_ID_TYPE = 'UpDataStructsTokenId';
-
-const crossAccountParam = (name = 'account') => ({ name, type: CROSS_ACCOUNT_ID_TYPE });
-const tokenParam = { name: 'tokenId', type: TOKEN_ID_TYPE };
-
-const rpc = {
-  accountBalance: fun('Get amount of different user tokens', [collectionParam, crossAccountParam()], 'u32'),
-  accountTokens: fun('Get tokens owned by account', [collectionParam, crossAccountParam()], 'Vec<UpDataStructsTokenId>'),
-  adminlist: fun('Get admin list', [collectionParam], 'Vec<PalletCommonAccountBasicCrossAccountIdRepr>'),
-  allowance: fun('Get allowed amount', [collectionParam, crossAccountParam('sender'), crossAccountParam('spender'), tokenParam], 'u128'),
-  allowed: fun('Check if user is allowed to use collection', [collectionParam, crossAccountParam()], 'bool'),
-  allowlist: fun('Get allowlist', [collectionParam], 'Vec<PalletCommonAccountBasicCrossAccountIdRepr>'),
-  balance: fun('Get amount of specific account token', [collectionParam, crossAccountParam(), tokenParam], 'u128'),
-  collectionById: fun('Get collection by specified id', [collectionParam], 'Option<UpDataStructsCollection>'),
-  collectionStats: fun('Get collection stats', [], 'UpDataStructsCollectionStats'),
-  collectionTokens: fun('Get tokens contained in collection', [collectionParam], 'Vec<UpDataStructsTokenId>'),
-  constMetadata: fun('Get token constant metadata', [collectionParam, tokenParam], 'Vec<u8>'),
-  lastTokenId: fun('Get last token id', [collectionParam], TOKEN_ID_TYPE),
-  tokenExists: fun('Check if token exists', [collectionParam, tokenParam], 'bool'),
-  tokenOwner: fun('Get token owner', [collectionParam, tokenParam], CROSS_ACCOUNT_ID_TYPE),
-  variableMetadata: fun('Get token variable metadata', [collectionParam, tokenParam], 'Vec<u8>')
-};
 
 async function getInjectedAccounts (injectedPromise: Promise<InjectedExtension[]>): Promise<InjectedAccountExt[]> {
   try {
@@ -215,6 +175,7 @@ async function loadOnReady (api: ApiPromise, injectedPromise: Promise<InjectedEx
     isApiReady: true,
     isDevelopment: isEthereum ? false : isDevelopment,
     isEthereum,
+    isKusamaApiReady: false,
     systemChain,
     systemName,
     systemVersion
@@ -252,8 +213,8 @@ function Api ({ children, store, url }: Props): React.ReactElement<Props> | null
     kusamaApi.on('error', (error: Error) => setIsKusamaApiError(error.message));
     kusamaApi.on('ready', (): void => {
       setState((prevState) => ({
-        isKusamaApiReady: true,
-        ...prevState
+        ...prevState,
+        isKusamaApiReady: true
       }));
     });
 
@@ -270,7 +231,7 @@ function Api ({ children, store, url }: Props): React.ReactElement<Props> | null
     api = new ApiPromise({ provider,
       registry,
       rpc: {
-        unique: rpc
+        unique: require('@unique-nft/types/definitions').unique.rpc
       },
       signer,
       types,
