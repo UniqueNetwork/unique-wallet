@@ -108,7 +108,7 @@ export function useCollection () {
       const offchainSchema = getCollectionPropertyValueByKey(collectionInfo, '_old_offchainSchema');
       const schemaVersion = getCollectionPropertyValueByKey(collectionInfo, '_old_schemaVersion');
 
-      if (offchainSchema && (schemaVersion === 'ImageURL' || schemaVersion === 'TokenURI')) {
+      if (offchainSchema && (schemaVersion === 'ImageUrl' || schemaVersion === 'TokenURI')) {
         return tokenImageUrl(hex2a(offchainSchema), tokenId);
       }
     }
