@@ -1,7 +1,7 @@
 // Copyright 2017-2022 @polkadot/UseTech authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export type SchemaVersionTypes = 'Custom' | 'ImageURL' | 'TokenURI' | 'Unique';
+export type SchemaVersionTypes = 'Custom' | 'ImageUrl' | 'TokenURI' | 'Unique';
 
 // { key: '_old_offchainSchema', value: '' },
 // { key: '_old_schemaVersion', value: 'Unique' },
